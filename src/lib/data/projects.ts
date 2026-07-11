@@ -1,0 +1,54 @@
+import { createClient } from "@/lib/supabase/server";
+import type { Project, ProjectWithClient } from "@/lib/types";
+
+const WITH_CLIENT = "*, client:clients(name)";
+
+export async function getProjects(): Promise<ProjectWithClient[]> {
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("projects")
+    .select(WITH_CLIENT)
+    .order("created_at", { ascending: false });
+  return (data ?? []) as ProjectWithClient[];
+}
+
+export async function getRecentProjects(limit = 5): Promise<ProjectWithClient[]> {
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("projects")
+    .select(WITH_CLIENT)
+    .order("created_at", { ascending: false })
+    .limit(limit);
+  return (data ?? []) as ProjectWithClient[];
+}
+
+export async function getProject(id: string): Promise<ProjectWithClient | null> {
+  const supabase = await createClient();
+  const { data } = await supabase.from("projects").select(WITH_CLIENT).eq("id", id).maybeSingle();
+  return (data as ProjectWithClient | null) ?? null;
+}
+
+export async function getProjectsByClient(clientId: string): Promise<Project[]> {
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("projects")
+    .select("*")
+    .eq("client_id", clientId)
+    .order("created_at", { ascending: false });
+  return data ?? [];
+}
+
+export async function getProjectCount(): Promise<number> {
+  const supabase = await createClient();
+  const { count } = await supabase.from("projects").select("*", { count: "exact", head: true });
+  return count ?? 0;
+}
+
+export async function getActiveProjectCount(): Promise<number> {
+  const supabase = await createClient();
+  const { count } = await supabase
+    .from("projects")
+    .select("*", { count: "exact", head: true })
+    .eq("status", "in_progress");
+  return count ?? 0;
+}

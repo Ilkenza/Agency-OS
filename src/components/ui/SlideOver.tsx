@@ -1,0 +1,56 @@
+"use client";
+
+import { useEffect } from "react";
+import { X } from "lucide-react";
+
+export function SlideOver({
+  open,
+  onClose,
+  title,
+  children,
+}: {
+  open: boolean;
+  onClose: () => void;
+  title: string;
+  children: React.ReactNode;
+}) {
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    document.addEventListener("keydown", onKey);
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = "";
+    };
+  }, [open, onClose]);
+
+  if (!open) return null;
+
+  return (
+    <div className="fixed inset-0 z-50">
+      <button
+        aria-label="Close panel"
+        onClick={onClose}
+        className="ag-overlay-in absolute inset-0 bg-black/60"
+      />
+      <div className="ag-panel-in absolute inset-y-0 right-0 flex w-full max-w-[440px] flex-col border-l border-line bg-surface shadow-[0_0_60px_rgba(0,0,0,0.6)]">
+        <div className="flex items-center justify-between border-b border-line px-5 py-4">
+          <h2 className="font-display text-[17px] font-extrabold tracking-[-0.3px] text-ink">
+            {title}
+          </h2>
+          <button
+            onClick={onClose}
+            aria-label="Close panel"
+            className="rounded-ctrl p-1.5 text-muted transition-colors hover:bg-white/[0.04] hover:text-ink"
+          >
+            <X className="h-[18px] w-[18px]" />
+          </button>
+        </div>
+        <div className="flex-1 overflow-y-auto p-5">{children}</div>
+      </div>
+    </div>
+  );
+}

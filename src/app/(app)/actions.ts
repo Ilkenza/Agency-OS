@@ -1,0 +1,30 @@
+"use server";
+
+import { revalidatePath } from "next/cache";
+import { createClient as createSupabaseServerClient } from "@/lib/supabase/server";
+
+export type GoalState = { ok?: boolean; error?: string } | undefined;
+
+export async function saveRevenueGoal(
+  _prev: GoalState,
+  formData: FormData,
+): Promise<GoalState> {
+  const raw = String(formData.get("goal") ?? "").trim();
+  const goal = raw ? Number(raw) : 0;
+  if (Number.isNaN(goal) || goal < 0) return { error: "Enter a positive amount." };
+
+  const supabase = await createSupabaseServerClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return { error: "Not signed in." };
+
+  const { error } = await supabase
+    .from("profiles")
+    .update({ revenue_goal: goal })
+    .eq("id", user.id);
+  if (error) return { error: error.message };
+
+  revalidatePath("/");
+  return { ok: true };
+}

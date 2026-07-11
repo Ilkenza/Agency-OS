@@ -1,0 +1,46 @@
+"use server";
+
+import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
+import { createClient as createSupabaseServerClient } from "@/lib/supabase/server";
+import { fetchAndAnalyze } from "@/lib/seo/analyze";
+
+export type CheckFormState = { error?: string } | undefined;
+
+export async function runCheck(
+  _prev: CheckFormState,
+  formData: FormData,
+): Promise<CheckFormState> {
+  const url = String(formData.get("url") ?? "").trim();
+  const projectId = String(formData.get("project_id") ?? "").trim() || null;
+  if (!url) return { error: "Enter a URL." };
+
+  const result = await fetchAndAnalyze(url);
+  if (!result.ok) return { error: result.error };
+
+  const supabase = await createSupabaseServerClient();
+  const { data, error } = await supabase
+    .from("seo_checks")
+    .insert({
+      url: result.url,
+      title: result.data.title,
+      score: result.data.score,
+      results: result.data.results,
+      project_id: projectId,
+    })
+    .select("id")
+    .single();
+  if (error) return { error: error.message };
+
+  revalidatePath("/seo");
+  revalidatePath("/");
+  redirect(`/seo/${data.id}`);
+}
+
+export async function deleteCheck(id: string) {
+  const supabase = await createSupabaseServerClient();
+  await supabase.from("seo_checks").delete().eq("id", id);
+  revalidatePath("/seo");
+  revalidatePath("/");
+  redirect("/seo");
+}
