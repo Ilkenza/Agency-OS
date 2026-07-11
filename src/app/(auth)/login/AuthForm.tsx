@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState, useState } from "react";
+import Link from "next/link";
 import { authenticate, type AuthState } from "../actions";
 import { Button } from "@/components/ui/Button";
 import { Field } from "@/components/ui/Field";
@@ -68,6 +69,17 @@ export function AuthForm() {
           minLength={6}
           required
         />
+
+        {mode === "signin" && (
+          <div className="mb-3 -mt-1 text-right">
+            <Link
+              href="/forgot-password"
+              className="text-[11.5px] font-semibold text-muted hover:text-gold-hi"
+            >
+              Forgot password?
+            </Link>
+          </div>
+        )}
 
         {state?.error && (
           <p className="mb-3 rounded-ctrl border border-danger/40 bg-danger-bg px-3 py-2 text-[12px] text-danger">
