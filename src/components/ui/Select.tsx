@@ -35,9 +35,15 @@ export function Select({
         )}
         {...props}
       >
-        {placeholder && <option value="">{placeholder}</option>}
+        {/* Explicit dark bg + light text so the native dropdown list is readable
+            (some browsers render options as faint grey-on-white otherwise). */}
+        {placeholder && (
+          <option value="" className="bg-[#1A1D24] text-[#8A909E]">
+            {placeholder}
+          </option>
+        )}
         {options.map((o) => (
-          <option key={o.value} value={o.value}>
+          <option key={o.value} value={o.value} className="bg-[#1A1D24] text-[#ECEEF2]">
             {o.label}
           </option>
         ))}
