@@ -5,27 +5,67 @@ import { redirect } from "next/navigation";
 import { createClient as createSupabaseServerClient } from "@/lib/supabase/server";
 import { LEAD_STATUSES, type LeadStatus } from "@/lib/status";
 import { parseLeadsImport } from "@/lib/leads/parse-import";
+import { computeImportPlan, type ImportChange } from "@/lib/leads/diff-import";
 
 export type LeadFormState = { error?: string } | undefined;
 
-export type ImportState =
-  | { imported?: number; skipped?: number; error?: string }
-  | undefined;
+export type ImportPreview =
+  | { error: string }
+  | {
+      newCount: number;
+      unchanged: number;
+      skipped: number;
+      updates: { id: string; name: string; changes: ImportChange[] }[];
+    };
 
-/** Bulk-create leads from pasted CSV/TSV (spreadsheet). RLS fills user_id. */
-export async function importLeads(_prev: ImportState, formData: FormData): Promise<ImportState> {
-  const text = String(formData.get("data") ?? "");
+/** Dry run: parse the paste, compare to existing leads, return counts + a diff. */
+export async function previewLeadsImport(text: string): Promise<ImportPreview> {
   const { rows, skipped, error } = parseLeadsImport(text);
   if (error) return { error };
   if (rows.length === 0) return { error: "No valid rows found — check the header and data." };
 
   const supabase = await createSupabaseServerClient();
-  const { error: dbError } = await supabase.from("leads").insert(rows);
-  if (dbError) return { error: dbError.message };
+  const { data: existing } = await supabase.from("leads").select("*");
+  const plan = computeImportPlan(rows, existing ?? []);
+
+  return {
+    newCount: plan.newRows.length,
+    unchanged: plan.unchanged,
+    skipped,
+    updates: plan.updates.map((u) => ({ id: u.id, name: u.name, changes: u.changes })),
+  };
+}
+
+export type ImportResult = { imported: number; updated: number; error?: string };
+
+/** Insert new leads; optionally apply the field changes to existing ones. */
+export async function commitLeadsImport(
+  text: string,
+  updateExisting: boolean,
+): Promise<ImportResult> {
+  const { rows, error } = parseLeadsImport(text);
+  if (error) return { imported: 0, updated: 0, error };
+
+  const supabase = await createSupabaseServerClient();
+  const { data: existing } = await supabase.from("leads").select("*");
+  const plan = computeImportPlan(rows, existing ?? []);
+
+  if (plan.newRows.length > 0) {
+    const { error: insErr } = await supabase.from("leads").insert(plan.newRows);
+    if (insErr) return { imported: 0, updated: 0, error: insErr.message };
+  }
+
+  let updated = 0;
+  if (updateExisting) {
+    for (const u of plan.updates) {
+      const { error: upErr } = await supabase.from("leads").update(u.payload).eq("id", u.id);
+      if (!upErr) updated++;
+    }
+  }
 
   revalidatePath("/leads");
   revalidatePath("/");
-  return { imported: rows.length, skipped };
+  return { imported: plan.newRows.length, updated };
 }
 
 export async function saveLead(_prev: LeadFormState, formData: FormData): Promise<LeadFormState> {
