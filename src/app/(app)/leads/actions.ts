@@ -4,8 +4,29 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient as createSupabaseServerClient } from "@/lib/supabase/server";
 import { LEAD_STATUSES, type LeadStatus } from "@/lib/status";
+import { parseLeadsImport } from "@/lib/leads/parse-import";
 
 export type LeadFormState = { error?: string } | undefined;
+
+export type ImportState =
+  | { imported?: number; skipped?: number; error?: string }
+  | undefined;
+
+/** Bulk-create leads from pasted CSV/TSV (spreadsheet). RLS fills user_id. */
+export async function importLeads(_prev: ImportState, formData: FormData): Promise<ImportState> {
+  const text = String(formData.get("data") ?? "");
+  const { rows, skipped, error } = parseLeadsImport(text);
+  if (error) return { error };
+  if (rows.length === 0) return { error: "No valid rows found — check the header and data." };
+
+  const supabase = await createSupabaseServerClient();
+  const { error: dbError } = await supabase.from("leads").insert(rows);
+  if (dbError) return { error: dbError.message };
+
+  revalidatePath("/leads");
+  revalidatePath("/");
+  return { imported: rows.length, skipped };
+}
 
 export async function saveLead(_prev: LeadFormState, formData: FormData): Promise<LeadFormState> {
   const id = String(formData.get("id") ?? "").trim();

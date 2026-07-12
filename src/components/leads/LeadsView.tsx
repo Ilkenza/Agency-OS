@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Plus, Send, Pencil, Search, FileText } from "lucide-react";
+import { Plus, Send, Pencil, Search, FileText, Upload } from "lucide-react";
 import { SlideOver } from "@/components/ui/SlideOver";
 import { Panel } from "@/components/ui/Panel";
 import { EmptyState } from "@/components/ui/EmptyState";
@@ -97,6 +97,10 @@ export function LeadsView({ leads, panel }: { leads: Lead[]; panel: LeadsPanel }
               className="w-[200px] rounded-ctrl border border-line bg-white/[0.035] py-2 pl-9 pr-3 text-[13px] text-ink placeholder:text-faint focus:border-gold focus:outline-none"
             />
           </div>
+          <Link href="/leads/import" className={buttonClasses("secondary")}>
+            <Upload className="h-4 w-4" />
+            Import
+          </Link>
           <Link href="/leads/templates" className={buttonClasses("secondary")}>
             <FileText className="h-4 w-4" />
             Templates
