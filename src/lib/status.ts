@@ -97,6 +97,7 @@ export function checkStatusMeta(status: string): { color: string; label: string 
 export const LEAD_STATUSES = [
   "new",
   "contacted",
+  "seen",
   "replied",
   "negotiating",
   "won",
@@ -107,6 +108,7 @@ export type LeadStatus = (typeof LEAD_STATUSES)[number];
 export const LEAD_STATUS_OPTIONS: { value: LeadStatus; label: string }[] = [
   { value: "new", label: "New" },
   { value: "contacted", label: "Contacted" },
+  { value: "seen", label: "Seen" },
   { value: "replied", label: "Replied" },
   { value: "negotiating", label: "Negotiating" },
   { value: "won", label: "Won" },
@@ -123,6 +125,8 @@ export function leadStatusBadge(status: string): { variant: BadgeStatus; label: 
       return { variant: "active", label: "Replied" };
     case "negotiating":
       return { variant: "active", label: "Negotiating" };
+    case "seen":
+      return { variant: "active", label: "Seen" };
     case "contacted":
       return { variant: "pending", label: "Contacted" };
     default:

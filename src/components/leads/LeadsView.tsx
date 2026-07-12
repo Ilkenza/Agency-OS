@@ -9,7 +9,7 @@ import { Panel } from "@/components/ui/Panel";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { Badge } from "@/components/ui/Badge";
 import { buttonClasses } from "@/components/ui/Button";
-import { LEAD_STATUS_OPTIONS, leadStatusBadge, serviceLabel } from "@/lib/status";
+import { LEAD_STATUS_OPTIONS, SERVICE_OPTIONS, leadStatusBadge, serviceLabel } from "@/lib/status";
 import { formatCurrency, formatDate, isToday, isOverdue } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import type { Lead } from "@/lib/types";
@@ -74,13 +74,35 @@ export function LeadsView({ leads, panel }: { leads: Lead[]; panel: LeadsPanel }
   const router = useRouter();
   const close = () => router.push("/leads");
   const [q, setQ] = useState("");
+  const [serviceF, setServiceF] = useState("");
+  const [statusF, setStatusF] = useState("");
+  const [sortBy, setSortBy] = useState("newest");
 
   const term = q.trim().toLowerCase();
-  const filtered = term
-    ? leads.filter((l) =>
-        [l.name, l.company, l.contact].some((v) => v?.toLowerCase().includes(term)),
-      )
-    : leads;
+  const filtered = leads.filter((l) => {
+    if (term && ![l.name, l.company, l.contact].some((v) => v?.toLowerCase().includes(term)))
+      return false;
+    if (serviceF && l.service !== serviceF) return false;
+    if (statusF && l.status !== statusF) return false;
+    return true;
+  });
+
+  const sorted = [...filtered].sort((a, b) => {
+    switch (sortBy) {
+      case "name":
+        return a.name.localeCompare(b.name);
+      case "value":
+        return (b.value ?? 0) - (a.value ?? 0);
+      case "followup":
+        return (a.next_followup ?? "9999-12-31").localeCompare(b.next_followup ?? "9999-12-31");
+      default:
+        return (b.created_at ?? "").localeCompare(a.created_at ?? "");
+    }
+  });
+
+  const selectClass =
+    "rounded-ctrl border border-line bg-white/[0.035] px-2.5 py-2 text-[12.5px] text-ink [color-scheme:dark] focus:border-gold focus:outline-none";
+  const optClass = "bg-[#1A1D24] text-[#ECEEF2]";
 
   return (
     <div className="mx-auto max-w-[1200px]">
@@ -113,6 +135,66 @@ export function LeadsView({ leads, panel }: { leads: Lead[]; panel: LeadsPanel }
         </div>
       </div>
 
+      {leads.length > 0 && (
+        <div className="mb-4 flex flex-wrap items-center gap-2">
+          <select
+            value={statusF}
+            onChange={(e) => setStatusF(e.target.value)}
+            aria-label="Filter by status"
+            className={selectClass}
+          >
+            <option value="" className={optClass}>
+              All statuses
+            </option>
+            {LEAD_STATUS_OPTIONS.map((s) => (
+              <option key={s.value} value={s.value} className={optClass}>
+                {s.label}
+              </option>
+            ))}
+          </select>
+
+          <select
+            value={serviceF}
+            onChange={(e) => setServiceF(e.target.value)}
+            aria-label="Filter by service"
+            className={selectClass}
+          >
+            <option value="" className={optClass}>
+              All services
+            </option>
+            {SERVICE_OPTIONS.map((s) => (
+              <option key={s.value} value={s.value} className={optClass}>
+                {s.label}
+              </option>
+            ))}
+          </select>
+
+          <select
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value)}
+            aria-label="Sort"
+            className={selectClass}
+          >
+            <option value="newest" className={optClass}>
+              Newest first
+            </option>
+            <option value="name" className={optClass}>
+              Name A–Z
+            </option>
+            <option value="value" className={optClass}>
+              Value (high→low)
+            </option>
+            <option value="followup" className={optClass}>
+              Follow-up (soonest)
+            </option>
+          </select>
+
+          {(statusF || serviceF || q) && (
+            <span className="mono text-[11.5px] text-faint">{sorted.length} shown</span>
+          )}
+        </div>
+      )}
+
       <Panel>
         {leads.length === 0 ? (
           <EmptyState
@@ -125,15 +207,15 @@ export function LeadsView({ leads, panel }: { leads: Lead[]; panel: LeadsPanel }
               </Link>
             }
           />
-        ) : filtered.length === 0 ? (
-          <EmptyState icon={Search} title="No matches" description={`Nothing matches “${q}”.`} />
+        ) : sorted.length === 0 ? (
+          <EmptyState icon={Search} title="No matches" description="Try clearing filters or search." />
         ) : (
           <div>
             {LEAD_STATUS_OPTIONS.map((s) => (
               <Section
                 key={s.value}
                 label={s.label}
-                leads={filtered.filter((l) => l.status === s.value)}
+                leads={sorted.filter((l) => l.status === s.value)}
               />
             ))}
           </div>
