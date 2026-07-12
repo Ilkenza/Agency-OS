@@ -34,6 +34,7 @@ export async function saveLead(_prev: LeadFormState, formData: FormData): Promis
   const company = String(formData.get("company") ?? "").trim() || null;
   const contact = String(formData.get("contact") ?? "").trim() || null;
   const channel = String(formData.get("channel") ?? "").trim() || null;
+  const service = String(formData.get("service") ?? "").trim() || null;
   const status = String(formData.get("status") ?? "new");
   const valueRaw = String(formData.get("value") ?? "").trim();
   const lastContactAt = String(formData.get("last_contact_at") ?? "").trim() || null;
@@ -52,6 +53,7 @@ export async function saveLead(_prev: LeadFormState, formData: FormData): Promis
     company,
     contact,
     channel,
+    service,
     status,
     value,
     last_contact_at: lastContactAt,

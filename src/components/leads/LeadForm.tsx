@@ -7,7 +7,7 @@ import { Select } from "@/components/ui/Select";
 import { Textarea } from "@/components/ui/Textarea";
 import { Button } from "@/components/ui/Button";
 import { DeleteButton } from "@/components/ui/DeleteButton";
-import { LEAD_STATUS_OPTIONS, CHANNEL_OPTIONS } from "@/lib/status";
+import { LEAD_STATUS_OPTIONS, CHANNEL_OPTIONS, SERVICE_OPTIONS } from "@/lib/status";
 import type { Lead } from "@/lib/types";
 
 export function LeadForm({ lead }: { lead?: Lead }) {
@@ -53,6 +53,13 @@ export function LeadForm({ lead }: { lead?: Lead }) {
           name="status"
           defaultValue={lead?.status ?? "new"}
           options={LEAD_STATUS_OPTIONS}
+        />
+        <Select
+          label="Service"
+          name="service"
+          defaultValue={lead?.service ?? ""}
+          placeholder="—"
+          options={SERVICE_OPTIONS}
         />
         <Field
           label="Est. value (€)"

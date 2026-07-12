@@ -97,6 +97,7 @@ export type Database = {
           name: string
           next_followup: string | null
           notes: string | null
+          service: string | null
           status: string
           user_id: string
           value: number
@@ -127,6 +128,7 @@ export type Database = {
           name?: string
           next_followup?: string | null
           notes?: string | null
+          service?: string | null
           status?: string
           user_id?: string
           value?: number

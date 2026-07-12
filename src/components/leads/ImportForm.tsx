@@ -8,9 +8,9 @@ import { Button, buttonClasses } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
 
 const TEMPLATE =
-  "name,company,contact,channel,status,value,next_followup,notes\n" +
-  "Milan Jovanović,Kafe Kod Mike,milan@example.com,instagram,contacted,800,2026-08-01,Poslao ponudu\n" +
-  "Ana Petrović,Studio Ana,ana@example.com,email,new,1200,,Nije još odgovorila";
+  "name,company,contact,channel,service,status,value,next_followup,notes\n" +
+  "Milan Jovanović,Kafe Kod Mike,@milan,instagram,new_site,contacted,800,2026-08-01,Poslao ponudu\n" +
+  "Ana Petrović,Studio Ana,@ana,instagram,redesign,new,1200,,Nije još odgovorila";
 
 function downloadTemplate() {
   const blob = new Blob([TEMPLATE], { type: "text/csv;charset=utf-8" });
@@ -46,6 +46,10 @@ export function ImportForm() {
           <li>
             <span className="mono text-ink">channel</span> — email · instagram · linkedin ·
             whatsapp · phone · other
+          </li>
+          <li>
+            <span className="mono text-ink">service</span> — new_site · redesign · fix (what you
+            pitched)
           </li>
           <li>
             <span className="mono text-ink">status</span> — new · contacted · replied ·

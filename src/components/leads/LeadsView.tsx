@@ -9,7 +9,7 @@ import { Panel } from "@/components/ui/Panel";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { Badge } from "@/components/ui/Badge";
 import { buttonClasses } from "@/components/ui/Button";
-import { LEAD_STATUS_OPTIONS, leadStatusBadge } from "@/lib/status";
+import { LEAD_STATUS_OPTIONS, leadStatusBadge, serviceLabel } from "@/lib/status";
 import { formatCurrency, formatDate, isToday, isOverdue } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import type { Lead } from "@/lib/types";
@@ -33,7 +33,8 @@ function LeadRow({ lead }: { lead: Lead }) {
           {lead.name}
         </Link>
         <div className="truncate text-[11.5px] text-muted">
-          {[lead.company, lead.channel].filter(Boolean).join(" · ") || "—"}
+          {[lead.company, lead.channel, serviceLabel(lead.service)].filter(Boolean).join(" · ") ||
+            "—"}
         </div>
       </div>
       <Badge status={badge.variant}>{badge.label}</Badge>

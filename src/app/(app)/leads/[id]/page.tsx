@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/Badge";
 import { Button, buttonClasses } from "@/components/ui/Button";
 import { DeleteButton } from "@/components/ui/DeleteButton";
 import { deleteLead, convertLeadToClient } from "../actions";
-import { leadStatusBadge } from "@/lib/status";
+import { leadStatusBadge, serviceLabel } from "@/lib/status";
 import { formatCurrency, formatDate } from "@/lib/format";
 
 function Stat({ label, children }: { label: string; children: React.ReactNode }) {
@@ -80,6 +80,9 @@ export default async function LeadDetailPage({ params }: { params: Promise<{ id:
             ) : (
               <span className="text-muted">—</span>
             )}
+          </Stat>
+          <Stat label="Service">
+            {serviceLabel(lead.service) ?? <span className="text-muted">—</span>}
           </Stat>
           <Stat label="Est. value">
             <span className="mono">{formatCurrency(lead.value)}</span>

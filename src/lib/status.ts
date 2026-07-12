@@ -138,3 +138,16 @@ export const CHANNEL_OPTIONS: { value: string; label: string }[] = [
   { value: "phone", label: "Phone" },
   { value: "other", label: "Other" },
 ];
+
+/** What you pitched a lead (website work). */
+export const SERVICE_OPTIONS: { value: string; label: string }[] = [
+  { value: "new_site", label: "New site" },
+  { value: "redesign", label: "Redesign" },
+  { value: "fix", label: "Site fix" },
+];
+
+export function serviceLabel(service: string | null | undefined): string | null {
+  if (!service) return null;
+  const found = SERVICE_OPTIONS.find((s) => s.value === service);
+  return found ? found.label : service;
+}

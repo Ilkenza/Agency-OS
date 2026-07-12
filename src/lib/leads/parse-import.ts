@@ -7,11 +7,21 @@ export type ImportRow = {
   company: string | null;
   contact: string | null;
   channel: string | null;
+  service: string | null;
   status: string;
   value: number;
   notes: string | null;
   next_followup: string | null;
 };
+
+function normalizeService(raw: string): string | null {
+  const v = raw.toLowerCase().trim();
+  if (!v) return null;
+  if (["new_site", "new site", "novi sajt", "sajt", "bez sajta"].includes(v)) return "new_site";
+  if (["redesign", "redizajn"].includes(v)) return "redesign";
+  if (["fix", "site fix", "popravka", "popravka sajta"].includes(v)) return "fix";
+  return null;
+}
 
 export type ParseResult = { rows: ImportRow[]; skipped: number; error?: string };
 
@@ -75,6 +85,7 @@ export function parseLeadsImport(text: string): ParseResult {
   const iCompany = idx(["company", "firma", "kompanija"]);
   const iContact = idx(["contact", "kontakt", "email", "e-mail", "phone", "telefon"]);
   const iChannel = idx(["channel", "kanal"]);
+  const iService = idx(["service", "usluga", "offer", "ponuda"]);
   const iStatus = idx(["status"]);
   const iValue = idx(["value", "vrednost", "iznos"]);
   const iFollow = idx(["next_followup", "followup", "follow_up", "rok"]);
@@ -118,6 +129,7 @@ export function parseLeadsImport(text: string): ParseResult {
       company: get(iCompany) || null,
       contact: get(iContact) || null,
       channel,
+      service: normalizeService(get(iService)),
       status,
       value,
       notes: get(iNotes) || null,
