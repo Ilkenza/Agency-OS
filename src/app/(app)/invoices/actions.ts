@@ -15,6 +15,8 @@ export async function saveInvoice(
   const clientId = String(formData.get("client_id") ?? "").trim() || null;
   const number = String(formData.get("number") ?? "").trim() || null;
   const status = String(formData.get("status") ?? "draft");
+  const currencyRaw = String(formData.get("currency") ?? "EUR");
+  const currency = ["EUR", "USD", "RSD"].includes(currencyRaw) ? currencyRaw : "EUR";
   const amountRaw = String(formData.get("amount") ?? "").trim();
   const issuedAt = String(formData.get("issued_at") ?? "").trim() || null;
   const dueDate = String(formData.get("due_date") ?? "").trim() || null;
@@ -29,6 +31,7 @@ export async function saveInvoice(
     client_id: clientId,
     number,
     amount,
+    currency,
     status,
     issued_at: issuedAt,
     due_date: dueDate,

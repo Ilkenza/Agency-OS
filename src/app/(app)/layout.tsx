@@ -8,6 +8,8 @@ import { getOpenTaskCount } from "@/lib/data/tasks";
 import { getInvoiceCount } from "@/lib/data/invoices";
 import { getCheckCount } from "@/lib/data/seo";
 import { getActiveLeadCount } from "@/lib/data/leads";
+import { getQuoteCount } from "@/lib/data/quotes";
+import { getToolCount } from "@/lib/data/tools";
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createClient();
@@ -23,15 +25,17 @@ export default async function AppLayout({ children }: { children: React.ReactNod
     email: user.email ?? "",
   };
 
-  const [clients, projects, tasks, invoices, seo, leads] = await Promise.all([
+  const [clients, projects, tasks, invoices, seo, leads, quotes, tools] = await Promise.all([
     getClientCount(),
     getProjectCount(),
     getOpenTaskCount(),
     getInvoiceCount(),
     getCheckCount(),
     getActiveLeadCount(),
+    getQuoteCount(),
+    getToolCount(),
   ]);
-  const counts: NavCounts = { clients, projects, tasks, invoices, seo, leads };
+  const counts: NavCounts = { clients, projects, tasks, invoices, seo, leads, quotes, tools };
 
   return (
     <AppShell user={shellUser} counts={counts}>

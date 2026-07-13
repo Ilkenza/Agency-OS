@@ -6,7 +6,7 @@ import { Field } from "@/components/ui/Field";
 import { Select } from "@/components/ui/Select";
 import { Button } from "@/components/ui/Button";
 import { DeleteButton } from "@/components/ui/DeleteButton";
-import { INVOICE_STATUS_OPTIONS } from "@/lib/status";
+import { INVOICE_STATUS_OPTIONS, CURRENCY_OPTIONS } from "@/lib/status";
 import { todayISO } from "@/lib/format";
 import type { Invoice } from "@/lib/types";
 
@@ -58,6 +58,13 @@ export function InvoiceForm({
           defaultValue={invoice ? String(invoice.amount) : ""}
           placeholder="500"
           autoFocus
+        />
+
+        <Select
+          label="Currency"
+          name="currency"
+          defaultValue={invoice?.currency ?? "EUR"}
+          options={CURRENCY_OPTIONS}
         />
 
         <Select

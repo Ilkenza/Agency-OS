@@ -7,6 +7,18 @@ export type Invoice = Tables<"invoices">;
 export type SeoCheck = Tables<"seo_checks">;
 export type Lead = Tables<"leads">;
 export type OutreachTemplate = Tables<"outreach_templates">;
+export type ServiceItem = Tables<"service_items">;
+export type Quote = Tables<"quotes">;
+export type Tool = Tables<"tools">;
+
+/** One line on a quote (stored in quotes.items jsonb). */
+export type QuoteItem = { label: string; price: number; qty: number };
+
+/** Quote with embedded client name and `items` narrowed to QuoteItem[]. */
+export type QuoteWithClient = Omit<Quote, "items"> & {
+  items: QuoteItem[];
+  client: { name: string } | null;
+};
 
 /** One finding in a seo_check's `results` jsonb array. */
 export type CheckStatus = "pass" | "warn" | "fail";

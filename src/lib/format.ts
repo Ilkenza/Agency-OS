@@ -8,6 +8,21 @@ export function formatCurrency(value: number | null | undefined, currency = "EUR
   }).format(n);
 }
 
+/** Money in a given currency (EUR/USD/RSD), correct symbol per locale. */
+export function formatMoney(amount: number | null | undefined, currency = "EUR") {
+  const n = typeof amount === "number" && Number.isFinite(amount) ? amount : 0;
+  const locale = currency === "USD" ? "en-US" : currency === "RSD" ? "sr-RS" : "en-IE";
+  try {
+    return new Intl.NumberFormat(locale, {
+      style: "currency",
+      currency,
+      maximumFractionDigits: Number.isInteger(n) ? 0 : 2,
+    }).format(n);
+  } catch {
+    return `${n} ${currency}`;
+  }
+}
+
 /** ISO date `YYYY-MM-DD`, or an em dash when empty. */
 export function formatDate(value: string | null | undefined) {
   if (!value) return "—";

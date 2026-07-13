@@ -155,3 +155,29 @@ export function serviceLabel(service: string | null | undefined): string | null 
   const found = SERVICE_OPTIONS.find((s) => s.value === service);
   return found ? found.label : service;
 }
+
+export const CURRENCY_OPTIONS: { value: string; label: string }[] = [
+  { value: "EUR", label: "EUR (€)" },
+  { value: "USD", label: "USD ($)" },
+  { value: "RSD", label: "RSD (дин)" },
+];
+
+export const QUOTE_STATUS_OPTIONS: { value: string; label: string }[] = [
+  { value: "draft", label: "Draft" },
+  { value: "sent", label: "Sent" },
+  { value: "accepted", label: "Accepted" },
+  { value: "declined", label: "Declined" },
+];
+
+export function quoteStatusBadge(status: string): { variant: BadgeStatus; label: string } {
+  switch (status) {
+    case "accepted":
+      return { variant: "ok", label: "Accepted" };
+    case "declined":
+      return { variant: "danger", label: "Declined" };
+    case "sent":
+      return { variant: "pending", label: "Sent" };
+    default:
+      return { variant: "draft", label: "Draft" };
+  }
+}

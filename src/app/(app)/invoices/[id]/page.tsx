@@ -8,7 +8,7 @@ import { buttonClasses } from "@/components/ui/Button";
 import { DeleteButton } from "@/components/ui/DeleteButton";
 import { deleteInvoice } from "../actions";
 import { effectiveInvoiceStatus, invoiceStatusBadge } from "@/lib/status";
-import { formatCurrency, formatDate } from "@/lib/format";
+import { formatMoney, formatDate } from "@/lib/format";
 
 function Stat({ label, children }: { label: string; children: React.ReactNode }) {
   return (
@@ -71,7 +71,7 @@ export default async function InvoiceDetailPage({
             {invoice.client?.name ?? <span className="text-muted">—</span>}
           </Stat>
           <Stat label="Amount">
-            <span className="mono">{formatCurrency(invoice.amount)}</span>
+            <span className="mono">{formatMoney(invoice.amount, invoice.currency)}</span>
           </Stat>
           <Stat label="Issued">
             <span className="mono">{formatDate(invoice.issued_at)}</span>

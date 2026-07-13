@@ -1,19 +1,15 @@
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { getInvoice } from "@/lib/data/invoices";
+import { getQuote } from "@/lib/data/quotes";
 import { getProfile } from "@/lib/data/profile";
-import { effectiveInvoiceStatus } from "@/lib/status";
+import { quoteTotal } from "@/lib/quotes/total";
 import { formatMoney, formatDate } from "@/lib/format";
 import { PrintButton } from "@/components/invoices/PrintButton";
 
-export default async function PrintInvoicePage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
+export default async function PrintQuotePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const invoice = await getInvoice(id);
-  if (!invoice) notFound();
+  const quote = await getQuote(id);
+  if (!quote) notFound();
 
   const supabase = await createClient();
   const {
@@ -21,11 +17,9 @@ export default async function PrintInvoicePage({
   } = await supabase.auth.getUser();
   const profile = await getProfile();
 
-  const fromName =
-    profile?.business_name || profile?.full_name || user?.email || "Your business";
+  const fromName = profile?.business_name || profile?.full_name || user?.email || "Your business";
   const fromEmail = profile?.business_email || user?.email || "";
-
-  const status = effectiveInvoiceStatus(invoice);
+  const total = quoteTotal(quote.items);
 
   return (
     <div className="mx-auto max-w-[720px] bg-white p-10 shadow-sm print:max-w-none print:p-0 print:shadow-none">
@@ -35,9 +29,9 @@ export default async function PrintInvoicePage({
             className="text-[28px] font-extrabold tracking-tight"
             style={{ fontFamily: "var(--font-display)" }}
           >
-            Invoice
+            Quote
           </div>
-          <div className="mono mt-1 text-sm text-neutral-500">{invoice.number ?? "—"}</div>
+          <div className="mono mt-1 text-sm text-neutral-500">{quote.title}</div>
         </div>
         <PrintButton />
       </div>
@@ -58,53 +52,41 @@ export default async function PrintInvoicePage({
         </div>
         <div>
           <div className="text-[11px] font-bold uppercase tracking-wide text-neutral-400">
-            Bill to
+            Prepared for
           </div>
-          <div className="mt-1 font-semibold">{invoice.client?.name ?? "—"}</div>
+          <div className="mt-1 font-semibold">{quote.client?.name ?? "—"}</div>
+          <div className="mono mt-1 text-xs text-neutral-400">{formatDate(quote.created_at)}</div>
         </div>
       </div>
 
-      <div className="mb-8 grid grid-cols-3 gap-4 border-y border-neutral-200 py-4 text-sm">
-        <div>
-          <div className="text-[11px] font-bold uppercase tracking-wide text-neutral-400">
-            Issued
-          </div>
-          <div className="mono mt-1">{formatDate(invoice.issued_at)}</div>
-        </div>
-        <div>
-          <div className="text-[11px] font-bold uppercase tracking-wide text-neutral-400">Due</div>
-          <div className="mono mt-1">{formatDate(invoice.due_date)}</div>
-        </div>
-        <div>
-          <div className="text-[11px] font-bold uppercase tracking-wide text-neutral-400">
-            Status
-          </div>
-          <div className="mt-1 capitalize">{status}</div>
-        </div>
-      </div>
-
-      <table className="mb-8 w-full text-sm">
+      <table className="mb-6 w-full text-sm">
         <thead>
           <tr className="border-b border-neutral-200 text-left text-[11px] uppercase tracking-wide text-neutral-400">
-            <th className="py-2 font-bold">Description</th>
+            <th className="py-2 font-bold">Item</th>
+            <th className="py-2 text-right font-bold">Price</th>
+            <th className="py-2 text-right font-bold">Qty</th>
             <th className="py-2 text-right font-bold">Amount</th>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td className="py-3">
-              Services{invoice.client?.name ? ` — ${invoice.client.name}` : ""}
-            </td>
-            <td className="mono py-3 text-right">{formatMoney(invoice.amount, invoice.currency)}</td>
-          </tr>
+          {quote.items.map((it, i) => (
+            <tr key={i} className="border-b border-neutral-100">
+              <td className="py-3">{it.label}</td>
+              <td className="mono py-3 text-right">{formatMoney(it.price, quote.currency)}</td>
+              <td className="mono py-3 text-right">{it.qty}</td>
+              <td className="mono py-3 text-right">
+                {formatMoney(it.price * it.qty, quote.currency)}
+              </td>
+            </tr>
+          ))}
         </tbody>
       </table>
 
       <div className="flex justify-end">
-        <div className="w-56">
+        <div className="w-64">
           <div className="flex justify-between border-t-2 border-neutral-900 pt-3">
             <span className="font-bold">Total</span>
-            <span className="mono font-bold">{formatMoney(invoice.amount, invoice.currency)}</span>
+            <span className="mono font-bold">{formatMoney(total, quote.currency)}</span>
           </div>
         </div>
       </div>

@@ -9,7 +9,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { Badge } from "@/components/ui/Badge";
 import { buttonClasses } from "@/components/ui/Button";
 import { effectiveInvoiceStatus, invoiceStatusBadge } from "@/lib/status";
-import { formatCurrency, formatDate } from "@/lib/format";
+import { formatMoney, formatDate } from "@/lib/format";
 import type { Invoice, InvoiceWithClient } from "@/lib/types";
 import { InvoiceForm, type ClientOption } from "./InvoiceForm";
 
@@ -93,7 +93,7 @@ export function InvoicesView({
                         <Badge status={badge.variant}>{badge.label}</Badge>
                       </td>
                       <td className="mono border-b border-line-soft px-4 py-3 text-right text-ink">
-                        {formatCurrency(inv.amount)}
+                        {formatMoney(inv.amount, inv.currency)}
                       </td>
                       <td className="mono border-b border-line-soft px-4 py-3 text-right text-muted">
                         {formatDate(inv.due_date)}

@@ -7,8 +7,6 @@ export type Json =
   | Json[]
 
 export type Database = {
-  // Allows to automatically instantiate createClient with right options
-  // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
     PostgrestVersion: "14.5"
   }
@@ -46,6 +44,7 @@ export type Database = {
           amount: number
           client_id: string | null
           created_at: string
+          currency: string
           due_date: string | null
           id: string
           issued_at: string | null
@@ -57,6 +56,7 @@ export type Database = {
           amount?: number
           client_id?: string | null
           created_at?: string
+          currency?: string
           due_date?: string | null
           id?: string
           issued_at?: string | null
@@ -68,6 +68,7 @@ export type Database = {
           amount?: number
           client_id?: string | null
           created_at?: string
+          currency?: string
           due_date?: string | null
           id?: string
           issued_at?: string | null
@@ -113,6 +114,7 @@ export type Database = {
           name: string
           next_followup?: string | null
           notes?: string | null
+          service?: string | null
           status?: string
           user_id?: string
           value?: number
@@ -250,6 +252,57 @@ export type Database = {
           },
         ]
       }
+      quotes: {
+        Row: {
+          client_id: string | null
+          created_at: string
+          currency: string
+          id: string
+          invoice_id: string | null
+          items: Json
+          status: string
+          title: string
+          user_id: string
+        }
+        Insert: {
+          client_id?: string | null
+          created_at?: string
+          currency?: string
+          id?: string
+          invoice_id?: string | null
+          items?: Json
+          status?: string
+          title: string
+          user_id?: string
+        }
+        Update: {
+          client_id?: string | null
+          created_at?: string
+          currency?: string
+          id?: string
+          invoice_id?: string | null
+          items?: Json
+          status?: string
+          title?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quotes_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "clients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "quotes_invoice_id_fkey"
+            columns: ["invoice_id"]
+            isOneToOne: false
+            referencedRelation: "invoices"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       seo_checks: {
         Row: {
           created_at: string
@@ -291,6 +344,36 @@ export type Database = {
           },
         ]
       }
+      service_items: {
+        Row: {
+          category: string | null
+          created_at: string
+          currency: string
+          id: string
+          label: string
+          price: number
+          user_id: string
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string
+          currency?: string
+          id?: string
+          label: string
+          price?: number
+          user_id?: string
+        }
+        Update: {
+          category?: string | null
+          created_at?: string
+          currency?: string
+          id?: string
+          label?: string
+          price?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
       tasks: {
         Row: {
           created_at: string
@@ -331,6 +414,36 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      tools: {
+        Row: {
+          category: string | null
+          created_at: string
+          id: string
+          name: string
+          notes: string | null
+          url: string | null
+          user_id: string
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string
+          id?: string
+          name: string
+          notes?: string | null
+          url?: string | null
+          user_id?: string
+        }
+        Update: {
+          category?: string | null
+          created_at?: string
+          id?: string
+          name?: string
+          notes?: string | null
+          url?: string | null
+          user_id?: string
+        }
+        Relationships: []
       }
     }
     Views: {
