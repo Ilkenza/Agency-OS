@@ -81,6 +81,35 @@ export default async function InvoiceDetailPage({
           </Stat>
         </div>
       </Panel>
+
+      {invoice.items.length > 0 && (
+        <Panel title="Line items">
+          <table className="w-full text-[13px]">
+            <thead>
+              <tr className="text-left text-[10.5px] uppercase tracking-[0.07em] text-muted">
+                <th className="px-4 py-2 font-bold">Description</th>
+                <th className="px-4 py-2 text-right font-bold">Qty</th>
+                <th className="px-4 py-2 text-right font-bold">Unit</th>
+                <th className="px-4 py-2 text-right font-bold">Amount</th>
+              </tr>
+            </thead>
+            <tbody>
+              {invoice.items.map((it, i) => (
+                <tr key={i} className="border-t border-line-soft">
+                  <td className="px-4 py-2.5 text-ink">{it.label}</td>
+                  <td className="mono px-4 py-2.5 text-right text-muted">{it.qty}</td>
+                  <td className="mono px-4 py-2.5 text-right text-muted">
+                    {formatMoney(it.price, invoice.currency)}
+                  </td>
+                  <td className="mono px-4 py-2.5 text-right text-ink">
+                    {formatMoney(it.price * it.qty, invoice.currency)}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </Panel>
+      )}
     </div>
   );
 }

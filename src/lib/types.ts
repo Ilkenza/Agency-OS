@@ -27,11 +27,16 @@ export type CheckResult = { key: string; label: string; status: CheckStatus; det
 /** Project with its embedded client name (from the `client:clients(name)` select). */
 export type ProjectWithClient = Project & { client: { name: string } | null };
 
-/** Task with its embedded project title (from the `project:projects(title)` select). */
-export type TaskWithProject = Task & { project: { title: string } | null };
+/** Task with its embedded project title + that project's client name. */
+export type TaskWithProject = Task & {
+  project: { title: string; client: { name: string } | null } | null;
+};
 
-/** Invoice with its embedded client name (from the `client:clients(name)` select). */
-export type InvoiceWithClient = Invoice & { client: { name: string } | null };
+/** Invoice with embedded client name and `items` narrowed to QuoteItem[]. */
+export type InvoiceWithClient = Omit<Invoice, "items"> & {
+  items: QuoteItem[];
+  client: { name: string } | null;
+};
 
 /** Seo check with embedded project title, and `results` narrowed to CheckResult[]. */
 export type SeoCheckWithProject = Omit<SeoCheck, "results"> & {

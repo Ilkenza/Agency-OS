@@ -22,3 +22,15 @@ export async function getToolCount(): Promise<number> {
   const { count } = await supabase.from("tools").select("*", { count: "exact", head: true });
   return count ?? 0;
 }
+
+/** Distinct categories in canonical casing (for the form datalist + normalization). */
+export async function getCategories(): Promise<string[]> {
+  const supabase = await createClient();
+  const { data } = await supabase.from("tools").select("category");
+  const set = new Map<string, string>();
+  for (const row of data ?? []) {
+    const c = row.category?.trim();
+    if (c) set.set(c.toLowerCase(), c);
+  }
+  return [...set.values()].sort((a, b) => a.localeCompare(b));
+}

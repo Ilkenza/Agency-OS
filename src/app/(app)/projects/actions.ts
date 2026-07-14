@@ -18,6 +18,8 @@ export async function saveProject(
   const status = String(formData.get("status") ?? "draft");
   const valueRaw = String(formData.get("value") ?? "").trim();
   const dueDate = String(formData.get("due_date") ?? "").trim() || null;
+  const currencyRaw = String(formData.get("currency") ?? "EUR");
+  const currency = ["EUR", "USD", "RSD"].includes(currencyRaw) ? currencyRaw : "EUR";
 
   if (!title) return { error: "Title is required." };
   if (!PROJECT_STATUSES.includes(status as ProjectStatus)) return { error: "Invalid status." };
@@ -32,6 +34,7 @@ export async function saveProject(
     description,
     status,
     value,
+    currency,
     due_date: dueDate,
   };
 

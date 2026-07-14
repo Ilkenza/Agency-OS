@@ -9,6 +9,7 @@ import { DeleteButton } from "@/components/ui/DeleteButton";
 import { deleteCheck } from "../actions";
 import { scoreBadge, checkStatusMeta } from "@/lib/status";
 import { formatDate } from "@/lib/format";
+import { CHECK_WHY } from "@/lib/seo/explain";
 import type { CheckResult } from "@/lib/types";
 
 const ICONS = { pass: CheckCircle2, warn: AlertTriangle, fail: XCircle } as const;
@@ -95,6 +96,11 @@ export default async function CheckDetailPage({
                 <div className="min-w-0 flex-1">
                   <div className="text-[13px] font-semibold text-ink">{r.label}</div>
                   <div className="text-[12px] text-muted">{r.detail}</div>
+                  {CHECK_WHY[r.key] && (
+                    <div className="mt-1 text-[11.5px] leading-relaxed text-faint">
+                      {CHECK_WHY[r.key]}
+                    </div>
+                  )}
                 </div>
                 <span className={`shrink-0 text-[11px] font-semibold uppercase ${meta.color}`}>
                   {meta.label}

@@ -19,6 +19,13 @@ export function TaskForm({ task, projects }: { task?: Task; projects: ProjectOpt
 
   const projectOptions = projects.map((p) => ({ value: p.id, label: p.title }));
 
+  // datetime-local wants `YYYY-MM-DDTHH:MM`; legacy date-only values get midnight.
+  const dueValue = task?.due_at
+    ? task.due_at.length >= 16 && task.due_at.includes("T")
+      ? task.due_at.slice(0, 16)
+      : `${task.due_at.slice(0, 10)}T00:00`
+    : "";
+
   return (
     <div className="flex h-full flex-col">
       <form action={formAction} className="flex-1">
@@ -48,7 +55,12 @@ export function TaskForm({ task, projects }: { task?: Task; projects: ProjectOpt
           options={PRIORITY_OPTIONS}
         />
 
-        <Field label="Due date" name="due_at" type="date" defaultValue={task?.due_at ?? ""} />
+        <Field
+          label="Rok (datum + opciono vreme)"
+          name="due_at"
+          type="datetime-local"
+          defaultValue={dueValue}
+        />
 
         {state?.error && (
           <p className="mb-3 rounded-ctrl border border-danger/40 bg-danger-bg px-3 py-2 text-[12px] text-danger">

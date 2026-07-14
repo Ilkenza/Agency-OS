@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/Button";
 import { DeleteButton } from "@/components/ui/DeleteButton";
 import type { Tool } from "@/lib/types";
 
-export function ToolForm({ tool }: { tool?: Tool }) {
+export function ToolForm({ tool, categories = [] }: { tool?: Tool; categories?: string[] }) {
   const [state, formAction, pending] = useActionState<ToolFormState, FormData>(saveTool, undefined);
 
   return (
@@ -36,8 +36,14 @@ export function ToolForm({ tool }: { tool?: Tool }) {
           name="category"
           defaultValue={tool?.category ?? ""}
           placeholder="Hosting"
-          help="e.g. Hosting, Database, Design, Email, Media, Analytics"
+          list="tool-categories"
+          help="Izaberi postojeću ili upiši novu (npr. Hosting, Database, Email…)."
         />
+        <datalist id="tool-categories">
+          {categories.map((c) => (
+            <option key={c} value={c} />
+          ))}
+        </datalist>
         <Textarea
           label="Notes"
           name="notes"

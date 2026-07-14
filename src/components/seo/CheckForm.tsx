@@ -27,9 +27,11 @@ export function CheckForm({
       <Field
         label="URL"
         name="url"
-        type="url"
+        type="text"
+        inputMode="url"
         defaultValue={initialUrl ?? ""}
-        placeholder="https://example.com"
+        placeholder="example.com"
+        help="Ne moraš da kucaš https:// — dodaje se automatski."
         autoFocus
         required
       />
@@ -51,9 +53,17 @@ export function CheckForm({
       <Button type="submit" variant="primary" className="w-full" disabled={pending}>
         {pending ? "Checking…" : "Run check"}
       </Button>
-      <p className="mt-2 text-[11.5px] text-muted">
-        We fetch the page and score on-page SEO + AI/GEO readiness.
-      </p>
+      <div className="mt-3 space-y-2 rounded-ctrl border border-line-soft bg-white/[0.02] p-3 text-[11.5px] leading-relaxed text-muted">
+        <p>
+          <span className="font-semibold text-ink">SEO</span> = koliko te lako pronalaze
+          pretraživači (Google): naslov, opis, naslovi, slike, mobilni prikaz…
+        </p>
+        <p>
+          <span className="font-semibold text-ink">GEO</span> = koliko te lako razumeju AI
+          alati (ChatGPT, Gemini): struktura, JSON-LD podaci, Open Graph. Preuzmemo stranicu i
+          ocenimo oba.
+        </p>
+      </div>
     </form>
   );
 }

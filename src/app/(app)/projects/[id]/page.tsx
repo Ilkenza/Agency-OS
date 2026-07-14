@@ -8,7 +8,7 @@ import { buttonClasses } from "@/components/ui/Button";
 import { DeleteButton } from "@/components/ui/DeleteButton";
 import { deleteProject } from "../actions";
 import { projectStatusBadge } from "@/lib/status";
-import { formatCurrency, formatDate } from "@/lib/format";
+import { formatMoney, formatDate } from "@/lib/format";
 
 function Stat({ label, children }: { label: string; children: React.ReactNode }) {
   return (
@@ -67,7 +67,7 @@ export default async function ProjectDetailPage({
             {project.client?.name ?? <span className="text-muted">—</span>}
           </Stat>
           <Stat label="Value">
-            <span className="mono">{formatCurrency(project.value)}</span>
+            <span className="mono">{formatMoney(project.value, project.currency)}</span>
           </Stat>
           <Stat label="Due">
             <span className="mono">{formatDate(project.due_date)}</span>

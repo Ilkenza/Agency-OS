@@ -88,6 +88,7 @@ export async function convertQuoteToInvoice(id: string) {
       currency: quote.currency,
       status: "draft",
       issued_at: todayISO(),
+      items,
     })
     .select("id")
     .single();

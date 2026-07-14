@@ -41,6 +41,9 @@ export function QuoteBuilder({
 
   const total = quoteTotal(items);
   const clientOptions = clients.map((c) => ({ value: c.id, label: c.name }));
+  // Only offer catalog items in the quote's currency — RSD & EUR items are separate rows,
+  // so mixing them would silently treat an EUR price as RSD.
+  const catalogForCurrency = catalog.filter((c) => c.currency === currency);
   const cellInput =
     "rounded-ctrl border border-line bg-white/[0.035] px-2.5 py-1.5 text-[13px] text-ink focus:border-gold focus:outline-none";
 
@@ -148,10 +151,11 @@ export function QuoteBuilder({
             className="rounded-ctrl border border-line bg-white/[0.035] px-2.5 py-2 text-[12.5px] text-ink [color-scheme:dark] focus:border-gold focus:outline-none"
           >
             <option value="" className="bg-[#1A1D24] text-[#ECEEF2]">
-              + Add from catalog…
+              + Add from catalog ({currency})…
             </option>
-            {catalog.map((c) => (
+            {catalogForCurrency.map((c) => (
               <option key={c.id} value={c.id} className="bg-[#1A1D24] text-[#ECEEF2]">
+                {c.category ? `${c.category} · ` : ""}
                 {c.label} — {formatMoney(c.price, c.currency)}
               </option>
             ))}

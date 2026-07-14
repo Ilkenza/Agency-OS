@@ -2,18 +2,31 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Plus, Wrench, Pencil, ExternalLink } from "lucide-react";
+import { Plus, Wrench, Pencil, ExternalLink, Tag } from "lucide-react";
 import { SlideOver } from "@/components/ui/SlideOver";
 import { Panel } from "@/components/ui/Panel";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { Button, buttonClasses } from "@/components/ui/Button";
 import type { Tool } from "@/lib/types";
 import { ToolForm } from "./ToolForm";
+import { CategoryForm } from "./CategoryForm";
 import { addStarterTools } from "@/app/(app)/toolbox/actions";
 
-export type ToolboxPanel = { mode: "new" } | { mode: "edit"; tool: Tool } | null;
+export type ToolboxPanel =
+  | { mode: "new" }
+  | { mode: "edit"; tool: Tool }
+  | { mode: "category"; name: string }
+  | null;
 
-export function ToolboxView({ tools, panel }: { tools: Tool[]; panel: ToolboxPanel }) {
+export function ToolboxView({
+  tools,
+  categories,
+  panel,
+}: {
+  tools: Tool[];
+  categories: string[];
+  panel: ToolboxPanel;
+}) {
   const router = useRouter();
   const close = () => router.push("/toolbox");
 
@@ -23,7 +36,7 @@ export function ToolboxView({ tools, panel }: { tools: Tool[]; panel: ToolboxPan
     if (!groups.has(cat)) groups.set(cat, []);
     groups.get(cat)!.push(t);
   }
-  const categories = [...groups.keys()].sort((a, b) =>
+  const groupKeys = [...groups.keys()].sort((a, b) =>
     a === "Other" ? 1 : b === "Other" ? -1 : a.localeCompare(b),
   );
 
@@ -54,10 +67,21 @@ export function ToolboxView({ tools, panel }: { tools: Tool[]; panel: ToolboxPan
         </Panel>
       ) : (
         <div className="space-y-6">
-          {categories.map((cat) => (
+          {groupKeys.map((cat) => (
             <div key={cat}>
-              <div className="mb-2 text-[11px] font-bold uppercase tracking-[0.07em] text-muted">
-                {cat}
+              <div className="group/cat mb-2 flex items-center gap-1.5">
+                <span className="text-[11px] font-bold uppercase tracking-[0.07em] text-muted">
+                  {cat}
+                </span>
+                {cat !== "Other" && (
+                  <Link
+                    href={`/toolbox?cat=${encodeURIComponent(cat)}`}
+                    aria-label={`Edit category ${cat}`}
+                    className="rounded-ctrl p-1 text-faint opacity-0 transition-opacity hover:bg-white/[0.05] hover:text-ink group-hover/cat:opacity-100"
+                  >
+                    <Tag className="h-[13px] w-[13px]" />
+                  </Link>
+                )}
               </div>
               <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                 {groups.get(cat)!.map((t) => (
@@ -99,9 +123,22 @@ export function ToolboxView({ tools, panel }: { tools: Tool[]; panel: ToolboxPan
       <SlideOver
         open={panel !== null}
         onClose={close}
-        title={panel?.mode === "edit" ? "Edit tool" : "New tool"}
+        title={
+          panel?.mode === "category"
+            ? "Edit category"
+            : panel?.mode === "edit"
+              ? "Edit tool"
+              : "New tool"
+        }
       >
-        <ToolForm tool={panel?.mode === "edit" ? panel.tool : undefined} />
+        {panel?.mode === "category" ? (
+          <CategoryForm name={panel.name} />
+        ) : (
+          <ToolForm
+            tool={panel?.mode === "edit" ? panel.tool : undefined}
+            categories={categories}
+          />
+        )}
       </SlideOver>
     </div>
   );

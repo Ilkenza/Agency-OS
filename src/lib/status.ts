@@ -19,9 +19,34 @@ export function projectStatusBadge(status: string): { variant: BadgeStatus; labe
     case "delivered":
       return { variant: "ok", label: "Delivered" };
     case "pending":
-      return { variant: "pending", label: "Pending" };
+      return { variant: "info", label: "Pending" };
     default:
       return { variant: "draft", label: "Draft" };
+  }
+}
+
+export const CLIENT_REGION_OPTIONS: { value: string; label: string }[] = [
+  { value: "domestic", label: "Domaći (RSD)" },
+  { value: "foreign", label: "Strani (EUR/USD)" },
+];
+
+export const CLIENT_TIER_OPTIONS: { value: string; label: string }[] = [
+  { value: "osnovni", label: "Osnovni" },
+  { value: "standard", label: "Standard" },
+  { value: "premium", label: "Premium" },
+];
+
+/** Client tier → Badge variant + label (for list/detail chips). */
+export function clientTierBadge(tier: string | null): { variant: BadgeStatus; label: string } | null {
+  switch (tier) {
+    case "premium":
+      return { variant: "ok", label: "Premium" };
+    case "standard":
+      return { variant: "info", label: "Standard" };
+    case "osnovni":
+      return { variant: "draft", label: "Osnovni" };
+    default:
+      return null;
   }
 }
 

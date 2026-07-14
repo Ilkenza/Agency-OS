@@ -9,7 +9,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { Badge } from "@/components/ui/Badge";
 import { buttonClasses } from "@/components/ui/Button";
 import { priorityBadge } from "@/lib/status";
-import { formatDate, isToday, isOverdue } from "@/lib/format";
+import { formatDateTime, isToday, isOverdue } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import type { Task, TaskWithProject } from "@/lib/types";
 import { TaskCheckbox } from "./TaskCheckbox";
@@ -37,13 +37,14 @@ function TaskRow({ task }: { task: TaskWithProject }) {
             href={`/projects/${task.project_id}`}
             className="text-[11.5px] text-muted hover:text-gold-hi"
           >
+            {task.project.client?.name ? `${task.project.client.name} · ` : ""}
             {task.project.title}
           </Link>
         )}
       </div>
       {!done && <Badge status={pb.variant}>{pb.label}</Badge>}
-      <span className="mono w-[92px] shrink-0 text-right text-[12px] text-muted">
-        {formatDate(task.due_at)}
+      <span className="mono w-[120px] shrink-0 text-right text-[12px] text-muted">
+        {formatDateTime(task.due_at)}
       </span>
       <Link
         href={`/tasks?edit=${task.id}`}

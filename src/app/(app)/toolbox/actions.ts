@@ -3,18 +3,30 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient as createSupabaseServerClient } from "@/lib/supabase/server";
+import { getCategories } from "@/lib/data/tools";
 
 export type ToolFormState = { error?: string } | undefined;
+
+/** Match an existing category case-insensitively (so "email" == "Email"), else Title-case it. */
+function normalizeCategory(input: string, existing: string[]): string | null {
+  const c = input.trim();
+  if (!c) return null;
+  const match = existing.find((e) => e.toLowerCase() === c.toLowerCase());
+  if (match) return match;
+  return c.charAt(0).toUpperCase() + c.slice(1);
+}
 
 export async function saveTool(_prev: ToolFormState, formData: FormData): Promise<ToolFormState> {
   const id = String(formData.get("id") ?? "").trim();
   const name = String(formData.get("name") ?? "").trim();
   let url = String(formData.get("url") ?? "").trim() || null;
-  const category = String(formData.get("category") ?? "").trim() || null;
   const notes = String(formData.get("notes") ?? "").trim() || null;
 
   if (!name) return { error: "Name is required." };
   if (url && !/^https?:\/\//i.test(url)) url = "https://" + url;
+
+  const existing = await getCategories();
+  const category = normalizeCategory(String(formData.get("category") ?? ""), existing);
 
   const supabase = await createSupabaseServerClient();
   const payload = { name, url, category, notes };
@@ -34,6 +46,37 @@ export async function saveTool(_prev: ToolFormState, formData: FormData): Promis
 export async function deleteTool(id: string) {
   const supabase = await createSupabaseServerClient();
   await supabase.from("tools").delete().eq("id", id);
+  revalidatePath("/toolbox");
+  redirect("/toolbox");
+}
+
+export type CategoryState = { error?: string } | undefined;
+
+/** Rename a category across all tools that use it. */
+export async function renameCategory(
+  _prev: CategoryState,
+  formData: FormData,
+): Promise<CategoryState> {
+  const oldName = String(formData.get("old") ?? "").trim();
+  const nextRaw = String(formData.get("name") ?? "").trim();
+  if (!oldName || !nextRaw) return { error: "Ime kategorije je obavezno." };
+  const next = nextRaw.charAt(0).toUpperCase() + nextRaw.slice(1);
+
+  const supabase = await createSupabaseServerClient();
+  const { error } = await supabase
+    .from("tools")
+    .update({ category: next })
+    .eq("category", oldName);
+  if (error) return { error: error.message };
+
+  revalidatePath("/toolbox");
+  redirect("/toolbox");
+}
+
+/** Remove a category — its tools fall back to "uncategorised" (null). */
+export async function deleteCategory(name: string) {
+  const supabase = await createSupabaseServerClient();
+  await supabase.from("tools").update({ category: null }).eq("category", name);
   revalidatePath("/toolbox");
   redirect("/toolbox");
 }
