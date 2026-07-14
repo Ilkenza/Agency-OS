@@ -46,18 +46,22 @@ export async function deleteServiceItem(id: string) {
 }
 
 // Svaki feature ima domaću (RSD) i stranu (EUR) cenu.
+// Strane cene su premium (zapadno tržište), domaće prilagođene srpskom tržištu.
 const STARTER = [
-  { label: "Landing page", eur: 300, rsd: 25000 },
-  { label: "Multi-page website", eur: 600, rsd: 55000 },
-  { label: "Contact form", eur: 80, rsd: 6000 },
-  { label: "Booking (Calendly / Cal.com)", eur: 120, rsd: 10000 },
-  { label: "Login / user accounts", eur: 250, rsd: 22000 },
-  { label: "Stripe checkout / payments", eur: 200, rsd: 18000 },
-  { label: "Blog / CMS", eur: 180, rsd: 15000 },
-  { label: "Multi-language", eur: 150, rsd: 12000 },
-  { label: "SEO setup", eur: 120, rsd: 10000 },
-  { label: "Analytics setup", eur: 60, rsd: 5000 },
-  { label: "Redesign (existing site)", eur: 350, rsd: 30000 },
+  { label: "Landing page (one-pager)", eur: 400, rsd: 30000 },
+  { label: "Multi-page website (do 5 str.)", eur: 900, rsd: 70000 },
+  { label: "Dodatna stranica", eur: 120, rsd: 9000 },
+  { label: "Contact form", eur: 100, rsd: 8000 },
+  { label: "Booking (Calendly / Cal.com)", eur: 150, rsd: 12000 },
+  { label: "Login / user accounts", eur: 350, rsd: 35000 },
+  { label: "Stripe checkout / payments", eur: 300, rsd: 30000 },
+  { label: "Blog / CMS", eur: 250, rsd: 25000 },
+  { label: "Multi-language", eur: 200, rsd: 18000 },
+  { label: "SEO setup", eur: 180, rsd: 15000 },
+  { label: "Analytics setup", eur: 80, rsd: 6000 },
+  { label: "Animacije / micro-interakcije", eur: 200, rsd: 16000 },
+  { label: "Redesign (postojeći sajt)", eur: 500, rsd: 45000 },
+  { label: "Održavanje (mesečno)", eur: 100, rsd: 8000 },
 ];
 
 export async function addStarterFeatures() {
