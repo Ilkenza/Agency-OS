@@ -45,25 +45,28 @@ export async function deleteServiceItem(id: string) {
   redirect("/quotes/catalog");
 }
 
+// Svaki feature ima domaću (RSD) i stranu (EUR) cenu.
 const STARTER = [
-  { label: "Landing page", price: 300 },
-  { label: "Multi-page website", price: 600 },
-  { label: "Contact form", price: 80 },
-  { label: "Booking (Calendly / Cal.com)", price: 120 },
-  { label: "Login / user accounts", price: 250 },
-  { label: "Stripe checkout / payments", price: 200 },
-  { label: "Blog / CMS", price: 180 },
-  { label: "Multi-language", price: 150 },
-  { label: "SEO setup", price: 120 },
-  { label: "Analytics setup", price: 60 },
-  { label: "Redesign (existing site)", price: 350 },
+  { label: "Landing page", eur: 300, rsd: 25000 },
+  { label: "Multi-page website", eur: 600, rsd: 55000 },
+  { label: "Contact form", eur: 80, rsd: 6000 },
+  { label: "Booking (Calendly / Cal.com)", eur: 120, rsd: 10000 },
+  { label: "Login / user accounts", eur: 250, rsd: 22000 },
+  { label: "Stripe checkout / payments", eur: 200, rsd: 18000 },
+  { label: "Blog / CMS", eur: 180, rsd: 15000 },
+  { label: "Multi-language", eur: 150, rsd: 12000 },
+  { label: "SEO setup", eur: 120, rsd: 10000 },
+  { label: "Analytics setup", eur: 60, rsd: 5000 },
+  { label: "Redesign (existing site)", eur: 350, rsd: 30000 },
 ];
 
 export async function addStarterFeatures() {
   const supabase = await createSupabaseServerClient();
-  await supabase
-    .from("service_items")
-    .insert(STARTER.map((s) => ({ label: s.label, price: s.price, currency: "EUR", category: "Website" })));
+  const rows = STARTER.flatMap((s) => [
+    { label: s.label, price: s.rsd, currency: "RSD", category: "Domaći (RSD)" },
+    { label: s.label, price: s.eur, currency: "EUR", category: "Strani (EUR)" },
+  ]);
+  await supabase.from("service_items").insert(rows);
   revalidatePath("/quotes/catalog");
   redirect("/quotes/catalog");
 }
