@@ -30,9 +30,16 @@ export function QuoteBuilder({
   const [currency, setCurrency] = useState(quote?.currency ?? "EUR");
   const [items, setItems] = useState<QuoteItem[]>(quote?.items ?? []);
 
+  // Price for the currently-selected quote currency (one catalog item holds all three).
+  const priceFor = (it: ServiceItem) => {
+    const raw =
+      currency === "RSD" ? it.price_rsd : currency === "USD" ? it.price_usd : it.price_eur;
+    return Number(raw) || 0;
+  };
+
   const addFromCatalog = (id: string) => {
     const it = catalog.find((c) => c.id === id);
-    if (it) setItems((p) => [...p, { label: it.label, price: Number(it.price) || 0, qty: 1 }]);
+    if (it) setItems((p) => [...p, { label: it.label, price: priceFor(it), qty: 1 }]);
   };
   const addCustom = () => setItems((p) => [...p, { label: "", price: 0, qty: 1 }]);
   const update = (i: number, patch: Partial<QuoteItem>) =>
@@ -41,9 +48,6 @@ export function QuoteBuilder({
 
   const total = quoteTotal(items);
   const clientOptions = clients.map((c) => ({ value: c.id, label: c.name }));
-  // Only offer catalog items in the quote's currency — RSD & EUR items are separate rows,
-  // so mixing them would silently treat an EUR price as RSD.
-  const catalogForCurrency = catalog.filter((c) => c.currency === currency);
   const cellInput =
     "rounded-ctrl border border-line bg-white/[0.035] px-2.5 py-1.5 text-[13px] text-ink focus:border-gold focus:outline-none";
 
@@ -153,10 +157,10 @@ export function QuoteBuilder({
             <option value="" className="bg-[#1A1D24] text-[#ECEEF2]">
               + Add from catalog ({currency})…
             </option>
-            {catalogForCurrency.map((c) => (
+            {catalog.map((c) => (
               <option key={c.id} value={c.id} className="bg-[#1A1D24] text-[#ECEEF2]">
                 {c.category ? `${c.category} · ` : ""}
-                {c.label} — {formatMoney(c.price, c.currency)}
+                {c.label} — {formatMoney(priceFor(c), currency)}
               </option>
             ))}
           </select>

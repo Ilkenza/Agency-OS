@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import { saveTool, deleteTool, type ToolFormState } from "@/app/(app)/toolbox/actions";
 import { Field } from "@/components/ui/Field";
 import { Textarea } from "@/components/ui/Textarea";
@@ -10,6 +10,7 @@ import type { Tool } from "@/lib/types";
 
 export function ToolForm({ tool, categories = [] }: { tool?: Tool; categories?: string[] }) {
   const [state, formAction, pending] = useActionState<ToolFormState, FormData>(saveTool, undefined);
+  const [category, setCategory] = useState(tool?.category ?? "");
 
   return (
     <div className="flex h-full flex-col">
@@ -34,16 +35,32 @@ export function ToolForm({ tool, categories = [] }: { tool?: Tool; categories?: 
         <Field
           label="Category"
           name="category"
-          defaultValue={tool?.category ?? ""}
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
           placeholder="Hosting"
-          list="tool-categories"
-          help="Izaberi postojeću ili upiši novu (npr. Hosting, Database, Email…)."
+          help="Upiši novu ili klikni postojeću ispod."
         />
-        <datalist id="tool-categories">
-          {categories.map((c) => (
-            <option key={c} value={c} />
-          ))}
-        </datalist>
+        {categories.length > 0 && (
+          <div className="mb-[13px] -mt-1 flex flex-wrap gap-1.5">
+            {categories.map((c) => {
+              const active = c.toLowerCase() === category.trim().toLowerCase();
+              return (
+                <button
+                  key={c}
+                  type="button"
+                  onClick={() => setCategory(c)}
+                  className={`rounded-pill border px-2.5 py-1 text-[11.5px] font-medium transition-colors ${
+                    active
+                      ? "border-gold bg-gold/15 text-gold-hi"
+                      : "border-line text-muted hover:border-muted hover:text-ink"
+                  }`}
+                >
+                  {c}
+                </button>
+              );
+            })}
+          </div>
+        )}
         <Textarea
           label="Notes"
           name="notes"

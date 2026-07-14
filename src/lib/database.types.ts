@@ -18,6 +18,7 @@ export type Database = {
         Row: {
           business_type: string | null
           contact: string | null
+          contact_channel: string | null
           created_at: string
           id: string
           name: string
@@ -29,6 +30,7 @@ export type Database = {
         Insert: {
           business_type?: string | null
           contact?: string | null
+          contact_channel?: string | null
           created_at?: string
           id?: string
           name: string
@@ -40,6 +42,7 @@ export type Database = {
         Update: {
           business_type?: string | null
           contact?: string | null
+          contact_channel?: string | null
           created_at?: string
           id?: string
           name?: string
@@ -369,6 +372,9 @@ export type Database = {
           id: string
           label: string
           price: number
+          price_eur: number | null
+          price_rsd: number | null
+          price_usd: number | null
           user_id: string
         }
         Insert: {
@@ -378,6 +384,9 @@ export type Database = {
           id?: string
           label: string
           price?: number
+          price_eur?: number | null
+          price_rsd?: number | null
+          price_usd?: number | null
           user_id?: string
         }
         Update: {
@@ -387,6 +396,9 @@ export type Database = {
           id?: string
           label?: string
           price?: number
+          price_eur?: number | null
+          price_rsd?: number | null
+          price_usd?: number | null
           user_id?: string
         }
         Relationships: []

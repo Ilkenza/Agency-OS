@@ -13,6 +13,7 @@ export async function saveClient(
   const id = String(formData.get("id") ?? "").trim();
   const name = String(formData.get("name") ?? "").trim();
   const contact = String(formData.get("contact") ?? "").trim() || null;
+  const contactChannel = String(formData.get("contact_channel") ?? "").trim() || null;
   const notes = String(formData.get("notes") ?? "").trim() || null;
   const businessType = String(formData.get("business_type") ?? "").trim() || null;
   const regionRaw = String(formData.get("region") ?? "").trim();
@@ -23,7 +24,15 @@ export async function saveClient(
   if (!name) return { error: "Name is required." };
 
   const supabase = await createSupabaseServerClient();
-  const payload = { name, contact, notes, business_type: businessType, region, tier };
+  const payload = {
+    name,
+    contact,
+    contact_channel: contactChannel,
+    notes,
+    business_type: businessType,
+    region,
+    tier,
+  };
 
   if (id) {
     const { error } = await supabase.from("clients").update(payload).eq("id", id);

@@ -7,11 +7,11 @@ import {
   type ServiceItemState,
 } from "@/app/(app)/quotes/catalog/actions";
 import { Field } from "@/components/ui/Field";
-import { Select } from "@/components/ui/Select";
 import { Button } from "@/components/ui/Button";
 import { DeleteButton } from "@/components/ui/DeleteButton";
-import { CURRENCY_OPTIONS } from "@/lib/status";
 import type { ServiceItem } from "@/lib/types";
+
+const priceStr = (v: number | null | undefined) => (v == null ? "" : String(v));
 
 export function ServiceItemForm({ item }: { item?: ServiceItem }) {
   const [state, formAction, pending] = useActionState<ServiceItemState, FormData>(
@@ -33,27 +33,48 @@ export function ServiceItemForm({ item }: { item?: ServiceItem }) {
           required
         />
         <Field
-          label="Price"
-          name="price"
-          type="number"
-          step="0.01"
-          min="0"
-          inputMode="decimal"
-          defaultValue={item ? String(item.price) : ""}
-          placeholder="120"
-        />
-        <Select
-          label="Currency"
-          name="currency"
-          defaultValue={item?.currency ?? "EUR"}
-          options={CURRENCY_OPTIONS}
-        />
-        <Field
           label="Category"
           name="category"
           defaultValue={item?.category ?? ""}
           placeholder="Website"
         />
+
+        <div className="mb-1.5 text-xs font-semibold text-[#C6CAD6]">Cene po valuti</div>
+        <div className="grid grid-cols-3 gap-x-3">
+          <Field
+            label="RSD"
+            name="price_rsd"
+            type="number"
+            step="0.01"
+            min="0"
+            inputMode="decimal"
+            defaultValue={priceStr(item?.price_rsd)}
+            placeholder="12000"
+          />
+          <Field
+            label="EUR"
+            name="price_eur"
+            type="number"
+            step="0.01"
+            min="0"
+            inputMode="decimal"
+            defaultValue={priceStr(item?.price_eur)}
+            placeholder="120"
+          />
+          <Field
+            label="USD"
+            name="price_usd"
+            type="number"
+            step="0.01"
+            min="0"
+            inputMode="decimal"
+            defaultValue={priceStr(item?.price_usd)}
+            placeholder="130"
+          />
+        </div>
+        <p className="mb-3 text-[11.5px] text-muted">
+          Popuni cenu za valute koje koristiš — ostavi prazno ako ne nudiš u toj valuti.
+        </p>
 
         {state?.error && (
           <p className="mb-3 rounded-ctrl border border-danger/40 bg-danger-bg px-3 py-2 text-[12px] text-danger">

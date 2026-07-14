@@ -83,6 +83,9 @@ export function ClientsView({
                     </td>
                     <td className="border-b border-line-soft px-4 py-3 text-muted">
                       {c.contact ?? "—"}
+                      {c.contact_channel && (
+                        <span className="block text-[11.5px] text-faint">{c.contact_channel}</span>
+                      )}
                     </td>
                     <td className="border-b border-line-soft px-4 py-3">
                       {clientTierBadge(c.tier) ? (

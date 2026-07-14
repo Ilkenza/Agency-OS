@@ -32,7 +32,14 @@ export function ClientForm({ client }: { client?: Client }) {
           label="Vlasnik / kontakt osoba"
           name="contact"
           defaultValue={client?.contact ?? ""}
-          placeholder="Ime · email · telefon"
+          placeholder="npr. Milan Jovanović"
+        />
+        <Field
+          label="Kontakt kanal"
+          name="contact_channel"
+          defaultValue={client?.contact_channel ?? ""}
+          placeholder="Instagram @user · email · telefon"
+          help="Kako ste u kontaktu / preko čega ste se čuli."
         />
         <div className="grid gap-x-4 sm:grid-cols-2">
           <Select
