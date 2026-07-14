@@ -45,8 +45,8 @@ export async function deleteServiceItem(id: string) {
   redirect("/quotes/catalog");
 }
 
-// Svaki feature ima domaću (RSD) i stranu (EUR) cenu.
-// Strane cene su premium (zapadno tržište), domaće prilagođene srpskom tržištu.
+// Bazna cena (nivo "Osnovni") po feature-u, posebno za domaće (RSD) i strane (EUR) klijente.
+// Strane baze su premium (zapadno tržište), domaće prilagođene srpskom tržištu.
 const STARTER = [
   { label: "Landing page (one-pager)", eur: 400, rsd: 30000 },
   { label: "Multi-page website (do 5 str.)", eur: 900, rsd: 70000 },
@@ -64,12 +64,34 @@ const STARTER = [
   { label: "Održavanje (mesečno)", eur: 100, rsd: 8000 },
 ];
 
+// Nivoi po tipu klijenta (množilac na baznu "Osnovni" cenu).
+const TIERS = [
+  { name: "Osnovni", mult: 1 },
+  { name: "Standard", mult: 1.6 },
+  { name: "Premium", mult: 2.5 },
+];
+
+// Zaokruži: RSD na 500, EUR na 10 — da cene budu "čiste".
+const roundTo = (value: number, step: number) => Math.round(value / step) * step;
+
 export async function addStarterFeatures() {
   const supabase = await createSupabaseServerClient();
-  const rows = STARTER.flatMap((s) => [
-    { label: s.label, price: s.rsd, currency: "RSD", category: "Domaći (RSD)" },
-    { label: s.label, price: s.eur, currency: "EUR", category: "Strani (EUR)" },
-  ]);
+  const rows = STARTER.flatMap((s) =>
+    TIERS.flatMap((t) => [
+      {
+        label: s.label,
+        price: roundTo(s.rsd * t.mult, 500),
+        currency: "RSD",
+        category: `Domaći — ${t.name}`,
+      },
+      {
+        label: s.label,
+        price: roundTo(s.eur * t.mult, 10),
+        currency: "EUR",
+        category: `Strani — ${t.name}`,
+      },
+    ]),
+  );
   await supabase.from("service_items").insert(rows);
   revalidatePath("/quotes/catalog");
   redirect("/quotes/catalog");
