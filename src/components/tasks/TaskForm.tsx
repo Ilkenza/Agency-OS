@@ -9,7 +9,7 @@ import { DeleteButton } from "@/components/ui/DeleteButton";
 import { PRIORITY_OPTIONS } from "@/lib/status";
 import type { Task } from "@/lib/types";
 
-export type ProjectOption = { id: string; title: string };
+export type ProjectOption = { id: string; title: string; client: string | null };
 
 export function TaskForm({ task, projects }: { task?: Task; projects: ProjectOption[] }) {
   const [state, formAction, pending] = useActionState<TaskFormState, FormData>(
@@ -17,7 +17,10 @@ export function TaskForm({ task, projects }: { task?: Task; projects: ProjectOpt
     undefined,
   );
 
-  const projectOptions = projects.map((p) => ({ value: p.id, label: p.title }));
+  const projectOptions = projects.map((p) => ({
+    value: p.id,
+    label: p.client ? `${p.client} · ${p.title}` : p.title,
+  }));
 
   // datetime-local wants `YYYY-MM-DDTHH:MM`; legacy date-only values get midnight.
   const dueValue = task?.due_at

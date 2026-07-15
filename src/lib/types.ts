@@ -22,7 +22,14 @@ export type QuoteWithClient = Omit<Quote, "items"> & {
 
 /** One finding in a seo_check's `results` jsonb array. */
 export type CheckStatus = "pass" | "warn" | "fail";
-export type CheckResult = { key: string; label: string; status: CheckStatus; detail: string };
+export type CheckResult = {
+  key: string;
+  label: string;
+  status: CheckStatus;
+  detail: string;
+  /** What the page actually has (e.g. the current title text) — for comparison with the example. */
+  found?: string;
+};
 
 /** Project with its embedded client name (from the `client:clients(name)` select). */
 export type ProjectWithClient = Project & { client: { name: string } | null };

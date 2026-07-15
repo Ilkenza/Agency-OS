@@ -106,13 +106,25 @@ export default async function CheckDetailPage({
                     {meta.label}
                   </span>
                 </summary>
-                {info && (
-                  <div className="space-y-2 px-4 pb-3.5 pl-11">
-                    <p className="text-[11.5px] leading-relaxed text-muted">{info.why}</p>
-                    {info.example && (
+                {(info || r.found) && (
+                  <div className="space-y-2.5 px-4 pb-3.5 pl-11">
+                    {info?.why && (
+                      <p className="text-[11.5px] leading-relaxed text-muted">{info.why}</p>
+                    )}
+                    {r.found && (
                       <div>
                         <div className="mb-1 text-[10.5px] font-bold uppercase tracking-[0.06em] text-faint">
-                          Primer
+                          Tvoja stranica
+                        </div>
+                        <pre className="mono overflow-x-auto rounded-ctrl border border-line-soft bg-white/[0.03] px-3 py-2 text-[11px] leading-relaxed text-ink/90">
+                          {r.found}
+                        </pre>
+                      </div>
+                    )}
+                    {info?.example && (
+                      <div>
+                        <div className="mb-1 text-[10.5px] font-bold uppercase tracking-[0.06em] text-faint">
+                          Primer (kako treba)
                         </div>
                         <pre className="mono overflow-x-auto rounded-ctrl border border-line-soft bg-white/[0.03] px-3 py-2 text-[11px] leading-relaxed text-ink/90">
                           {info.example}

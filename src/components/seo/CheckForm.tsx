@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
+import { Loader2 } from "lucide-react";
 import { runCheck, type CheckFormState } from "@/app/(app)/seo/actions";
 import { Field } from "@/components/ui/Field";
 import { Select } from "@/components/ui/Select";
@@ -51,7 +52,14 @@ export function CheckForm({
       )}
 
       <Button type="submit" variant="primary" className="w-full" disabled={pending}>
-        {pending ? "Checking…" : "Run check"}
+        {pending ? (
+          <>
+            <Loader2 className="h-4 w-4 animate-spin" />
+            Skeniram…
+          </>
+        ) : (
+          "Run check"
+        )}
       </Button>
       <div className="mt-3 space-y-2 rounded-ctrl border border-line-soft bg-white/[0.02] p-3 text-[11.5px] leading-relaxed text-muted">
         <p>

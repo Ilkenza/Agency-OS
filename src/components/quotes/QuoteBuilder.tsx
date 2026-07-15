@@ -160,7 +160,7 @@ export function QuoteBuilder({
             {catalog.map((c) => (
               <option key={c.id} value={c.id} className="bg-[#1A1D24] text-[#ECEEF2]">
                 {c.category ? `${c.category} · ` : ""}
-                {c.label} — {formatMoney(priceFor(c), currency)}
+                {c.label} — {priceFor(c) > 0 ? formatMoney(priceFor(c), currency) : "nema cenu"}
               </option>
             ))}
           </select>

@@ -18,7 +18,11 @@ export default async function TasksPage({
     if (task) panel = { mode: "edit", task };
   }
 
-  const projectOptions = projects.map((p) => ({ id: p.id, title: p.title }));
+  const projectOptions = projects.map((p) => ({
+    id: p.id,
+    title: p.title,
+    client: p.client?.name ?? null,
+  }));
 
   return <TasksView tasks={tasks} projects={projectOptions} panel={panel} />;
 }
