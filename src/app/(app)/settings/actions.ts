@@ -74,6 +74,22 @@ export async function changePassword(
   return { ok: true };
 }
 
+/** Create/rotate the token the browser extension uses to add leads. */
+export async function generateExtToken(): Promise<SettingsState> {
+  const supabase = await createSupabaseServerClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return { error: "Not signed in." };
+
+  const token = crypto.randomUUID();
+  const { error } = await supabase.from("profiles").update({ ext_token: token }).eq("id", user.id);
+  if (error) return { error: error.message };
+
+  revalidatePath("/settings");
+  return { ok: true };
+}
+
 export async function deleteAccount() {
   const supabase = await createSupabaseServerClient();
   const { error } = await supabase.rpc("delete_user");

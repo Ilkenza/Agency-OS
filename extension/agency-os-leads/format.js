@@ -1,66 +1,46 @@
-/* Pure transforms — no DOM, no chrome APIs. Loaded before popup.js in the
- * popup page (shared globals) and require()-able by test.mjs in node.
- *
- * Column order matches src/lib/leads/parse-import.ts. */
+/* Pure helpers — no DOM, no chrome APIs. Shared by popup.js and test.mjs. */
 
-const HEADERS = [
-  "name",
-  "company",
-  "contact",
-  "channel",
-  "service",
-  "status",
-  "value",
-  "next_followup",
-  "notes",
-];
-
-function mapsToRows(rows, onlyNoSite) {
-  return rows
-    .filter((r) => (onlyNoSite ? !r.hasWebsite : true))
-    .map((r) => ({
-      name: r.name,
-      company: "",
-      contact: r.phone || "",
-      channel: r.phone ? "phone" : "",
-      service: r.hasWebsite ? "" : "bez sajta",
-      status: "new",
-      value: "",
-      next_followup: "",
-      notes: [r.info, r.hasWebsite ? "" : "nema sajt"].filter(Boolean).join(" · "),
-    }));
-}
-
-function instagramToRows(rows) {
-  return rows.map((r) => ({
-    name: r.name || r.username,
+// Scraped Instagram profile → default lead field values (user can edit in the form).
+function igToLead(p) {
+  const username = (p.username || "").replace(/^@/, "");
+  return {
+    name: p.name || username,
     company: "",
-    contact: "@" + r.username,
+    contact: username ? "@" + username : "",
     channel: "instagram",
     service: "",
     status: "new",
-    value: "",
-    next_followup: "",
     notes: "",
-  }));
+  };
 }
 
-function toTSV(rows) {
-  const head = HEADERS.join("\t");
-  const body = rows.map((r) => HEADERS.map((h) => String(r[h] ?? "").replace(/\t/g, " ")).join("\t"));
-  return [head, ...body].join("\n");
+// Scraped Google Maps place → default lead field values.
+function mapsToLead(p) {
+  return {
+    name: p.name || "",
+    company: "",
+    contact: p.phone || "",
+    channel: "google_maps",
+    service: p.hasWebsite ? "" : "new_site",
+    status: "new",
+    notes: [p.link || "", p.hasWebsite ? "" : "nema sajt"].filter(Boolean).join(" · "),
+  };
 }
 
-function csvCell(v) {
-  const s = String(v ?? "");
-  return /[",\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
-}
-function toCSV(rows) {
-  const head = HEADERS.map(csvCell).join(",");
-  const body = rows.map((r) => HEADERS.map((h) => csvCell(r[h])).join(","));
-  return [head, ...body].join("\n");
+// Lead form values → argument object for the ext_add_lead RPC.
+function toRpcArgs(lead, token) {
+  return {
+    p_token: token || "",
+    p_name: lead.name || "",
+    p_company: lead.company || "",
+    p_contact: lead.contact || "",
+    p_channel: lead.channel || "",
+    p_service: lead.service || "",
+    p_status: lead.status || "new",
+    p_notes: lead.notes || "",
+  };
 }
 
 if (typeof module !== "undefined") {
-  module.exports = { HEADERS, mapsToRows, instagramToRows, toTSV, toCSV };
+  module.exports = { igToLead, mapsToLead, toRpcArgs };
 }

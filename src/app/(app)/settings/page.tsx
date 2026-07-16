@@ -4,6 +4,7 @@ import { Panel } from "@/components/ui/Panel";
 import { ProfileForm } from "@/components/settings/ProfileForm";
 import { BusinessForm } from "@/components/settings/BusinessForm";
 import { PasswordForm } from "@/components/settings/PasswordForm";
+import { ExtensionPanel } from "@/components/settings/ExtensionPanel";
 import { DangerZone } from "@/components/settings/DangerZone";
 
 export default async function SettingsPage() {
@@ -23,6 +24,14 @@ export default async function SettingsPage() {
 
       <Panel title="Business details">
         <BusinessForm profile={profile} />
+      </Panel>
+
+      <Panel title="Browser extension (Lead Collector)">
+        <ExtensionPanel
+          token={profile?.ext_token ?? null}
+          url={process.env.NEXT_PUBLIC_SUPABASE_URL ?? ""}
+          anonKey={process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? ""}
+        />
       </Panel>
 
       <Panel title="Password">

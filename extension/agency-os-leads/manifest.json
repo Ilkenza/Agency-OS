@@ -1,16 +1,18 @@
 {
   "manifest_version": 3,
   "name": "Agency OS — Lead Collector",
-  "version": "1.0.0",
-  "description": "Prikupi leadove sa Google Maps i Instagram-a i izvezi ih za Agency OS (Kopiraj / CSV).",
-  "permissions": ["activeTab", "scripting", "clipboardWrite", "downloads"],
+  "version": "2.0.0",
+  "description": "Otvori profil (Instagram) ili biznis (Google Maps), proveri postoji li lead i sačuvaj ga direktno u Agency OS.",
+  "permissions": ["activeTab", "scripting", "clipboardWrite", "storage"],
   "host_permissions": [
     "https://www.google.com/maps/*",
     "https://www.google.com/*",
-    "https://www.instagram.com/*"
+    "https://www.instagram.com/*",
+    "https://*.supabase.co/*"
   ],
   "action": {
     "default_popup": "popup.html",
     "default_title": "Agency OS — Lead Collector"
-  }
+  },
+  "options_page": "options.html"
 }
