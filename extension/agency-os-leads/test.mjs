@@ -24,7 +24,8 @@ eq("ig: strips leading @", igToLead({ username: "@y" }).contact, "@y");
 const fb = fbToLead({ name: "Pekara Zlatno Zrno", handle: "zlatnozrno", url: "https://www.facebook.com/zlatnozrno" });
 eq("fb: channel", fb.channel, "facebook");
 eq("fb: contact @handle", fb.contact, "@zlatnozrno");
-eq("fb: notes = url", fb.notes, "https://www.facebook.com/zlatnozrno");
+eq("fb: notes empty", fb.notes, "");
+eq("fb: name is real name", fb.name, "Pekara Zlatno Zrno");
 const fbId = fbToLead({ name: "X", handle: "profile:123", url: "https://www.facebook.com/profile.php?id=123" });
 eq("fb: numeric profile → contact url", fbId.contact, "https://www.facebook.com/profile.php?id=123");
 

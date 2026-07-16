@@ -19,13 +19,13 @@ function fbToLead(p) {
   const handle = (p.handle || "").replace(/^@/, "");
   const cleanHandle = handle && !handle.startsWith("profile:") ? handle : "";
   return {
-    name: p.name || cleanHandle || "Facebook",
+    name: p.name || cleanHandle || "",
     company: "",
     contact: cleanHandle ? "@" + cleanHandle : p.url || "",
     channel: "facebook",
     service: "",
     status: "new",
-    notes: p.url || "",
+    notes: "",
   };
 }
 
