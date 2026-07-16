@@ -143,7 +143,7 @@ export const LEAD_STATUS_OPTIONS: { value: LeadStatus; label: string }[] = [
   { value: "interested", label: "Interested" },
   { value: "follow_up_soon", label: "Follow up soon" },
   { value: "negotiating", label: "Negotiating" },
-  { value: "waiting", label: "Site in progress" },
+  { value: "waiting", label: "Awaiting their site" },
   { value: "maybe", label: "Maybe later" },
   { value: "won", label: "Won" },
   { value: "lost", label: "Lost" },
@@ -166,7 +166,7 @@ export function leadStatusBadge(status: string): { variant: BadgeStatus; label: 
     case "seen":
       return { variant: "active", label: "Seen" };
     case "waiting":
-      return { variant: "info", label: "In progress" };
+      return { variant: "info", label: "Awaiting site" };
     case "maybe":
       return { variant: "draft", label: "Maybe later" };
     case "contacted":
