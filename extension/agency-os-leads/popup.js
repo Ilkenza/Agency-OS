@@ -35,7 +35,7 @@ function scrapeIgProfile() {
   const m = location.pathname.match(/^\/([A-Za-z0-9._]+)\/?$/);
   const reserved = ["explore", "reels", "direct", "accounts", "p", "stories", "about"];
   if (!m || reserved.includes(m[1]))
-    return { error: "Otvori nečiju Instagram stranicu profila (npr. instagram.com/ime)." };
+    return { error: "Open someone's Instagram profile page (e.g. instagram.com/name)." };
   const username = m[1];
   let name = "";
   const header = document.querySelector("header");
@@ -65,7 +65,7 @@ function scrapeFbProfile() {
   }
   const name = (document.querySelector("h1")?.textContent || "").trim();
   if (!name && !handle)
-    return { error: "Otvori Facebook stranicu ili profil (npr. facebook.com/ime)." };
+    return { error: "Open a Facebook page or profile (e.g. facebook.com/name)." };
   const url =
     "https://www.facebook.com" +
     (handle.startsWith("profile:") ? "/profile.php?id=" + handle.slice(8) : "/" + handle);
@@ -74,7 +74,7 @@ function scrapeFbProfile() {
 
 function scrapeMapsPlace() {
   const name = (document.querySelector("h1")?.textContent || "").trim();
-  if (!name) return { error: "Otvori biznis na Google Maps (klikni na mesto da se otvori panel)." };
+  if (!name) return { error: "Open a business on Google Maps (click a place to open its panel)." };
   let phone = "";
   const pb = document.querySelector('button[data-item-id^="phone:tel:"]');
   if (pb) {
@@ -104,7 +104,7 @@ async function rpc(fn, args) {
 /** Look up the existing lead; if found, mark ✓ and fill the form from it. */
 async function syncExisting(contact, name) {
   els.exists.className = "exists";
-  els.exists.innerHTML = "Proveravam…";
+  els.exists.innerHTML = "Checking…";
   try {
     const found = await rpc("ext_get_lead", {
       p_token: cfg.token,
@@ -115,14 +115,14 @@ async function syncExisting(contact, name) {
       // Keep the auto channel if the stored one is empty.
       fillForm({ ...found, channel: found.channel || els.form.channel.value });
       els.exists.className = "exists dupe";
-      els.exists.innerHTML = '<span class="mark">✓</span> Već postoji u Agency OS';
+      els.exists.innerHTML = '<span class="mark">✓</span> Already in Agency OS';
     } else {
       els.exists.className = "exists new";
-      els.exists.innerHTML = '<span class="mark">✗</span> Nov lead';
+      els.exists.innerHTML = '<span class="mark">✗</span> New lead';
     }
   } catch (e) {
     els.exists.className = "exists";
-    els.exists.innerHTML = "Ne mogu da proverim (proveri vezu u Options).";
+    els.exists.innerHTML = "Can't check (verify the connection in Options).";
     setMsg(String(e.message || e), "err", 8000);
   }
 }
@@ -187,7 +187,7 @@ async function boot() {
   cfg = store.agencyos;
   if (!cfg || !cfg.url || !cfg.token) {
     notice(
-      'Nije povezano. Otvori <b>Options</b> ekstenzije i nalepi config iz aplikacije (Settings → Browser extension).',
+      'Not connected. Open the extension <b>Options</b> and paste the config from the app (Settings → Browser extension).',
     );
     return;
   }
@@ -200,7 +200,7 @@ async function boot() {
   else if (/^https:\/\/www\.google\.[^/]+\/maps/.test(url)) mode = "maps";
   else {
     notice(
-      "Otvori nečiji <b>Instagram profil</b>, <b>Facebook stranicu</b> ili <b>biznis na Google Maps</b>.",
+      "Open an <b>Instagram profile</b>, a <b>Facebook page</b>, or a <b>Google Maps business</b>.",
     );
     return;
   }
@@ -216,11 +216,11 @@ async function boot() {
     const [r] = await chrome.scripting.executeScript({ target: { tabId: tab.id }, func: fn });
     data = r?.result;
   } catch (e) {
-    notice("Ne mogu da pročitam stranicu: " + (e?.message || e));
+    notice("Can't read the page: " + (e?.message || e));
     return;
   }
   if (!data || data.error) {
-    notice(data?.error || "Ništa nije pronađeno na stranici.");
+    notice(data?.error || "Nothing found on the page.");
     return;
   }
 
@@ -241,7 +241,7 @@ async function boot() {
 els.form.addEventListener("submit", async (e) => {
   e.preventDefault();
   els.save.disabled = true;
-  setMsg("Čuvam…");
+  setMsg("Saving…");
   try {
     const lead = {
       name: els.form.name.value.trim(),
@@ -253,11 +253,11 @@ els.form.addEventListener("submit", async (e) => {
       notes: els.form.notes.value.trim(),
     };
     await rpc("ext_add_lead", toRpcArgs(lead, cfg.token));
-    setMsg("Sačuvano u Agency OS ✓", "ok", 5000);
+    setMsg("Saved to Agency OS ✓", "ok", 5000);
     await clearDraft(); // saved → drop the unsaved-draft copy
     syncExisting(lead.contact, lead.name);
   } catch (e2) {
-    setMsg("Greška: " + (e2?.message || e2), "err", 9000);
+    setMsg("Error: " + (e2?.message || e2), "err", 9000);
   }
   els.save.disabled = false;
 });

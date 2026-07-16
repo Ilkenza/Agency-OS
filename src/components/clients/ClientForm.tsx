@@ -21,48 +21,48 @@ export function ClientForm({ client }: { client?: Client }) {
       <form action={formAction} className="flex-1">
         {client && <input type="hidden" name="id" value={client.id} />}
         <Field
-          label="Naziv biznisa"
+          label="Business name"
           name="name"
           defaultValue={client?.name ?? ""}
-          placeholder="Prestige Nekretnine"
+          placeholder="Prestige Real Estate"
           autoFocus
           required
         />
         <Field
-          label="Vlasnik / kontakt osoba"
+          label="Owner / contact person"
           name="contact"
           defaultValue={client?.contact ?? ""}
-          placeholder="npr. Milan Jovanović"
+          placeholder="e.g. John Miller"
         />
         <Field
-          label="Kontakt kanal"
+          label="Contact channel"
           name="contact_channel"
           defaultValue={client?.contact_channel ?? ""}
-          placeholder="Instagram @user · email · telefon"
-          help="Kako ste u kontaktu / preko čega ste se čuli."
+          placeholder="Instagram @user · email · phone"
+          help="How you're in touch / where you connected."
         />
         <div className="grid gap-x-4 sm:grid-cols-2">
           <Select
             label="Region"
             name="region"
             defaultValue={client?.region ?? ""}
-            placeholder="Izaberi…"
+            placeholder="Select…"
             options={CLIENT_REGION_OPTIONS}
-            help="Određuje valutu ponuda/projekata."
+            help="Sets the currency for quotes/projects."
           />
           <Select
-            label="Nivo"
+            label="Tier"
             name="tier"
             defaultValue={client?.tier ?? ""}
-            placeholder="Izaberi…"
+            placeholder="Select…"
             options={CLIENT_TIER_OPTIONS}
           />
         </div>
         <Field
-          label="Tip biznisa"
+          label="Business type"
           name="business_type"
           defaultValue={client?.business_type ?? ""}
-          placeholder="pekara, teretana, klinika…"
+          placeholder="bakery, gym, clinic…"
         />
         <Textarea
           label="Notes"

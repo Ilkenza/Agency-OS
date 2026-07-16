@@ -1,37 +1,38 @@
-# Agency OS — Lead Collector (Chrome ekstenzija)
+# Agency OS — Lead Collector (Chrome extension)
 
-Otvoriš **jedan** Instagram profil, Facebook stranicu ili Google Maps biznis → ekstenzija uzme podatke sa te stranice,
-**proveri da li lead već postoji** u Agency OS (✓ / ✗), pustiš te da dopuniš polja i **sačuvaš direktno
-u bazu**. Bez CSV-a i bez ručnog kucanja.
+Open **one** Instagram profile, Facebook page, or Google Maps business → the extension reads the page,
+**checks whether the lead already exists** in Agency OS (✓ / ✗), lets you fill in a few fields, and
+**saves it straight to your database**. No CSV, no manual typing.
 
-## Jednokratni setup
+## One-time setup
 
-1. U aplikaciji: **Settings → Browser extension** → **Generiši token** → **Kopiraj config za ekstenziju**.
-2. `chrome://extensions` → **Developer mode** → **Load unpacked** → izaberi folder `extension/agency-os-leads`.
-3. Desni klik na ikonu ekstenzije → **Options** → nalepi config → **Sačuvaj vezu** (piše „Povezano ✓").
+1. In the app: **Settings → Browser extension** → **Generate token** → **Copy config for the extension**.
+2. `chrome://extensions` → **Developer mode** → **Load unpacked** → pick this folder (`extension/agency-os-leads`).
+3. Right-click the extension icon → **Options** → paste the config → **Save connection** (shows “Connected ✓”).
 
-Config je JSON `{ url, anonKey, token }`. `url`/`anonKey` su javni (Supabase), `token` je tvoja tajna
-koja povezuje ekstenziju sa tvojim nalogom.
+The config is a JSON `{ url, anonKey, token }`. `url`/`anonKey` are public (Supabase); `token` is your
+secret that links the extension to your account.
 
-## Korišćenje
+## Usage
 
-- **Instagram**: otvori nečiji profil (`instagram.com/ime`) → klikni ikonu. Popup pokaže ✓/✗ i formu
-  (name, contact `@username`, channel `instagram`, + service/status/notes/company po izboru) → **Sačuvaj**.
-- **Facebook**: otvori stranicu/profil (`facebook.com/ime`) → klikni ikonu. Uzme naziv (h1) i link;
+- **Instagram**: open someone's profile (`instagram.com/name`) → click the icon. The popup shows ✓/✗ and a
+  form (name, contact `@username`, channel `instagram`, plus service/status/notes/company) → **Save**.
+- **Facebook**: open a page/profile (`facebook.com/name`) → click the icon. Takes the name and handle;
   channel = `facebook`.
-- **Google Maps**: klikni na biznis da se otvori panel → klikni ikonu. Uzme naziv, telefon (ako postoji),
-  DA/NE ima sajt, i **link** (ide u notes); channel = `google_maps` → dopuni → **Sačuvaj**.
+- **Google Maps**: click a business to open its panel → click the icon. Takes the name, phone (if shown),
+  whether it has a website, and the link (added to notes); channel = `google_maps`.
 
-Lead se odmah pojavi u aplikaciji pod **Leads**.
+The lead appears immediately in the app under **Leads**.
 
-## Ograničenja / bezbednost
+## Limits / security
 
-- **Token je tajna** — ko ga ima može dodavati leadove tebi. Čuvaj ga; **Regeneriši token** u Settings
-  odmah opoziva stari.
-- **Selektori se mogu pokvariti**: Instagram/Google menjaju HTML. Ako popup kaže da ništa nije pronašao,
-  treba doraditi `scrapeIgProfile` / `scrapeMapsPlace` u `popup.js`.
-- **Telefon** na Maps-u se čita samo ako je prikazan u panelu.
-- Ekstenzija samo **čita** otvorenu stranicu i **piše u tvoj Agency OS** — ništa ne šalje na IG/Google.
+- **The token is a secret** — anyone with it can add leads to your account. Keep it safe; **Regenerate
+  token** in Settings revokes the old one instantly.
+- **Selectors can break**: Instagram/Facebook/Google change their HTML. If the popup finds nothing,
+  update `scrapeIgProfile` / `scrapeFbProfile` / `scrapeMapsPlace` in `popup.js`.
+- **Phone** on Maps is only read if it's shown in the panel.
+- The extension only **reads** the open page and **writes to your Agency OS** — it never posts anything
+  to Instagram/Facebook/Google.
 
 ## Test
 
@@ -39,11 +40,11 @@ Lead se odmah pojavi u aplikaciji pod **Leads**.
 node test.mjs
 ```
 
-## Fajlovi
+## Files
 
 - `manifest.json` — MV3 manifest (+ options_page)
-- `popup.html` / `popup.css` — UI (forma + provera duplikata)
-- `popup.js` — detekcija sajta, scraper injekcija, provera i upis (Supabase RPC)
-- `format.js` — čiste funkcije (scrape → lead payload); deljene sa testom
-- `options.html` / `options.js` — unos/čuvanje config-a
+- `popup.html` / `popup.css` — UI (form + duplicate check)
+- `popup.js` — site detection, scraper injection, check and save (Supabase RPC)
+- `format.js` — pure functions (scrape → lead payload); shared with the test
+- `options.html` / `options.js` — enter/store the config
 - `test.mjs` — node sanity test

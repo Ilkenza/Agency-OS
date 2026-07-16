@@ -32,16 +32,16 @@ export function ExtensionPanel({
       setCopied(true);
       setTimeout(() => setCopied(false), 2500);
     } catch {
-      setError("Kopiranje nije uspelo.");
+      setError("Copy failed.");
     }
   };
 
   return (
     <div className="space-y-4 px-4 py-4">
       <p className="text-[13px] leading-relaxed text-muted">
-        Poveži <b className="text-ink">Lead Collector</b> ekstenziju sa svojim nalogom: generiši token,
-        klikni „Kopiraj config“, pa ga nalepi u ekstenziju (Options). Token je tajna — čuvaj ga, a
-        regenerisanjem odmah opozivaš stari.
+        Connect the <b className="text-ink">Lead Collector</b> extension to your account: generate a
+        token, click “Copy config”, then paste it into the extension (Options). The token is a secret —
+        keep it safe; regenerating revokes the old one instantly.
       </p>
 
       {token ? (
@@ -57,18 +57,18 @@ export function ExtensionPanel({
           <div className="flex flex-wrap items-center gap-2">
             <Button type="button" variant="primary" onClick={copyConfig}>
               {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
-              {copied ? "Kopirano" : "Kopiraj config za ekstenziju"}
+              {copied ? "Copied" : "Copy config for the extension"}
             </Button>
             <Button type="button" variant="secondary" onClick={generate} disabled={pending}>
               <KeyRound className="h-4 w-4" />
-              {pending ? "…" : "Regeneriši token"}
+              {pending ? "…" : "Regenerate token"}
             </Button>
           </div>
         </div>
       ) : (
         <Button type="button" variant="primary" onClick={generate} disabled={pending}>
           <KeyRound className="h-4 w-4" />
-          {pending ? "Generišem…" : "Generiši token"}
+          {pending ? "Generating…" : "Generate token"}
         </Button>
       )}
 

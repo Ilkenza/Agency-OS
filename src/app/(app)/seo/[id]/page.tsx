@@ -84,7 +84,7 @@ export default async function CheckDetailPage({
 
       <Panel title="Findings">
         <p className="border-b border-line-soft px-4 py-2.5 text-[11.5px] text-muted">
-          Klikni na stavku da vidiš šta znači, zašto je bitno i primer kako treba.
+          Click an item to see what it means, why it matters, and an example.
         </p>
         <div>
           {check.results.map((r: CheckResult) => {
@@ -114,7 +114,7 @@ export default async function CheckDetailPage({
                     {r.found && (
                       <div>
                         <div className="mb-1 text-[10.5px] font-bold uppercase tracking-[0.06em] text-faint">
-                          Tvoja stranica
+                          Your page
                         </div>
                         <pre className="mono overflow-x-auto rounded-ctrl border border-line-soft bg-white/[0.03] px-3 py-2 text-[11px] leading-relaxed text-ink/90">
                           {r.found}
@@ -124,7 +124,7 @@ export default async function CheckDetailPage({
                     {info?.example && (
                       <div>
                         <div className="mb-1 text-[10.5px] font-bold uppercase tracking-[0.06em] text-faint">
-                          Primer (kako treba)
+                          Example (recommended)
                         </div>
                         <pre className="mono overflow-x-auto rounded-ctrl border border-line-soft bg-white/[0.03] px-3 py-2 text-[11px] leading-relaxed text-ink/90">
                           {info.example}

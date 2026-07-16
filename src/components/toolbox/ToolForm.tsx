@@ -38,7 +38,7 @@ export function ToolForm({ tool, categories = [] }: { tool?: Tool; categories?: 
           value={category}
           onChange={(e) => setCategory(e.target.value)}
           placeholder="Hosting"
-          help="Upiši novu ili klikni postojeću ispod."
+          help="Type a new one or click an existing category below."
         />
         {categories.length > 0 && (
           <div className="mb-[13px] -mt-1 flex flex-wrap gap-1.5">

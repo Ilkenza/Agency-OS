@@ -57,11 +57,11 @@ export async function deleteServiceItem(id: string) {
   redirect("/quotes/catalog");
 }
 
-// Bazna cena (nivo "Osnovni") po feature-u i valuti. RSD za domaće, EUR/USD za strane klijente.
+// Base price (tier "Basic") per feature and currency. RSD for domestic, EUR/USD for international.
 const STARTER = [
   { label: "Landing page (one-pager)", rsd: 30000, eur: 400, usd: 430 },
-  { label: "Multi-page website (do 5 str.)", rsd: 70000, eur: 900, usd: 980 },
-  { label: "Dodatna stranica", rsd: 9000, eur: 120, usd: 130 },
+  { label: "Multi-page website (up to 5 pages)", rsd: 70000, eur: 900, usd: 980 },
+  { label: "Extra page", rsd: 9000, eur: 120, usd: 130 },
   { label: "Contact form", rsd: 8000, eur: 100, usd: 110 },
   { label: "Booking (Calendly / Cal.com)", rsd: 12000, eur: 150, usd: 160 },
   { label: "Login / user accounts", rsd: 35000, eur: 350, usd: 380 },
@@ -70,28 +70,28 @@ const STARTER = [
   { label: "Multi-language", rsd: 18000, eur: 200, usd: 220 },
   { label: "SEO setup", rsd: 15000, eur: 180, usd: 200 },
   { label: "Analytics setup", rsd: 6000, eur: 80, usd: 90 },
-  { label: "Animacije / micro-interakcije", rsd: 16000, eur: 200, usd: 220 },
-  { label: "Redesign (postojeći sajt)", rsd: 45000, eur: 500, usd: 550 },
-  { label: "Održavanje (mesečno)", rsd: 8000, eur: 100, usd: 110 },
+  { label: "Animations / micro-interactions", rsd: 16000, eur: 200, usd: 220 },
+  { label: "Redesign (existing site)", rsd: 45000, eur: 500, usd: 550 },
+  { label: "Maintenance (monthly)", rsd: 8000, eur: 100, usd: 110 },
 ];
 
-// Nivoi po tipu klijenta (množilac na baznu "Osnovni" cenu).
+// Tiers by client type (multiplier on the "Basic" base price).
 const TIERS = [
-  { name: "Osnovni", mult: 1 },
+  { name: "Basic", mult: 1 },
   { name: "Standard", mult: 1.6 },
   { name: "Premium", mult: 2.5 },
 ];
 
-// Zaokruži: RSD na 500, EUR/USD na 10 — da cene budu "čiste".
+// Round: RSD to 500, EUR/USD to 10 — clean prices.
 const roundTo = (value: number, step: number) => Math.round(value / step) * step;
 
 export async function addStarterFeatures() {
   const supabase = await createSupabaseServerClient();
-  // Očisti prethodne seed serije (sve verzije) da nema duplikata pri ponovnom pokretanju.
+  // Clear previous seed batches (all versions) so re-running doesn't create duplicates.
   await supabase
     .from("service_items")
     .delete()
-    .in("category", ["Website", "Osnovni", "Standard", "Premium"]);
+    .in("category", ["Website", "Basic", "Osnovni", "Standard", "Premium"]);
   await supabase.from("service_items").delete().like("category", "Domaći — %");
   await supabase.from("service_items").delete().like("category", "Strani — %");
 

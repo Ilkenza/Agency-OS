@@ -32,7 +32,7 @@ export function CheckForm({
         inputMode="url"
         defaultValue={initialUrl ?? ""}
         placeholder="example.com"
-        help="Ne moraš da kucaš https:// — dodaje se automatski."
+        help="No need to type https:// — it's added automatically."
         autoFocus
         required
       />
@@ -55,7 +55,7 @@ export function CheckForm({
         {pending ? (
           <>
             <Loader2 className="h-4 w-4 animate-spin" />
-            Skeniram…
+            Scanning…
           </>
         ) : (
           "Run check"
@@ -63,13 +63,12 @@ export function CheckForm({
       </Button>
       <div className="mt-3 space-y-2 rounded-ctrl border border-line-soft bg-white/[0.02] p-3 text-[11.5px] leading-relaxed text-muted">
         <p>
-          <span className="font-semibold text-ink">SEO</span> = koliko te lako pronalaze
-          pretraživači (Google): naslov, opis, naslovi, slike, mobilni prikaz…
+          <span className="font-semibold text-ink">SEO</span> = how easily search engines (Google)
+          find you: title, description, headings, images, mobile view…
         </p>
         <p>
-          <span className="font-semibold text-ink">GEO</span> = koliko te lako razumeju AI
-          alati (ChatGPT, Gemini): struktura, JSON-LD podaci, Open Graph. Preuzmemo stranicu i
-          ocenimo oba.
+          <span className="font-semibold text-ink">GEO</span> = how easily AI tools (ChatGPT, Gemini)
+          understand you: structure, JSON-LD data, Open Graph. We fetch the page and score both.
         </p>
       </div>
     </form>

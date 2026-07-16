@@ -39,7 +39,7 @@ export function ServiceItemForm({ item }: { item?: ServiceItem }) {
           placeholder="Website"
         />
 
-        <div className="mb-1.5 text-xs font-semibold text-[#C6CAD6]">Cene po valuti</div>
+        <div className="mb-1.5 text-xs font-semibold text-[#C6CAD6]">Prices per currency</div>
         <div className="grid grid-cols-3 gap-x-3">
           <Field
             label="RSD"
@@ -73,7 +73,7 @@ export function ServiceItemForm({ item }: { item?: ServiceItem }) {
           />
         </div>
         <p className="mb-3 text-[11.5px] text-muted">
-          Popuni cenu za valute koje koristiš — ostavi prazno ako ne nudiš u toj valuti.
+          Fill in the currencies you use — leave blank if you do not offer it in that currency.
         </p>
 
         {state?.error && (

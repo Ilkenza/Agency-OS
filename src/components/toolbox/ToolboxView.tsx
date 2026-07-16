@@ -76,11 +76,11 @@ export function ToolboxView({
                 {cat !== "Other" && (
                   <Link
                     href={`/toolbox?cat=${encodeURIComponent(cat)}`}
-                    aria-label={`Uredi kategoriju ${cat}`}
+                    aria-label={`Edit category ${cat}`}
                     className="inline-flex items-center gap-1 rounded-ctrl border border-line px-1.5 py-0.5 text-[10.5px] font-semibold text-muted transition-colors hover:border-muted hover:text-ink"
                   >
                     <Tag className="h-3 w-3" />
-                    Uredi
+                    Edit
                   </Link>
                 )}
               </div>

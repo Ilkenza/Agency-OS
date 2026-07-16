@@ -62,7 +62,7 @@ export function ClientsView({
                     Contact
                   </th>
                   <th className="border-b border-line-soft px-4 py-[11px] text-left text-[10.5px] font-bold uppercase tracking-[0.07em] text-muted">
-                    Nivo
+                    Tier
                   </th>
                   <th className="border-b border-line-soft px-4 py-[11px] text-right text-[10.5px] font-bold uppercase tracking-[0.07em] text-muted">
                     Projects

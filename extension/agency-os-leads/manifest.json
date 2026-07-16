@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Agency OS — Lead Collector",
   "version": "2.0.0",
-  "description": "Otvori profil (Instagram) ili biznis (Google Maps), proveri postoji li lead i sačuvaj ga direktno u Agency OS.",
+  "description": "Open a profile (Instagram/Facebook) or a Google Maps business, check if the lead exists, and save it straight to Agency OS.",
   "permissions": ["activeTab", "scripting", "clipboardWrite", "storage"],
   "host_permissions": [
     "https://www.google.com/maps/*",

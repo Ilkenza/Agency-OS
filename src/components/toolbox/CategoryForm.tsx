@@ -21,12 +21,12 @@ export function CategoryForm({ name }: { name: string }) {
       <form action={formAction} className="flex-1">
         <input type="hidden" name="old" value={name} />
         <Field
-          label="Naziv kategorije"
+          label="Category name"
           name="name"
           defaultValue={name}
           autoFocus
           required
-          help="Preimenuje se na svim alatima u ovoj kategoriji."
+          help="Renames it across all tools in this category."
         />
 
         {state?.error && (
@@ -44,7 +44,7 @@ export function CategoryForm({ name }: { name: string }) {
         <DeleteButton
           action={deleteCategory.bind(null, name)}
           label="Delete category"
-          confirmText={`Obrisati kategoriju "${name}"? Alati ostaju, samo bez kategorije.`}
+          confirmText={`Delete category "${name}"? The tools stay, just without a category.`}
         />
       </div>
     </div>

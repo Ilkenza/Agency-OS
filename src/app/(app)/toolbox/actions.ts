@@ -59,7 +59,7 @@ export async function renameCategory(
 ): Promise<CategoryState> {
   const oldName = String(formData.get("old") ?? "").trim();
   const nextRaw = String(formData.get("name") ?? "").trim();
-  if (!oldName || !nextRaw) return { error: "Ime kategorije je obavezno." };
+  if (!oldName || !nextRaw) return { error: "Category name is required." };
   const next = nextRaw.charAt(0).toUpperCase() + nextRaw.slice(1);
 
   const supabase = await createSupabaseServerClient();

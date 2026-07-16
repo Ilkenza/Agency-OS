@@ -59,7 +59,7 @@ export function TaskForm({ task, projects }: { task?: Task; projects: ProjectOpt
         />
 
         <Field
-          label="Rok (datum + opciono vreme)"
+          label="Due (date + optional time)"
           name="due_at"
           type="datetime-local"
           defaultValue={dueValue}

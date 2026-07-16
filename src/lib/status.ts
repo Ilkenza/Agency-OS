@@ -26,12 +26,13 @@ export function projectStatusBadge(status: string): { variant: BadgeStatus; labe
 }
 
 export const CLIENT_REGION_OPTIONS: { value: string; label: string }[] = [
-  { value: "domestic", label: "Domaći (RSD)" },
-  { value: "foreign", label: "Strani (EUR/USD)" },
+  { value: "domestic", label: "Domestic (RSD)" },
+  { value: "foreign", label: "International (EUR/USD)" },
 ];
 
+// Values stay `osnovni/standard/premium` (clients.tier check constraint); labels are English.
 export const CLIENT_TIER_OPTIONS: { value: string; label: string }[] = [
-  { value: "osnovni", label: "Osnovni" },
+  { value: "osnovni", label: "Basic" },
   { value: "standard", label: "Standard" },
   { value: "premium", label: "Premium" },
 ];
@@ -44,7 +45,7 @@ export function clientTierBadge(tier: string | null): { variant: BadgeStatus; la
     case "standard":
       return { variant: "info", label: "Standard" };
     case "osnovni":
-      return { variant: "draft", label: "Osnovni" };
+      return { variant: "draft", label: "Basic" };
     default:
       return null;
   }
@@ -126,6 +127,7 @@ export const LEAD_STATUSES = [
   "replied",
   "negotiating",
   "waiting",
+  "maybe",
   "won",
   "lost",
 ] as const;
@@ -137,7 +139,8 @@ export const LEAD_STATUS_OPTIONS: { value: LeadStatus; label: string }[] = [
   { value: "seen", label: "Seen" },
   { value: "replied", label: "Replied" },
   { value: "negotiating", label: "Negotiating" },
-  { value: "waiting", label: "Čeka (sajt u izradi)" },
+  { value: "waiting", label: "Site in progress" },
+  { value: "maybe", label: "Maybe later" },
   { value: "won", label: "Won" },
   { value: "lost", label: "Lost" },
 ];
@@ -155,7 +158,9 @@ export function leadStatusBadge(status: string): { variant: BadgeStatus; label: 
     case "seen":
       return { variant: "active", label: "Seen" };
     case "waiting":
-      return { variant: "info", label: "Čeka" };
+      return { variant: "info", label: "In progress" };
+    case "maybe":
+      return { variant: "draft", label: "Maybe later" };
     case "contacted":
       return { variant: "pending", label: "Contacted" };
     default:
