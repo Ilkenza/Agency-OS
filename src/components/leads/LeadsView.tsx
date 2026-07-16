@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Plus, Send, Pencil, Search, FileText, Upload } from "lucide-react";
+import { Plus, Send, Pencil, Search, FileText, Upload, Download } from "lucide-react";
 import { SlideOver } from "@/components/ui/SlideOver";
 import { Panel } from "@/components/ui/Panel";
 import { EmptyState } from "@/components/ui/EmptyState";
@@ -16,6 +16,39 @@ import type { Lead } from "@/lib/types";
 import { LeadForm } from "./LeadForm";
 
 export type LeadsPanel = { mode: "new" } | { mode: "edit"; lead: Lead } | null;
+
+// Columns match the leads import (parse-import.ts) so an export can be re-imported.
+const EXPORT_COLUMNS = [
+  "name",
+  "company",
+  "contact",
+  "channel",
+  "service",
+  "status",
+  "value",
+  "next_followup",
+  "notes",
+] as const;
+
+function csvCell(v: unknown): string {
+  const s = v == null ? "" : String(v);
+  return /[",\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+}
+
+function exportLeadsCsv(leads: Lead[]) {
+  const head = EXPORT_COLUMNS.join(",");
+  const rows = leads.map((l) =>
+    EXPORT_COLUMNS.map((c) => csvCell((l as Record<string, unknown>)[c])).join(","),
+  );
+  const csv = "﻿" + [head, ...rows].join("\n");
+  const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `agency-os-leads-${new Date().toISOString().slice(0, 10)}.csv`;
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(url), 4000);
+}
 
 function LeadRow({ lead }: { lead: Lead }) {
   const badge = leadStatusBadge(lead.status);
@@ -124,6 +157,15 @@ export function LeadsView({ leads, panel }: { leads: Lead[]; panel: LeadsPanel }
             <Upload className="h-4 w-4" />
             Import
           </Link>
+          <button
+            type="button"
+            onClick={() => exportLeadsCsv(leads)}
+            disabled={leads.length === 0}
+            className={buttonClasses("secondary")}
+          >
+            <Download className="h-4 w-4" />
+            Export
+          </button>
           <Link href="/leads/templates" className={buttonClasses("secondary")}>
             <FileText className="h-4 w-4" />
             Templates
