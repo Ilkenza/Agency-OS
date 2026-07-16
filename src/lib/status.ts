@@ -125,6 +125,7 @@ export const LEAD_STATUSES = [
   "seen",
   "replied",
   "negotiating",
+  "waiting",
   "won",
   "lost",
 ] as const;
@@ -136,6 +137,7 @@ export const LEAD_STATUS_OPTIONS: { value: LeadStatus; label: string }[] = [
   { value: "seen", label: "Seen" },
   { value: "replied", label: "Replied" },
   { value: "negotiating", label: "Negotiating" },
+  { value: "waiting", label: "Čeka (sajt u izradi)" },
   { value: "won", label: "Won" },
   { value: "lost", label: "Lost" },
 ];
@@ -152,6 +154,8 @@ export function leadStatusBadge(status: string): { variant: BadgeStatus; label: 
       return { variant: "active", label: "Negotiating" };
     case "seen":
       return { variant: "active", label: "Seen" };
+    case "waiting":
+      return { variant: "info", label: "Čeka" };
     case "contacted":
       return { variant: "pending", label: "Contacted" };
     default:

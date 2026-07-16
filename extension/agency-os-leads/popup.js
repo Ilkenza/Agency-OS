@@ -120,6 +120,44 @@ async function activeTab() {
   return tab;
 }
 
+// --- Draft: keep unsaved edits per page across popup close/reopen ---
+let draftKey = null;
+
+function currentForm() {
+  return {
+    name: els.form.name.value,
+    company: els.form.company.value,
+    contact: els.form.contact.value,
+    channel: els.form.channel.value,
+    service: els.form.service.value,
+    status: els.form.status.value,
+    notes: els.form.notes.value,
+  };
+}
+
+async function saveDraft() {
+  if (!draftKey) return;
+  const s = await chrome.storage.local.get(["drafts"]);
+  const drafts = s.drafts || {};
+  drafts[draftKey] = currentForm();
+  chrome.storage.local.set({ drafts });
+}
+
+async function applyDraft() {
+  if (!draftKey) return;
+  const s = await chrome.storage.local.get(["drafts"]);
+  const d = (s.drafts || {})[draftKey];
+  if (d) fillForm(d);
+}
+
+async function clearDraft() {
+  if (!draftKey) return;
+  const s = await chrome.storage.local.get(["drafts"]);
+  const drafts = s.drafts || {};
+  delete drafts[draftKey];
+  chrome.storage.local.set({ drafts });
+}
+
 async function boot() {
   const store = await chrome.storage.sync.get(["agencyos"]);
   cfg = store.agencyos;
@@ -132,6 +170,7 @@ async function boot() {
 
   const tab = await activeTab();
   const url = tab?.url || "";
+  draftKey = url;
   if (/^https:\/\/www\.instagram\.com\//.test(url)) mode = "instagram";
   else if (/^https:\/\/www\.google\.[^/]+\/maps/.test(url)) mode = "maps";
   else {
@@ -158,8 +197,12 @@ async function boot() {
 
   const lead = mode === "instagram" ? igToLead(data) : mapsToLead(data);
   fillForm(lead);
-  // If it already exists, this overwrites the form with the saved values.
-  syncExisting(lead.contact, lead.name);
+  // 1) saved lead from DB overrides scraped defaults; 2) unsaved draft wins over both.
+  await syncExisting(lead.contact, lead.name);
+  await applyDraft();
+
+  // Persist every edit so closing the popup doesn't lose unsaved input.
+  els.form.addEventListener("input", saveDraft);
 }
 
 els.form.addEventListener("submit", async (e) => {
@@ -178,6 +221,7 @@ els.form.addEventListener("submit", async (e) => {
     };
     await rpc("ext_add_lead", toRpcArgs(lead, cfg.token));
     setMsg("Sačuvano u Agency OS ✓", "ok", 5000);
+    await clearDraft(); // saved → drop the unsaved-draft copy
     syncExisting(lead.contact, lead.name);
   } catch (e2) {
     setMsg("Greška: " + (e2?.message || e2), "err", 9000);
