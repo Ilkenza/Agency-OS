@@ -22,6 +22,8 @@ body {
   background: var(--bg);
   color: var(--ink);
   font-size: 13px;
+  /* Render native <select> dropdowns dark so the options are readable. */
+  color-scheme: dark;
 }
 
 header {
@@ -102,6 +104,10 @@ form textarea:focus {
 form input[readonly] {
   color: var(--muted);
   background: rgba(255, 255, 255, 0.02);
+}
+form select option {
+  background: #1a1d24;
+  color: #eceef2;
 }
 .row {
   display: grid;

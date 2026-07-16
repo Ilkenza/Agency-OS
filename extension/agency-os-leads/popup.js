@@ -77,18 +77,19 @@ async function rpc(fn, args) {
   return res.json();
 }
 
-async function checkExists() {
-  const name = els.form.name.value.trim();
-  const contact = els.form.contact.value.trim();
+/** Look up the existing lead; if found, mark ✓ and fill the form from it. */
+async function syncExisting(contact, name) {
   els.exists.className = "exists";
   els.exists.innerHTML = "Proveravam…";
   try {
-    const exists = await rpc("ext_lead_exists", {
+    const found = await rpc("ext_get_lead", {
       p_token: cfg.token,
-      p_contact: contact,
-      p_name: name,
+      p_contact: contact || "",
+      p_name: name || "",
     });
-    if (exists) {
+    if (found) {
+      // Keep the auto channel if the stored one is empty.
+      fillForm({ ...found, channel: found.channel || els.form.channel.value });
       els.exists.className = "exists dupe";
       els.exists.innerHTML = '<span class="mark">✓</span> Već postoji u Agency OS';
     } else {
@@ -157,7 +158,8 @@ async function boot() {
 
   const lead = mode === "instagram" ? igToLead(data) : mapsToLead(data);
   fillForm(lead);
-  checkExists();
+  // If it already exists, this overwrites the form with the saved values.
+  syncExisting(lead.contact, lead.name);
 }
 
 els.form.addEventListener("submit", async (e) => {
@@ -176,7 +178,7 @@ els.form.addEventListener("submit", async (e) => {
     };
     await rpc("ext_add_lead", toRpcArgs(lead, cfg.token));
     setMsg("Sačuvano u Agency OS ✓", "ok", 5000);
-    checkExists();
+    syncExisting(lead.contact, lead.name);
   } catch (e2) {
     setMsg("Greška: " + (e2?.message || e2), "err", 9000);
   }
