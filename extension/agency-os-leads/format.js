@@ -14,6 +14,21 @@ function igToLead(p) {
   };
 }
 
+// Scraped Facebook page/profile → default lead field values.
+function fbToLead(p) {
+  const handle = (p.handle || "").replace(/^@/, "");
+  const cleanHandle = handle && !handle.startsWith("profile:") ? handle : "";
+  return {
+    name: p.name || cleanHandle || "Facebook",
+    company: "",
+    contact: cleanHandle ? "@" + cleanHandle : p.url || "",
+    channel: "facebook",
+    service: "",
+    status: "new",
+    notes: p.url || "",
+  };
+}
+
 // Scraped Google Maps place → default lead field values.
 function mapsToLead(p) {
   return {
@@ -42,5 +57,5 @@ function toRpcArgs(lead, token) {
 }
 
 if (typeof module !== "undefined") {
-  module.exports = { igToLead, mapsToLead, toRpcArgs };
+  module.exports = { igToLead, fbToLead, mapsToLead, toRpcArgs };
 }

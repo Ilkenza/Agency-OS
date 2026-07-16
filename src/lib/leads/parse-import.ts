@@ -1,6 +1,15 @@
 import { LEAD_STATUSES } from "@/lib/status";
 
-const CHANNELS = ["email", "instagram", "google_maps", "linkedin", "whatsapp", "phone", "other"];
+const CHANNELS = [
+  "email",
+  "instagram",
+  "facebook",
+  "google_maps",
+  "linkedin",
+  "whatsapp",
+  "phone",
+  "other",
+];
 
 export type ImportRow = {
   name: string;

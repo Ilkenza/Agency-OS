@@ -48,6 +48,30 @@ function scrapeIgProfile() {
   return { source: "instagram", username, name };
 }
 
+function scrapeFbProfile() {
+  const path = location.pathname;
+  const reserved = [
+    "watch", "marketplace", "groups", "gaming", "events", "pages", "messages",
+    "notifications", "friends", "bookmarks", "help", "settings", "login", "reel",
+    "reels", "story.php", "sharer", "photo", "profile.php",
+  ];
+  let handle = "";
+  const idm = location.search.match(/[?&]id=(\d+)/);
+  if (path.startsWith("/profile.php") && idm) {
+    handle = "profile:" + idm[1];
+  } else {
+    const m = path.match(/^\/([A-Za-z0-9.\-]+)\/?$/);
+    if (m && !reserved.includes(m[1])) handle = m[1];
+  }
+  const name = (document.querySelector("h1")?.textContent || "").trim();
+  if (!name && !handle)
+    return { error: "Otvori Facebook stranicu ili profil (npr. facebook.com/ime)." };
+  const url =
+    "https://www.facebook.com" +
+    (handle.startsWith("profile:") ? "/profile.php?id=" + handle.slice(8) : "/" + handle);
+  return { source: "facebook", name, handle, url };
+}
+
 function scrapeMapsPlace() {
   const name = (document.querySelector("h1")?.textContent || "").trim();
   if (!name) return { error: "Otvori biznis na Google Maps (klikni na mesto da se otvori panel)." };
@@ -172,15 +196,23 @@ async function boot() {
   const url = tab?.url || "";
   draftKey = url;
   if (/^https:\/\/www\.instagram\.com\//.test(url)) mode = "instagram";
+  else if (/^https:\/\/(www\.|web\.|m\.)?facebook\.com\//.test(url)) mode = "facebook";
   else if (/^https:\/\/www\.google\.[^/]+\/maps/.test(url)) mode = "maps";
   else {
-    notice("Otvori nečiji <b>Instagram profil</b> ili <b>biznis na Google Maps</b>.");
+    notice(
+      "Otvori nečiji <b>Instagram profil</b>, <b>Facebook stranicu</b> ili <b>biznis na Google Maps</b>.",
+    );
     return;
   }
 
   let data;
   try {
-    const fn = mode === "instagram" ? scrapeIgProfile : scrapeMapsPlace;
+    const fn =
+      mode === "instagram"
+        ? scrapeIgProfile
+        : mode === "facebook"
+          ? scrapeFbProfile
+          : scrapeMapsPlace;
     const [r] = await chrome.scripting.executeScript({ target: { tabId: tab.id }, func: fn });
     data = r?.result;
   } catch (e) {
@@ -195,7 +227,8 @@ async function boot() {
   els.notice.classList.add("hidden");
   els.main.classList.remove("hidden");
 
-  const lead = mode === "instagram" ? igToLead(data) : mapsToLead(data);
+  const lead =
+    mode === "instagram" ? igToLead(data) : mode === "facebook" ? fbToLead(data) : mapsToLead(data);
   fillForm(lead);
   // 1) saved lead from DB overrides scraped defaults; 2) unsaved draft wins over both.
   await syncExisting(lead.contact, lead.name);

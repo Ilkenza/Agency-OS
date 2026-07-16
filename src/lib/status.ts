@@ -166,6 +166,7 @@ export function leadStatusBadge(status: string): { variant: BadgeStatus; label: 
 export const CHANNEL_OPTIONS: { value: string; label: string }[] = [
   { value: "email", label: "Email" },
   { value: "instagram", label: "Instagram" },
+  { value: "facebook", label: "Facebook" },
   { value: "google_maps", label: "Google Maps" },
   { value: "linkedin", label: "LinkedIn" },
   { value: "whatsapp", label: "WhatsApp" },

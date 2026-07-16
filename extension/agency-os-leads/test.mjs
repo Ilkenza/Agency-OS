@@ -1,7 +1,7 @@
 // Sanity check for the pure helpers. Run: node test.mjs
 import { createRequire } from "node:module";
 const require = createRequire(import.meta.url);
-const { igToLead, mapsToLead, toRpcArgs } = require("./format.js");
+const { igToLead, fbToLead, mapsToLead, toRpcArgs } = require("./format.js");
 
 let failed = 0;
 const eq = (label, got, want) => {
@@ -20,6 +20,13 @@ eq("ig: contact @username", ig.contact, "@zlatno_zrno");
 eq("ig: name", ig.name, "Zlatno Zrno");
 eq("ig: name falls back to username", igToLead({ username: "x", name: "" }).name, "x");
 eq("ig: strips leading @", igToLead({ username: "@y" }).contact, "@y");
+
+const fb = fbToLead({ name: "Pekara Zlatno Zrno", handle: "zlatnozrno", url: "https://www.facebook.com/zlatnozrno" });
+eq("fb: channel", fb.channel, "facebook");
+eq("fb: contact @handle", fb.contact, "@zlatnozrno");
+eq("fb: notes = url", fb.notes, "https://www.facebook.com/zlatnozrno");
+const fbId = fbToLead({ name: "X", handle: "profile:123", url: "https://www.facebook.com/profile.php?id=123" });
+eq("fb: numeric profile → contact url", fbId.contact, "https://www.facebook.com/profile.php?id=123");
 
 const noSite = mapsToLead({ name: "Pekara", phone: "+38160123", hasWebsite: false, link: "https://maps/x" });
 eq("maps: channel google_maps", noSite.channel, "google_maps");

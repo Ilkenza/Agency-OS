@@ -1,6 +1,6 @@
 # Agency OS — Lead Collector (Chrome ekstenzija)
 
-Otvoriš **jedan** Instagram profil ili Google Maps biznis → ekstenzija uzme podatke sa te stranice,
+Otvoriš **jedan** Instagram profil, Facebook stranicu ili Google Maps biznis → ekstenzija uzme podatke sa te stranice,
 **proveri da li lead već postoji** u Agency OS (✓ / ✗), pustiš te da dopuniš polja i **sačuvaš direktno
 u bazu**. Bez CSV-a i bez ručnog kucanja.
 
@@ -17,6 +17,8 @@ koja povezuje ekstenziju sa tvojim nalogom.
 
 - **Instagram**: otvori nečiji profil (`instagram.com/ime`) → klikni ikonu. Popup pokaže ✓/✗ i formu
   (name, contact `@username`, channel `instagram`, + service/status/notes/company po izboru) → **Sačuvaj**.
+- **Facebook**: otvori stranicu/profil (`facebook.com/ime`) → klikni ikonu. Uzme naziv (h1) i link;
+  channel = `facebook`.
 - **Google Maps**: klikni na biznis da se otvori panel → klikni ikonu. Uzme naziv, telefon (ako postoji),
   DA/NE ima sajt, i **link** (ide u notes); channel = `google_maps` → dopuni → **Sačuvaj**.
 
