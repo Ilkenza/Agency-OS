@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="sr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="popup.css" />
+    <title>Agency OS — Lead Collector</title>
+  </head>
+  <body>
+    <header>
+      <div class="brand">Agency OS</div>
+      <div class="sub">Lead Collector</div>
+    </header>
+
+    <div id="source" class="source">Proveravam stranicu…</div>
+
+    <label id="onlyNoSiteWrap" class="chk hidden">
+      <input type="checkbox" id="onlyNoSite" />
+      Samo biznisi <b>bez sajta</b>
+    </label>
+
+    <button id="collect" class="btn primary" disabled>Prikupi</button>
+
+    <div id="count" class="count"></div>
+
+    <div id="preview" class="preview"></div>
+
+    <div class="actions">
+      <button id="copy" class="btn" disabled>Kopiraj za Agency OS</button>
+      <button id="csv" class="btn" disabled>Preuzmi CSV</button>
+    </div>
+
+    <div id="msg" class="msg"></div>
+
+    <details class="help">
+      <summary>Kako se koristi</summary>
+      <ol>
+        <li><b>Google Maps</b>: otvori pretragu (npr. „pekare Novi Sad"), <b>skroluj listu</b> da učita
+          više rezultata, pa klikni <b>Prikupi</b>.</li>
+        <li><b>Instagram</b>: otvori listu pratilaca / praćenih (modal) ili rezultate pretrage, pa
+          <b>Prikupi</b>. (IG je beta — može zahtevati par pokušaja.)</li>
+        <li><b>Kopiraj za Agency OS</b> → u aplikaciji idi na <b>Leads → Import</b> i nalepi (Ctrl+V).</li>
+      </ol>
+      <p class="fine">Skupljaj samo javne podatke, umereno. Poštuj uslove korišćenja sajtova.</p>
+    </details>
+
+    <script src="format.js"></script>
+    <script src="popup.js"></script>
+  </body>
+</html>
