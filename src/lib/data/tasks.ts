@@ -2,7 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import { todayISO } from "@/lib/format";
 import type { TaskWithProject } from "@/lib/types";
 
-const WITH_PROJECT = "*, project:projects(title)";
+const WITH_PROJECT = "*, project:projects(title, client:clients(name))";
 
 export async function getTasks(): Promise<TaskWithProject[]> {
   const supabase = await createClient();
@@ -27,7 +27,7 @@ export async function getTasksForToday(): Promise<TaskWithProject[]> {
     .from("tasks")
     .select(WITH_PROJECT)
     .eq("status", "todo")
-    .lte("due_at", todayISO())
+    .lte("due_at", `${todayISO()}T23:59:59`)
     .order("due_at", { ascending: true });
   return (data ?? []) as TaskWithProject[];
 }
@@ -38,7 +38,7 @@ export async function getTodayOpenCount(): Promise<number> {
     .from("tasks")
     .select("*", { count: "exact", head: true })
     .eq("status", "todo")
-    .lte("due_at", todayISO());
+    .lte("due_at", `${todayISO()}T23:59:59`);
   return count ?? 0;
 }
 

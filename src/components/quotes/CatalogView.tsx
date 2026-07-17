@@ -63,8 +63,21 @@ export function CatalogView({ items, panel }: { items: ServiceItem[]; panel: Cat
                   <div className="text-[13.5px] font-semibold text-ink">{it.label}</div>
                   {it.category && <div className="text-[11.5px] text-muted">{it.category}</div>}
                 </div>
-                <span className="mono shrink-0 text-[13px] text-ink">
-                  {formatMoney(it.price, it.currency)}
+                <span className="mono shrink-0 text-right text-[12px] text-ink">
+                  {[
+                    it.price_rsd != null ? formatMoney(it.price_rsd, "RSD") : null,
+                    it.price_eur != null ? formatMoney(it.price_eur, "EUR") : null,
+                    it.price_usd != null ? formatMoney(it.price_usd, "USD") : null,
+                  ]
+                    .filter(Boolean)
+                    .map((s, i) => (
+                      <span key={i} className="ml-2 whitespace-nowrap">
+                        {s}
+                      </span>
+                    ))}
+                  {it.price_rsd == null && it.price_eur == null && it.price_usd == null && (
+                    <span className="text-faint">—</span>
+                  )}
                 </span>
                 <Link
                   href={`/quotes/catalog?edit=${it.id}`}

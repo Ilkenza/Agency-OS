@@ -1,0 +1,21 @@
+{
+  "manifest_version": 3,
+  "name": "Agency OS — Lead Collector",
+  "version": "2.0.0",
+  "description": "Open a profile (Instagram/Facebook) or a Google Maps business, check if the lead exists, and save it straight to Agency OS.",
+  "permissions": ["activeTab", "scripting", "clipboardWrite", "storage"],
+  "host_permissions": [
+    "https://www.google.com/maps/*",
+    "https://www.google.com/*",
+    "https://www.instagram.com/*",
+    "https://www.facebook.com/*",
+    "https://web.facebook.com/*",
+    "https://m.facebook.com/*",
+    "https://*.supabase.co/*"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Agency OS — Lead Collector"
+  },
+  "options_page": "options.html"
+}

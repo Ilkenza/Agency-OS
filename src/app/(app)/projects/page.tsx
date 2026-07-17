@@ -18,7 +18,7 @@ export default async function ProjectsPage({
     if (project) panel = { mode: "edit", project };
   }
 
-  const clientOptions = clients.map((c) => ({ id: c.id, name: c.name }));
+  const clientOptions = clients.map((c) => ({ id: c.id, name: c.name, region: c.region }));
 
   return <ProjectsView projects={projects} clients={clientOptions} panel={panel} />;
 }

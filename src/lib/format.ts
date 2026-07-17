@@ -31,6 +31,20 @@ export function formatDate(value: string | null | undefined) {
   return d.toISOString().slice(0, 10);
 }
 
+/** Date, plus `HH:MM` when the value carries a non-midnight time (e.g. task due). */
+export function formatDateTime(value: string | null | undefined) {
+  if (!value) return "—";
+  const d = new Date(value);
+  if (Number.isNaN(d.getTime())) return "—";
+  const date = formatDate(value);
+  // A plain `YYYY-MM-DD` (date-only) string has no time component to show.
+  const hasTime = /[T ]\d{2}:\d{2}/.test(value) && !(d.getHours() === 0 && d.getMinutes() === 0);
+  if (!hasTime) return date;
+  const hh = String(d.getHours()).padStart(2, "0");
+  const mm = String(d.getMinutes()).padStart(2, "0");
+  return `${date} ${hh}:${mm}`;
+}
+
 /** Today's date as `YYYY-MM-DD` (server timezone). */
 export function todayISO() {
   return new Date().toISOString().slice(0, 10);

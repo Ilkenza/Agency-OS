@@ -4,8 +4,26 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient as createSupabaseServerClient } from "@/lib/supabase/server";
 import { INVOICE_STATUSES, type InvoiceStatus } from "@/lib/status";
+import { quoteTotal } from "@/lib/quotes/total";
+import type { QuoteItem } from "@/lib/types";
 
 export type InvoiceFormState = { error?: string } | undefined;
+
+function parseItems(raw: string): QuoteItem[] {
+  try {
+    const arr = JSON.parse(raw);
+    if (!Array.isArray(arr)) return [];
+    return arr
+      .map((x) => ({
+        label: String(x?.label ?? "").trim(),
+        price: Number(x?.price) || 0,
+        qty: Math.max(1, Math.floor(Number(x?.qty) || 1)),
+      }))
+      .filter((x) => x.label !== "");
+  } catch {
+    return [];
+  }
+}
 
 export async function saveInvoice(
   _prev: InvoiceFormState,
@@ -20,10 +38,12 @@ export async function saveInvoice(
   const amountRaw = String(formData.get("amount") ?? "").trim();
   const issuedAt = String(formData.get("issued_at") ?? "").trim() || null;
   const dueDate = String(formData.get("due_date") ?? "").trim() || null;
+  const items = parseItems(String(formData.get("items") ?? "[]"));
 
   if (!INVOICE_STATUSES.includes(status as InvoiceStatus)) return { error: "Invalid status." };
 
-  const amount = amountRaw ? Number(amountRaw) : 0;
+  // With line items the amount is their sum; otherwise fall back to the manual amount field.
+  const amount = items.length > 0 ? quoteTotal(items) : amountRaw ? Number(amountRaw) : 0;
   if (Number.isNaN(amount) || amount < 0) return { error: "Amount must be a positive number." };
 
   const supabase = await createSupabaseServerClient();
@@ -35,6 +55,7 @@ export async function saveInvoice(
     status,
     issued_at: issuedAt,
     due_date: dueDate,
+    items,
   };
 
   if (id) {

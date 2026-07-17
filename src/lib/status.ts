@@ -19,9 +19,35 @@ export function projectStatusBadge(status: string): { variant: BadgeStatus; labe
     case "delivered":
       return { variant: "ok", label: "Delivered" };
     case "pending":
-      return { variant: "pending", label: "Pending" };
+      return { variant: "info", label: "Pending" };
     default:
       return { variant: "draft", label: "Draft" };
+  }
+}
+
+export const CLIENT_REGION_OPTIONS: { value: string; label: string }[] = [
+  { value: "domestic", label: "Domestic (RSD)" },
+  { value: "foreign", label: "International (EUR/USD)" },
+];
+
+// Values stay `osnovni/standard/premium` (clients.tier check constraint); labels are English.
+export const CLIENT_TIER_OPTIONS: { value: string; label: string }[] = [
+  { value: "osnovni", label: "Basic" },
+  { value: "standard", label: "Standard" },
+  { value: "premium", label: "Premium" },
+];
+
+/** Client tier → Badge variant + label (for list/detail chips). */
+export function clientTierBadge(tier: string | null): { variant: BadgeStatus; label: string } | null {
+  switch (tier) {
+    case "premium":
+      return { variant: "ok", label: "Premium" };
+    case "standard":
+      return { variant: "info", label: "Standard" };
+    case "osnovni":
+      return { variant: "draft", label: "Basic" };
+    default:
+      return null;
   }
 }
 
@@ -99,7 +125,11 @@ export const LEAD_STATUSES = [
   "contacted",
   "seen",
   "replied",
+  "interested",
+  "follow_up_soon",
   "negotiating",
+  "waiting",
+  "maybe",
   "won",
   "lost",
 ] as const;
@@ -110,7 +140,11 @@ export const LEAD_STATUS_OPTIONS: { value: LeadStatus; label: string }[] = [
   { value: "contacted", label: "Contacted" },
   { value: "seen", label: "Seen" },
   { value: "replied", label: "Replied" },
+  { value: "interested", label: "Interested" },
+  { value: "follow_up_soon", label: "Follow up soon" },
   { value: "negotiating", label: "Negotiating" },
+  { value: "waiting", label: "Awaiting their site" },
+  { value: "maybe", label: "Maybe later" },
   { value: "won", label: "Won" },
   { value: "lost", label: "Lost" },
 ];
@@ -123,10 +157,18 @@ export function leadStatusBadge(status: string): { variant: BadgeStatus; label: 
       return { variant: "danger", label: "Lost" };
     case "replied":
       return { variant: "active", label: "Replied" };
+    case "interested":
+      return { variant: "active", label: "Interested" };
+    case "follow_up_soon":
+      return { variant: "info", label: "Follow up soon" };
     case "negotiating":
       return { variant: "active", label: "Negotiating" };
     case "seen":
       return { variant: "active", label: "Seen" };
+    case "waiting":
+      return { variant: "info", label: "Awaiting site" };
+    case "maybe":
+      return { variant: "draft", label: "Maybe later" };
     case "contacted":
       return { variant: "pending", label: "Contacted" };
     default:
@@ -137,6 +179,8 @@ export function leadStatusBadge(status: string): { variant: BadgeStatus; label: 
 export const CHANNEL_OPTIONS: { value: string; label: string }[] = [
   { value: "email", label: "Email" },
   { value: "instagram", label: "Instagram" },
+  { value: "facebook", label: "Facebook" },
+  { value: "google_maps", label: "Google Maps" },
   { value: "linkedin", label: "LinkedIn" },
   { value: "whatsapp", label: "WhatsApp" },
   { value: "phone", label: "Phone" },

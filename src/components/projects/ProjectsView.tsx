@@ -9,7 +9,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { Badge } from "@/components/ui/Badge";
 import { buttonClasses } from "@/components/ui/Button";
 import { projectStatusBadge } from "@/lib/status";
-import { formatCurrency, formatDate } from "@/lib/format";
+import { formatMoney, formatDate } from "@/lib/format";
 import type { Project, ProjectWithClient } from "@/lib/types";
 import { ProjectForm, type ClientOption } from "./ProjectForm";
 
@@ -91,7 +91,7 @@ export function ProjectsView({
                         <Badge status={badge.variant}>{badge.label}</Badge>
                       </td>
                       <td className="mono border-b border-line-soft px-4 py-3 text-right text-ink">
-                        {formatCurrency(p.value)}
+                        {formatMoney(p.value, p.currency)}
                       </td>
                       <td className="mono border-b border-line-soft px-4 py-3 text-right text-muted">
                         {formatDate(p.due_date)}

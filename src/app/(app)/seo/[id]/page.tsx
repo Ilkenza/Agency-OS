@@ -9,6 +9,7 @@ import { DeleteButton } from "@/components/ui/DeleteButton";
 import { deleteCheck } from "../actions";
 import { scoreBadge, checkStatusMeta } from "@/lib/status";
 import { formatDate } from "@/lib/format";
+import { CHECK_INFO } from "@/lib/seo/explain";
 import type { CheckResult } from "@/lib/types";
 
 const ICONS = { pass: CheckCircle2, warn: AlertTriangle, fail: XCircle } as const;
@@ -82,24 +83,57 @@ export default async function CheckDetailPage({
       </div>
 
       <Panel title="Findings">
+        <p className="border-b border-line-soft px-4 py-2.5 text-[11.5px] text-muted">
+          Click an item to see what it means, why it matters, and an example.
+        </p>
         <div>
           {check.results.map((r: CheckResult) => {
             const meta = checkStatusMeta(r.status);
             const Icon = ICONS[r.status] ?? AlertTriangle;
+            const info = CHECK_INFO[r.key];
             return (
-              <div
+              <details
                 key={r.key}
-                className="flex items-start gap-3 border-b border-line-soft px-4 py-3 last:border-b-0"
+                className="group border-b border-line-soft last:border-b-0 [&_summary::-webkit-details-marker]:hidden"
               >
-                <Icon className={`mt-0.5 h-[17px] w-[17px] shrink-0 ${meta.color}`} />
-                <div className="min-w-0 flex-1">
-                  <div className="text-[13px] font-semibold text-ink">{r.label}</div>
-                  <div className="text-[12px] text-muted">{r.detail}</div>
-                </div>
-                <span className={`shrink-0 text-[11px] font-semibold uppercase ${meta.color}`}>
-                  {meta.label}
-                </span>
-              </div>
+                <summary className="flex cursor-pointer list-none items-start gap-3 px-4 py-3 hover:bg-white/[0.02]">
+                  <Icon className={`mt-0.5 h-[17px] w-[17px] shrink-0 ${meta.color}`} />
+                  <div className="min-w-0 flex-1">
+                    <div className="text-[13px] font-semibold text-ink">{r.label}</div>
+                    <div className="text-[12px] text-muted">{r.detail}</div>
+                  </div>
+                  <span className={`shrink-0 text-[11px] font-semibold uppercase ${meta.color}`}>
+                    {meta.label}
+                  </span>
+                </summary>
+                {(info || r.found) && (
+                  <div className="space-y-2.5 px-4 pb-3.5 pl-11">
+                    {info?.why && (
+                      <p className="text-[11.5px] leading-relaxed text-muted">{info.why}</p>
+                    )}
+                    {r.found && (
+                      <div>
+                        <div className="mb-1 text-[10.5px] font-bold uppercase tracking-[0.06em] text-faint">
+                          Your page
+                        </div>
+                        <pre className="mono overflow-x-auto rounded-ctrl border border-line-soft bg-white/[0.03] px-3 py-2 text-[11px] leading-relaxed text-ink/90">
+                          {r.found}
+                        </pre>
+                      </div>
+                    )}
+                    {info?.example && (
+                      <div>
+                        <div className="mb-1 text-[10.5px] font-bold uppercase tracking-[0.06em] text-faint">
+                          Example (recommended)
+                        </div>
+                        <pre className="mono overflow-x-auto rounded-ctrl border border-line-soft bg-white/[0.03] px-3 py-2 text-[11px] leading-relaxed text-ink/90">
+                          {info.example}
+                        </pre>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </details>
             );
           })}
         </div>

@@ -30,6 +30,7 @@
   --color-pending: #9aa0ae;
   --color-danger: #de6b5e;
   --color-draft: #6b7185;
+  --color-info: #5b8fd6;
 
   /* Status (background tints) */
   --color-ok-bg: rgba(95, 184, 138, 0.14);
@@ -37,6 +38,7 @@
   --color-pending-bg: rgba(255, 255, 255, 0.06);
   --color-danger-bg: rgba(222, 107, 94, 0.15);
   --color-draft-bg: rgba(255, 255, 255, 0.045);
+  --color-info-bg: rgba(91, 143, 214, 0.16);
 
   /* Borders */
   --color-line: rgba(255, 255, 255, 0.08);

@@ -29,7 +29,7 @@ export function TaskCheckbox({ id, done }: { id: string; done: boolean }) {
       onClick={toggle}
       disabled={pending}
       className={cn(
-        "flex h-5 w-5 shrink-0 items-center justify-center rounded-[6px] border transition-colors",
+        "flex h-5 w-5 shrink-0 cursor-pointer items-center justify-center rounded-[6px] border transition-colors disabled:cursor-not-allowed",
         checked
           ? "border-ok bg-ok/20 text-ok"
           : "border-line text-transparent hover:border-muted",

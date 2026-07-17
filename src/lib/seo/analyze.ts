@@ -7,23 +7,28 @@ export type AnalyzeResult = { title: string | null; score: number; results: Chec
 export function analyzeHtml(html: string): AnalyzeResult {
   const $ = cheerio.load(html);
   const results: CheckResult[] = [];
-  const push = (key: string, label: string, status: CheckStatus, detail: string) =>
-    results.push({ key, label, status, detail });
+  const push = (
+    key: string,
+    label: string,
+    status: CheckStatus,
+    detail: string,
+    found?: string,
+  ) => results.push({ key, label, status, detail, found });
 
   // --- SEO ---
   const title = $("title").first().text().trim();
   const titleLen = title.length;
   if (!title) push("title", "Title tag", "fail", "No <title> found.");
   else if (titleLen >= 30 && titleLen <= 60)
-    push("title", "Title tag", "pass", `${titleLen} chars — good length.`);
-  else push("title", "Title tag", "warn", `${titleLen} chars — aim for 30–60.`);
+    push("title", "Title tag", "pass", `${titleLen} chars — good length.`, title);
+  else push("title", "Title tag", "warn", `${titleLen} chars — aim for 30–60.`, title);
 
   const desc = ($('meta[name="description"]').attr("content") ?? "").trim();
   const descLen = desc.length;
   if (!desc) push("description", "Meta description", "fail", "Missing meta description.");
   else if (descLen >= 70 && descLen <= 160)
-    push("description", "Meta description", "pass", `${descLen} chars — good length.`);
-  else push("description", "Meta description", "warn", `${descLen} chars — aim for 70–160.`);
+    push("description", "Meta description", "pass", `${descLen} chars — good length.`, desc);
+  else push("description", "Meta description", "warn", `${descLen} chars — aim for 70–160.`, desc);
 
   const h1s = $("h1").length;
   if (h1s === 1) push("h1", "Single H1", "pass", "Exactly one H1.");
@@ -53,6 +58,7 @@ export function analyzeHtml(html: string): AnalyzeResult {
     "Canonical URL",
     canonical ? "pass" : "warn",
     canonical ? "Canonical set." : "No canonical link.",
+    canonical || undefined,
   );
 
   const viewport = $('meta[name="viewport"]').attr("content");
@@ -61,6 +67,7 @@ export function analyzeHtml(html: string): AnalyzeResult {
     "Mobile viewport",
     viewport ? "pass" : "fail",
     viewport ? "Viewport meta set." : "No viewport meta — not mobile-friendly.",
+    viewport || undefined,
   );
 
   const lang = $("html").attr("lang");
@@ -69,6 +76,7 @@ export function analyzeHtml(html: string): AnalyzeResult {
     "HTML lang",
     lang ? "pass" : "warn",
     lang ? `lang="${lang}".` : "No <html lang> attribute.",
+    lang ? `lang="${lang}"` : undefined,
   );
 
   const imgs = $("img");
@@ -100,8 +108,12 @@ export function analyzeHtml(html: string): AnalyzeResult {
 
   const ogTitle = $('meta[property="og:title"]').attr("content");
   const ogDesc = $('meta[property="og:description"]').attr("content");
-  if (ogTitle && ogDesc) push("og", "Open Graph", "pass", "og:title and og:description set.");
-  else if (ogTitle || ogDesc) push("og", "Open Graph", "warn", "Partial Open Graph tags.");
+  const ogFound = [ogTitle && `og:title="${ogTitle}"`, ogDesc && `og:description="${ogDesc}"`]
+    .filter(Boolean)
+    .join(" · ");
+  if (ogTitle && ogDesc)
+    push("og", "Open Graph", "pass", "og:title and og:description set.", ogFound);
+  else if (ogTitle || ogDesc) push("og", "Open Graph", "warn", "Partial Open Graph tags.", ogFound);
   else push("og", "Open Graph", "warn", "No Open Graph tags — worse link/AI previews.");
 
   const weight = (s: CheckStatus) => (s === "pass" ? 1 : s === "warn" ? 0.5 : 0);

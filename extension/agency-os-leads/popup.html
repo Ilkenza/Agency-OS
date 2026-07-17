@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="sr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="popup.css" />
+    <title>Agency OS — Lead Collector</title>
+  </head>
+  <body>
+    <header>
+      <div class="brand">Agency OS</div>
+      <div class="sub">Lead Collector</div>
+    </header>
+
+    <div id="notice" class="source hidden"></div>
+
+    <div id="main" class="hidden">
+      <div class="exists" id="exists"></div>
+
+      <form id="form" autocomplete="off">
+        <label>Name<input name="name" required /></label>
+        <label>Company<input name="company" /></label>
+        <label>Contact<input name="contact" /></label>
+        <label
+          >Channel
+          <input name="channel" id="channel" readonly />
+        </label>
+        <div class="row">
+          <label
+            >Service
+            <select name="service">
+              <option value="">—</option>
+              <option value="new_site">New site</option>
+              <option value="redesign">Redesign</option>
+              <option value="fix">Site fix</option>
+            </select>
+          </label>
+          <label
+            >Status
+            <select name="status">
+              <option value="new">New</option>
+              <option value="contacted">Contacted</option>
+              <option value="seen">Seen</option>
+              <option value="replied">Replied</option>
+              <option value="interested">Interested</option>
+              <option value="follow_up_soon">Follow up soon</option>
+              <option value="negotiating">Negotiating</option>
+              <option value="waiting">Awaiting their site</option>
+              <option value="maybe">Maybe later</option>
+              <option value="won">Won</option>
+              <option value="lost">Lost</option>
+            </select>
+          </label>
+        </div>
+        <label>Notes<textarea name="notes" rows="2"></textarea></label>
+
+        <button type="submit" id="save" class="btn primary">Save to Agency OS</button>
+      </form>
+
+      <div id="msg" class="msg"></div>
+    </div>
+
+    <script src="format.js"></script>
+    <script src="popup.js"></script>
+  </body>
+</html>

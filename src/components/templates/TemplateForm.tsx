@@ -38,6 +38,11 @@ export function TemplateForm({ template }: { template?: OutreachTemplate }) {
           defaultValue={template?.body ?? ""}
           placeholder="Hi {name}, I came across {company} and…"
         />
+        <p className="mb-3 -mt-1 text-[11.5px] text-muted">
+          Variables filled per lead:{" "}
+          <code className="mono">{"{name}"}</code> <code className="mono">{"{company}"}</code>{" "}
+          <code className="mono">{"{contact}"}</code> <code className="mono">{"{service}"}</code>
+        </p>
 
         {state?.error && (
           <p className="mb-3 rounded-ctrl border border-danger/40 bg-danger-bg px-3 py-2 text-[12px] text-danger">

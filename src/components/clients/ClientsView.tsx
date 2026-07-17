@@ -6,7 +6,9 @@ import { Plus, Users, Pencil } from "lucide-react";
 import { SlideOver } from "@/components/ui/SlideOver";
 import { Panel } from "@/components/ui/Panel";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { Badge } from "@/components/ui/Badge";
 import { buttonClasses } from "@/components/ui/Button";
+import { clientTierBadge } from "@/lib/status";
 import { formatDate } from "@/lib/format";
 import type { Client } from "@/lib/types";
 import type { ClientWithCount } from "@/lib/data/clients";
@@ -59,6 +61,9 @@ export function ClientsView({
                   <th className="border-b border-line-soft px-4 py-[11px] text-left text-[10.5px] font-bold uppercase tracking-[0.07em] text-muted">
                     Contact
                   </th>
+                  <th className="border-b border-line-soft px-4 py-[11px] text-left text-[10.5px] font-bold uppercase tracking-[0.07em] text-muted">
+                    Tier
+                  </th>
                   <th className="border-b border-line-soft px-4 py-[11px] text-right text-[10.5px] font-bold uppercase tracking-[0.07em] text-muted">
                     Projects
                   </th>
@@ -78,6 +83,18 @@ export function ClientsView({
                     </td>
                     <td className="border-b border-line-soft px-4 py-3 text-muted">
                       {c.contact ?? "—"}
+                      {c.contact_channel && (
+                        <span className="block text-[11.5px] text-faint">{c.contact_channel}</span>
+                      )}
+                    </td>
+                    <td className="border-b border-line-soft px-4 py-3">
+                      {clientTierBadge(c.tier) ? (
+                        <Badge status={clientTierBadge(c.tier)!.variant}>
+                          {clientTierBadge(c.tier)!.label}
+                        </Badge>
+                      ) : (
+                        <span className="text-faint">—</span>
+                      )}
                     </td>
                     <td className="mono border-b border-line-soft px-4 py-3 text-right text-muted">
                       {c.projects?.[0]?.count ?? 0}

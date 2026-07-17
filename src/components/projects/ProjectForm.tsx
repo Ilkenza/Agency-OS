@@ -1,16 +1,16 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import { saveProject, deleteProject, type ProjectFormState } from "@/app/(app)/projects/actions";
 import { Field } from "@/components/ui/Field";
 import { Textarea } from "@/components/ui/Textarea";
 import { Select } from "@/components/ui/Select";
 import { Button } from "@/components/ui/Button";
 import { DeleteButton } from "@/components/ui/DeleteButton";
-import { PROJECT_STATUS_OPTIONS } from "@/lib/status";
+import { PROJECT_STATUS_OPTIONS, CURRENCY_OPTIONS } from "@/lib/status";
 import type { Project } from "@/lib/types";
 
-export type ClientOption = { id: string; name: string };
+export type ClientOption = { id: string; name: string; region: string | null };
 
 export function ProjectForm({
   project,
@@ -24,7 +24,18 @@ export function ProjectForm({
     undefined,
   );
 
+  const [clientId, setClientId] = useState(project?.client_id ?? "");
+  const [currency, setCurrency] = useState(project?.currency ?? "EUR");
+
   const clientOptions = clients.map((c) => ({ value: c.id, label: c.name }));
+
+  // Pick a client → default the currency from its region (existing projects keep their currency).
+  const onClientChange = (id: string) => {
+    setClientId(id);
+    const region = clients.find((c) => c.id === id)?.region;
+    if (region === "domestic") setCurrency("RSD");
+    else if (region === "foreign") setCurrency("EUR");
+  };
 
   return (
     <div className="flex h-full flex-col">
@@ -43,7 +54,8 @@ export function ProjectForm({
         <Select
           label="Client"
           name="client_id"
-          defaultValue={project?.client_id ?? ""}
+          value={clientId}
+          onChange={(e) => onClientChange(e.target.value)}
           placeholder={clientOptions.length ? "No client" : "No clients yet"}
           options={clientOptions}
           help={clientOptions.length ? undefined : "Add a client first to link this project."}
@@ -56,16 +68,25 @@ export function ProjectForm({
           options={PROJECT_STATUS_OPTIONS}
         />
 
-        <Field
-          label="Value (€)"
-          name="value"
-          type="number"
-          step="0.01"
-          min="0"
-          inputMode="decimal"
-          defaultValue={project ? String(project.value) : ""}
-          placeholder="500"
-        />
+        <div className="grid gap-x-4 sm:grid-cols-2">
+          <Field
+            label="Value"
+            name="value"
+            type="number"
+            step="0.01"
+            min="0"
+            inputMode="decimal"
+            defaultValue={project ? String(project.value) : ""}
+            placeholder="500"
+          />
+          <Select
+            label="Currency"
+            name="currency"
+            value={currency}
+            onChange={(e) => setCurrency(e.target.value)}
+            options={CURRENCY_OPTIONS}
+          />
+        </div>
 
         <Field
           label="Due date"

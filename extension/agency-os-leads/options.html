@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="sr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="popup.css" />
+    <title>Agency OS — Lead Collector · Settings</title>
+    <style>
+      body {
+        width: 520px;
+      }
+      textarea {
+        width: 100%;
+        min-height: 120px;
+        border-radius: 8px;
+        border: 1px solid var(--line);
+        background: var(--surface);
+        color: var(--ink);
+        padding: 10px;
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 12px;
+      }
+      .status {
+        margin-top: 10px;
+        min-height: 18px;
+      }
+      .ok {
+        color: var(--ok);
+      }
+      .err {
+        color: #de6b5e;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="brand">Agency OS</div>
+      <div class="sub">Settings</div>
+    </header>
+
+    <p class="source">
+      In the app, go to <b>Settings → Browser extension</b>, click <b>“Copy config”</b>, and paste it
+      here.
+    </p>
+
+    <label for="cfg" style="display: block; margin-bottom: 6px; color: var(--muted)">Config (JSON)</label>
+    <textarea id="cfg" placeholder='{ "url": "https://...supabase.co", "anonKey": "...", "token": "..." }'></textarea>
+
+    <div style="margin-top: 10px">
+      <button id="save" class="btn primary">Save connection</button>
+    </div>
+
+    <div id="status" class="status"></div>
+
+    <script src="options.js"></script>
+  </body>
+</html>

@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 
-export type BadgeStatus = "ok" | "active" | "pending" | "danger" | "draft";
+export type BadgeStatus = "ok" | "active" | "pending" | "danger" | "draft" | "info";
 
 const variants: Record<BadgeStatus, string> = {
   ok: "text-ok bg-ok-bg before:bg-ok",
@@ -8,6 +8,7 @@ const variants: Record<BadgeStatus, string> = {
   pending: "text-pending bg-pending-bg before:bg-pending",
   danger: "text-danger bg-danger-bg before:bg-danger",
   draft: "text-draft bg-draft-bg before:bg-draft",
+  info: "text-info bg-info-bg before:bg-info",
 };
 
 interface BadgeProps {

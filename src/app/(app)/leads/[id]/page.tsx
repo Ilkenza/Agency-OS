@@ -2,6 +2,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, Pencil, UserPlus, ArrowUpRight } from "lucide-react";
 import { getLead } from "@/lib/data/leads";
+import { getTemplates } from "@/lib/data/templates";
+import { ComposeMessage } from "@/components/leads/ComposeMessage";
 import { Panel } from "@/components/ui/Panel";
 import { Badge } from "@/components/ui/Badge";
 import { Button, buttonClasses } from "@/components/ui/Button";
@@ -24,6 +26,7 @@ export default async function LeadDetailPage({ params }: { params: Promise<{ id:
   const lead = await getLead(id);
   if (!lead) notFound();
 
+  const templates = await getTemplates();
   const badge = leadStatusBadge(lead.status);
 
   return (
@@ -94,6 +97,10 @@ export default async function LeadDetailPage({ params }: { params: Promise<{ id:
             <span className="mono">{formatDate(lead.next_followup)}</span>
           </Stat>
         </div>
+      </Panel>
+
+      <Panel title="Message (mail-merge)">
+        <ComposeMessage lead={lead} templates={templates} />
       </Panel>
 
       {lead.notes && (

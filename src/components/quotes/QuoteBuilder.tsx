@@ -30,9 +30,16 @@ export function QuoteBuilder({
   const [currency, setCurrency] = useState(quote?.currency ?? "EUR");
   const [items, setItems] = useState<QuoteItem[]>(quote?.items ?? []);
 
+  // Price for the currently-selected quote currency (one catalog item holds all three).
+  const priceFor = (it: ServiceItem) => {
+    const raw =
+      currency === "RSD" ? it.price_rsd : currency === "USD" ? it.price_usd : it.price_eur;
+    return Number(raw) || 0;
+  };
+
   const addFromCatalog = (id: string) => {
     const it = catalog.find((c) => c.id === id);
-    if (it) setItems((p) => [...p, { label: it.label, price: Number(it.price) || 0, qty: 1 }]);
+    if (it) setItems((p) => [...p, { label: it.label, price: priceFor(it), qty: 1 }]);
   };
   const addCustom = () => setItems((p) => [...p, { label: "", price: 0, qty: 1 }]);
   const update = (i: number, patch: Partial<QuoteItem>) =>
@@ -148,11 +155,12 @@ export function QuoteBuilder({
             className="rounded-ctrl border border-line bg-white/[0.035] px-2.5 py-2 text-[12.5px] text-ink [color-scheme:dark] focus:border-gold focus:outline-none"
           >
             <option value="" className="bg-[#1A1D24] text-[#ECEEF2]">
-              + Add from catalog…
+              + Add from catalog ({currency})…
             </option>
             {catalog.map((c) => (
               <option key={c.id} value={c.id} className="bg-[#1A1D24] text-[#ECEEF2]">
-                {c.label} — {formatMoney(c.price, c.currency)}
+                {c.category ? `${c.category} · ` : ""}
+                {c.label} — {priceFor(c) > 0 ? formatMoney(priceFor(c), currency) : "no price"}
               </option>
             ))}
           </select>

@@ -16,8 +16,8 @@ type Preview = Exclude<ImportPreview, { error: string }>;
 
 const TEMPLATE =
   "name,company,contact,channel,service,status,value,next_followup,notes\n" +
-  "Milan Jovanović,Kafe Kod Mike,@milan,instagram,new_site,contacted,800,2026-08-01,Poslao ponudu\n" +
-  "Ana Petrović,Studio Ana,@ana,instagram,redesign,new,1200,,Nije još odgovorila";
+  "John Miller,Mike's Cafe,@john,instagram,new_site,contacted,800,2026-08-01,Sent a quote\n" +
+  "Anna Peters,Studio Anna,@anna,instagram,redesign,new,1200,,No reply yet";
 
 function downloadTemplate() {
   const blob = new Blob([TEMPLATE], { type: "text/csv;charset=utf-8" });

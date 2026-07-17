@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
+import { Loader2 } from "lucide-react";
 import { runCheck, type CheckFormState } from "@/app/(app)/seo/actions";
 import { Field } from "@/components/ui/Field";
 import { Select } from "@/components/ui/Select";
@@ -27,9 +28,11 @@ export function CheckForm({
       <Field
         label="URL"
         name="url"
-        type="url"
+        type="text"
+        inputMode="url"
         defaultValue={initialUrl ?? ""}
-        placeholder="https://example.com"
+        placeholder="example.com"
+        help="No need to type https:// — it's added automatically."
         autoFocus
         required
       />
@@ -49,11 +52,25 @@ export function CheckForm({
       )}
 
       <Button type="submit" variant="primary" className="w-full" disabled={pending}>
-        {pending ? "Checking…" : "Run check"}
+        {pending ? (
+          <>
+            <Loader2 className="h-4 w-4 animate-spin" />
+            Scanning…
+          </>
+        ) : (
+          "Run check"
+        )}
       </Button>
-      <p className="mt-2 text-[11.5px] text-muted">
-        We fetch the page and score on-page SEO + AI/GEO readiness.
-      </p>
+      <div className="mt-3 space-y-2 rounded-ctrl border border-line-soft bg-white/[0.02] p-3 text-[11.5px] leading-relaxed text-muted">
+        <p>
+          <span className="font-semibold text-ink">SEO</span> = how easily search engines (Google)
+          find you: title, description, headings, images, mobile view…
+        </p>
+        <p>
+          <span className="font-semibold text-ink">GEO</span> = how easily AI tools (ChatGPT, Gemini)
+          understand you: structure, JSON-LD data, Open Graph. We fetch the page and score both.
+        </p>
+      </div>
     </form>
   );
 }

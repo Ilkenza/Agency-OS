@@ -7,6 +7,8 @@ export type Json =
   | Json[]
 
 export type Database = {
+  // Allows to automatically instantiate createClient with right options
+  // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
     PostgrestVersion: "14.5"
   }
@@ -14,27 +16,39 @@ export type Database = {
     Tables: {
       clients: {
         Row: {
+          business_type: string | null
           contact: string | null
+          contact_channel: string | null
           created_at: string
           id: string
           name: string
           notes: string | null
+          region: string | null
+          tier: string | null
           user_id: string
         }
         Insert: {
+          business_type?: string | null
           contact?: string | null
+          contact_channel?: string | null
           created_at?: string
           id?: string
           name: string
           notes?: string | null
+          region?: string | null
+          tier?: string | null
           user_id?: string
         }
         Update: {
+          business_type?: string | null
           contact?: string | null
+          contact_channel?: string | null
           created_at?: string
           id?: string
           name?: string
           notes?: string | null
+          region?: string | null
+          tier?: string | null
           user_id?: string
         }
         Relationships: []
@@ -48,6 +62,7 @@ export type Database = {
           due_date: string | null
           id: string
           issued_at: string | null
+          items: Json
           number: string | null
           status: string
           user_id: string
@@ -60,6 +75,7 @@ export type Database = {
           due_date?: string | null
           id?: string
           issued_at?: string | null
+          items?: Json
           number?: string | null
           status?: string
           user_id?: string
@@ -72,6 +88,7 @@ export type Database = {
           due_date?: string | null
           id?: string
           issued_at?: string | null
+          items?: Json
           number?: string | null
           status?: string
           user_id?: string
@@ -176,6 +193,7 @@ export type Database = {
           business_email: string | null
           business_name: string | null
           created_at: string
+          ext_token: string | null
           full_name: string | null
           handle: string | null
           id: string
@@ -188,6 +206,7 @@ export type Database = {
           business_email?: string | null
           business_name?: string | null
           created_at?: string
+          ext_token?: string | null
           full_name?: string | null
           handle?: string | null
           id: string
@@ -200,6 +219,7 @@ export type Database = {
           business_email?: string | null
           business_name?: string | null
           created_at?: string
+          ext_token?: string | null
           full_name?: string | null
           handle?: string | null
           id?: string
@@ -212,6 +232,7 @@ export type Database = {
         Row: {
           client_id: string | null
           created_at: string
+          currency: string
           description: string | null
           due_date: string | null
           id: string
@@ -223,6 +244,7 @@ export type Database = {
         Insert: {
           client_id?: string | null
           created_at?: string
+          currency?: string
           description?: string | null
           due_date?: string | null
           id?: string
@@ -234,6 +256,7 @@ export type Database = {
         Update: {
           client_id?: string | null
           created_at?: string
+          currency?: string
           description?: string | null
           due_date?: string | null
           id?: string
@@ -352,6 +375,9 @@ export type Database = {
           id: string
           label: string
           price: number
+          price_eur: number | null
+          price_rsd: number | null
+          price_usd: number | null
           user_id: string
         }
         Insert: {
@@ -361,6 +387,9 @@ export type Database = {
           id?: string
           label: string
           price?: number
+          price_eur?: number | null
+          price_rsd?: number | null
+          price_usd?: number | null
           user_id?: string
         }
         Update: {
@@ -370,6 +399,9 @@ export type Database = {
           id?: string
           label?: string
           price?: number
+          price_eur?: number | null
+          price_rsd?: number | null
+          price_usd?: number | null
           user_id?: string
         }
         Relationships: []
