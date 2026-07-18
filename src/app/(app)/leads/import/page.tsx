@@ -4,7 +4,7 @@ import { ImportForm } from "@/components/leads/ImportForm";
 
 export default function ImportLeadsPage() {
   return (
-    <div className="mx-auto max-w-[720px]">
+    <div className="mx-auto max-w-180">
       <Link
         href="/leads"
         className="inline-flex items-center gap-1.5 text-[12px] font-semibold text-muted hover:text-ink"

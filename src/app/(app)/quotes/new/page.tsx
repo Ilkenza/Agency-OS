@@ -5,11 +5,14 @@ import { getServiceItems } from "@/lib/data/catalog";
 import { QuoteBuilder } from "@/components/quotes/QuoteBuilder";
 
 export default async function NewQuotePage() {
-  const [clients, catalog] = await Promise.all([getClients(), getServiceItems()]);
+  const [clients, catalog] = await Promise.all([
+    getClients(),
+    getServiceItems(),
+  ]);
   const clientOptions = clients.map((c) => ({ id: c.id, name: c.name }));
 
   return (
-    <div className="mx-auto max-w-[900px]">
+    <div className="mx-auto max-w-225">
       <Link
         href="/quotes"
         className="mb-3 inline-flex items-center gap-1.5 text-[12px] font-semibold text-muted hover:text-ink"

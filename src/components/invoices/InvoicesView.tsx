@@ -13,7 +13,10 @@ import { formatMoney, formatDate } from "@/lib/format";
 import type { Invoice, InvoiceWithClient } from "@/lib/types";
 import { InvoiceForm, type ClientOption } from "./InvoiceForm";
 
-export type InvoicesPanel = { mode: "new" } | { mode: "edit"; invoice: Invoice } | null;
+export type InvoicesPanel =
+  | { mode: "new" }
+  | { mode: "edit"; invoice: Invoice }
+  | null;
 
 export function InvoicesView({
   invoices,
@@ -30,7 +33,7 @@ export function InvoicesView({
   const close = () => router.push("/invoices");
 
   return (
-    <div className="mx-auto max-w-[1200px]">
+    <div className="mx-auto max-w-300">
       <div className="mb-4 flex items-center justify-between">
         <h1 className="font-display text-[22px] font-extrabold tracking-[-0.5px] text-ink">
           Invoices
@@ -58,31 +61,37 @@ export function InvoicesView({
             <table className="w-full text-[13px]">
               <thead>
                 <tr>
-                  <th className="border-b border-line-soft px-4 py-[11px] text-left text-[10.5px] font-bold uppercase tracking-[0.07em] text-muted">
+                  <th className="border-b border-line-soft px-4 py-2.75 text-left text-[10.5px] font-bold uppercase tracking-[0.07em] text-muted">
                     Number
                   </th>
-                  <th className="border-b border-line-soft px-4 py-[11px] text-left text-[10.5px] font-bold uppercase tracking-[0.07em] text-muted">
+                  <th className="border-b border-line-soft px-4 py-2.75 text-left text-[10.5px] font-bold uppercase tracking-[0.07em] text-muted">
                     Client
                   </th>
-                  <th className="border-b border-line-soft px-4 py-[11px] text-left text-[10.5px] font-bold uppercase tracking-[0.07em] text-muted">
+                  <th className="border-b border-line-soft px-4 py-2.75 text-left text-[10.5px] font-bold uppercase tracking-[0.07em] text-muted">
                     Status
                   </th>
-                  <th className="border-b border-line-soft px-4 py-[11px] text-right text-[10.5px] font-bold uppercase tracking-[0.07em] text-muted">
+                  <th className="border-b border-line-soft px-4 py-2.75 text-right text-[10.5px] font-bold uppercase tracking-[0.07em] text-muted">
                     Amount
                   </th>
-                  <th className="border-b border-line-soft px-4 py-[11px] text-right text-[10.5px] font-bold uppercase tracking-[0.07em] text-muted">
+                  <th className="border-b border-line-soft px-4 py-2.75 text-right text-[10.5px] font-bold uppercase tracking-[0.07em] text-muted">
                     Due
                   </th>
-                  <th className="border-b border-line-soft px-4 py-[11px]" />
+                  <th className="border-b border-line-soft px-4 py-2.75" />
                 </tr>
               </thead>
               <tbody>
                 {invoices.map((inv) => {
                   const badge = invoiceStatusBadge(effectiveInvoiceStatus(inv));
                   return (
-                    <tr key={inv.id} className="group transition-colors hover:bg-white/[0.02]">
+                    <tr
+                      key={inv.id}
+                      className="group transition-colors hover:bg-white/2"
+                    >
                       <td className="mono border-b border-line-soft px-4 py-3 font-semibold text-ink">
-                        <Link href={`/invoices/${inv.id}`} className="hover:text-gold-hi">
+                        <Link
+                          href={`/invoices/${inv.id}`}
+                          className="hover:text-gold-hi"
+                        >
                           {inv.number ?? "—"}
                         </Link>
                       </td>
@@ -102,9 +111,9 @@ export function InvoicesView({
                         <Link
                           href={`/invoices?edit=${inv.id}`}
                           aria-label={`Edit invoice ${inv.number ?? ""}`}
-                          className="inline-flex rounded-ctrl p-1.5 text-faint opacity-0 transition-opacity hover:bg-white/[0.05] hover:text-ink group-hover:opacity-100"
+                          className="inline-flex rounded-ctrl p-1.5 text-faint opacity-0 transition-opacity hover:bg-white/5 hover:text-ink group-hover:opacity-100"
                         >
-                          <Pencil className="h-[15px] w-[15px]" />
+                          <Pencil className="h-3.75 w-3.75" />
                         </Link>
                       </td>
                     </tr>

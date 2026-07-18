@@ -15,15 +15,10 @@ const disp = (v: unknown) => {
   return s === "" ? "—" : s;
 };
 
-/** Match an existing lead by @handle/email (contact) first, then name. */
 const keyOf = (contact: string | null, name: string) =>
   ((contact ?? "").trim() || (name ?? "").trim()).toLowerCase();
 
-/**
- * Split parsed rows into brand-new leads vs updates to existing ones,
- * with a per-field diff. Existing text fields are only overwritten when the
- * import actually provides a value (so a blank cell never wipes real data).
- */
+
 export function computeImportPlan(rows: ImportRow[], existing: Lead[]): ImportPlan {
   const byKey = new Map<string, Lead>();
   for (const e of existing) {

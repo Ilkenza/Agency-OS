@@ -65,11 +65,7 @@ function splitLine(line: string, delim: string): string[] {
   return out.map((s) => s.trim());
 }
 
-/**
- * Parse pasted spreadsheet data (tab-separated) or CSV into lead rows.
- * Requires a header row; only `name` is mandatory. Unknown status/channel
- * fall back to sensible defaults so a messy sheet still imports.
- */
+
 export function parseLeadsImport(text: string): ParseResult {
   const clean = text.replace(/\r\n?/g, "\n").trim();
   if (!clean) return { rows: [], skipped: 0, error: "Nothing to import." };

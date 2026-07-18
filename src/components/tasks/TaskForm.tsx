@@ -1,7 +1,11 @@
 "use client";
 
 import { useActionState } from "react";
-import { saveTask, deleteTask, type TaskFormState } from "@/app/(app)/tasks/actions";
+import {
+  saveTask,
+  deleteTask,
+  type TaskFormState,
+} from "@/app/(app)/tasks/actions";
 import { Field } from "@/components/ui/Field";
 import { Select } from "@/components/ui/Select";
 import { Button } from "@/components/ui/Button";
@@ -9,9 +13,19 @@ import { DeleteButton } from "@/components/ui/DeleteButton";
 import { PRIORITY_OPTIONS } from "@/lib/status";
 import type { Task } from "@/lib/types";
 
-export type ProjectOption = { id: string; title: string; client: string | null };
+export type ProjectOption = {
+  id: string;
+  title: string;
+  client: string | null;
+};
 
-export function TaskForm({ task, projects }: { task?: Task; projects: ProjectOption[] }) {
+export function TaskForm({
+  task,
+  projects,
+}: {
+  task?: Task;
+  projects: ProjectOption[];
+}) {
   const [state, formAction, pending] = useActionState<TaskFormState, FormData>(
     saveTask,
     undefined,
@@ -71,7 +85,12 @@ export function TaskForm({ task, projects }: { task?: Task; projects: ProjectOpt
           </p>
         )}
 
-        <Button type="submit" variant="primary" className="w-full" disabled={pending}>
+        <Button
+          type="submit"
+          variant="primary"
+          className="w-full"
+          disabled={pending}
+        >
           {pending ? "Saving…" : task ? "Save changes" : "Create task"}
         </Button>
       </form>

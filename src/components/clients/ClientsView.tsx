@@ -14,7 +14,10 @@ import type { Client } from "@/lib/types";
 import type { ClientWithCount } from "@/lib/data/clients";
 import { ClientForm } from "./ClientForm";
 
-export type ClientsPanel = { mode: "new" } | { mode: "edit"; client: Client } | null;
+export type ClientsPanel =
+  | { mode: "new" }
+  | { mode: "edit"; client: Client }
+  | null;
 
 export function ClientsView({
   clients,
@@ -27,7 +30,7 @@ export function ClientsView({
   const close = () => router.push("/clients");
 
   return (
-    <div className="mx-auto max-w-[1200px]">
+    <div className="mx-auto max-w-300">
       <div className="mb-4 flex items-center justify-between">
         <h1 className="font-display text-[22px] font-extrabold tracking-[-0.5px] text-ink">
           Clients
@@ -55,36 +58,44 @@ export function ClientsView({
             <table className="w-full text-[13px]">
               <thead>
                 <tr>
-                  <th className="border-b border-line-soft px-4 py-[11px] text-left text-[10.5px] font-bold uppercase tracking-[0.07em] text-muted">
+                  <th className="border-b border-line-soft px-4 py-2.75 text-left text-[10.5px] font-bold uppercase tracking-[0.07em] text-muted">
                     Name
                   </th>
-                  <th className="border-b border-line-soft px-4 py-[11px] text-left text-[10.5px] font-bold uppercase tracking-[0.07em] text-muted">
+                  <th className="border-b border-line-soft px-4 py-2.75 text-left text-[10.5px] font-bold uppercase tracking-[0.07em] text-muted">
                     Contact
                   </th>
-                  <th className="border-b border-line-soft px-4 py-[11px] text-left text-[10.5px] font-bold uppercase tracking-[0.07em] text-muted">
+                  <th className="border-b border-line-soft px-4 py-2.75 text-left text-[10.5px] font-bold uppercase tracking-[0.07em] text-muted">
                     Tier
                   </th>
-                  <th className="border-b border-line-soft px-4 py-[11px] text-right text-[10.5px] font-bold uppercase tracking-[0.07em] text-muted">
+                  <th className="border-b border-line-soft px-4 py-2.75 text-right text-[10.5px] font-bold uppercase tracking-[0.07em] text-muted">
                     Projects
                   </th>
-                  <th className="border-b border-line-soft px-4 py-[11px] text-right text-[10.5px] font-bold uppercase tracking-[0.07em] text-muted">
+                  <th className="border-b border-line-soft px-4 py-2.75 text-right text-[10.5px] font-bold uppercase tracking-[0.07em] text-muted">
                     Added
                   </th>
-                  <th className="border-b border-line-soft px-4 py-[11px]" />
+                  <th className="border-b border-line-soft px-4 py-2.75" />
                 </tr>
               </thead>
               <tbody>
                 {clients.map((c) => (
-                  <tr key={c.id} className="group transition-colors hover:bg-white/[0.02]">
+                  <tr
+                    key={c.id}
+                    className="group transition-colors hover:bg-white/2"
+                  >
                     <td className="border-b border-line-soft px-4 py-3 font-semibold text-ink">
-                      <Link href={`/clients/${c.id}`} className="hover:text-gold-hi">
+                      <Link
+                        href={`/clients/${c.id}`}
+                        className="hover:text-gold-hi"
+                      >
                         {c.name}
                       </Link>
                     </td>
                     <td className="border-b border-line-soft px-4 py-3 text-muted">
                       {c.contact ?? "—"}
                       {c.contact_channel && (
-                        <span className="block text-[11.5px] text-faint">{c.contact_channel}</span>
+                        <span className="block text-[11.5px] text-faint">
+                          {c.contact_channel}
+                        </span>
                       )}
                     </td>
                     <td className="border-b border-line-soft px-4 py-3">
@@ -106,9 +117,9 @@ export function ClientsView({
                       <Link
                         href={`/clients?edit=${c.id}`}
                         aria-label={`Edit ${c.name}`}
-                        className="inline-flex rounded-ctrl p-1.5 text-faint opacity-0 transition-opacity hover:bg-white/[0.05] hover:text-ink group-hover:opacity-100"
+                        className="inline-flex rounded-ctrl p-1.5 text-faint opacity-0 transition-opacity hover:bg-white/5 hover:text-ink group-hover:opacity-100"
                       >
-                        <Pencil className="h-[15px] w-[15px]" />
+                        <Pencil className="h-3.75 w-3.75" />
                       </Link>
                     </td>
                   </tr>
@@ -124,7 +135,11 @@ export function ClientsView({
         onClose={close}
         title={panel?.mode === "edit" ? "Edit client" : "New client"}
       >
-        {panel?.mode === "edit" ? <ClientForm client={panel.client} /> : <ClientForm />}
+        {panel?.mode === "edit" ? (
+          <ClientForm client={panel.client} />
+        ) : (
+          <ClientForm />
+        )}
       </SlideOver>
     </div>
   );

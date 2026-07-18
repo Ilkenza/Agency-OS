@@ -14,12 +14,17 @@ export function ProfileForm({ profile }: { profile: Profile | null }) {
 
   return (
     <form action={formAction} className="px-4 py-4">
-      <Field label="Full name" name="full_name" defaultValue={profile?.full_name ?? ""} placeholder="Your name" />
+      <Field
+        label="Full name"
+        name="full_name"
+        defaultValue={profile?.full_name ?? ""}
+        placeholder="Your name"
+      />
       <Field
         label="Handle"
         name="handle"
         defaultValue={profile?.handle ?? ""}
-        placeholder="ilkenza"
+        placeholder="Your username"
         help="A unique username."
       />
 

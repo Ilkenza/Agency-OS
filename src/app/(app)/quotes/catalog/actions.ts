@@ -6,7 +6,6 @@ import { createClient as createSupabaseServerClient } from "@/lib/supabase/serve
 
 export type ServiceItemState = { error?: string } | undefined;
 
-/** Parse an optional price field: empty → null, invalid/negative → error sentinel (NaN). */
 function parsePrice(raw: string): number | null {
   const s = raw.trim();
   if (!s) return null;
@@ -91,9 +90,10 @@ export async function addStarterFeatures() {
   await supabase
     .from("service_items")
     .delete()
-    .in("category", ["Website", "Basic", "Osnovni", "Standard", "Premium"]);
-  await supabase.from("service_items").delete().like("category", "Domaći — %");
-  await supabase.from("service_items").delete().like("category", "Strani — %");
+    .in("category", ["Website", "Basic", "Standard", "Premium"]);
+  // cSpell:ignore Local International
+  await supabase.from("service_items").delete().like("category", "Local — %");
+  await supabase.from("service_items").delete().like("category", "International — %");
 
   const rows = STARTER.flatMap((s) =>
     TIERS.map((t) => ({

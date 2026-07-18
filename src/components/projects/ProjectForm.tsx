@@ -1,7 +1,11 @@
 "use client";
 
 import { useActionState, useState } from "react";
-import { saveProject, deleteProject, type ProjectFormState } from "@/app/(app)/projects/actions";
+import {
+  saveProject,
+  deleteProject,
+  type ProjectFormState,
+} from "@/app/(app)/projects/actions";
 import { Field } from "@/components/ui/Field";
 import { Textarea } from "@/components/ui/Textarea";
 import { Select } from "@/components/ui/Select";
@@ -19,10 +23,10 @@ export function ProjectForm({
   project?: Project;
   clients: ClientOption[];
 }) {
-  const [state, formAction, pending] = useActionState<ProjectFormState, FormData>(
-    saveProject,
-    undefined,
-  );
+  const [state, formAction, pending] = useActionState<
+    ProjectFormState,
+    FormData
+  >(saveProject, undefined);
 
   const [clientId, setClientId] = useState(project?.client_id ?? "");
   const [currency, setCurrency] = useState(project?.currency ?? "EUR");
@@ -58,7 +62,11 @@ export function ProjectForm({
           onChange={(e) => onClientChange(e.target.value)}
           placeholder={clientOptions.length ? "No client" : "No clients yet"}
           options={clientOptions}
-          help={clientOptions.length ? undefined : "Add a client first to link this project."}
+          help={
+            clientOptions.length
+              ? undefined
+              : "Add a client first to link this project."
+          }
         />
 
         <Select
@@ -108,7 +116,12 @@ export function ProjectForm({
           </p>
         )}
 
-        <Button type="submit" variant="primary" className="w-full" disabled={pending}>
+        <Button
+          type="submit"
+          variant="primary"
+          className="w-full"
+          disabled={pending}
+        >
           {pending ? "Saving…" : project ? "Save changes" : "Create project"}
         </Button>
       </form>

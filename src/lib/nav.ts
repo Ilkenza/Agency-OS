@@ -44,7 +44,6 @@ export const NAV_ITEMS: NavItem[] = [
 
 export type NavCounts = Partial<Record<CountKey, number>>;
 
-/** New-menu destinations for the topbar `+ New` button. */
 export const NEW_ITEMS: { label: string; href: string }[] = [
   { label: "New lead", href: "/leads?new=1" },
   { label: "New client", href: "/clients?new=1" },

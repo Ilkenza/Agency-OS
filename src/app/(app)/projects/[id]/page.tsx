@@ -10,10 +10,18 @@ import { deleteProject } from "../actions";
 import { projectStatusBadge } from "@/lib/status";
 import { formatMoney, formatDate } from "@/lib/format";
 
-function Stat({ label, children }: { label: string; children: React.ReactNode }) {
+function Stat({
+  label,
+  children,
+}: {
+  label: string;
+  children: React.ReactNode;
+}) {
   return (
     <div>
-      <div className="text-[11px] font-semibold uppercase tracking-[0.05em] text-muted">{label}</div>
+      <div className="text-[11px] font-semibold uppercase tracking-wider text-muted">
+        {label}
+      </div>
       <div className="mt-1 text-[14px] text-ink">{children}</div>
     </div>
   );
@@ -31,7 +39,7 @@ export default async function ProjectDetailPage({
   const badge = projectStatusBadge(project.status);
 
   return (
-    <div className="mx-auto max-w-[1200px] space-y-6">
+    <div className="mx-auto max-w-300 space-y-6">
       <Link
         href="/projects"
         className="inline-flex items-center gap-1.5 text-[12px] font-semibold text-muted hover:text-ink"
@@ -50,7 +58,10 @@ export default async function ProjectDetailPage({
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <Link href={`/projects?edit=${project.id}`} className={buttonClasses("secondary")}>
+          <Link
+            href={`/projects?edit=${project.id}`}
+            className={buttonClasses("secondary")}
+          >
             <Pencil className="h-4 w-4" />
             Edit
           </Link>
@@ -67,7 +78,9 @@ export default async function ProjectDetailPage({
             {project.client?.name ?? <span className="text-muted">—</span>}
           </Stat>
           <Stat label="Value">
-            <span className="mono">{formatMoney(project.value, project.currency)}</span>
+            <span className="mono">
+              {formatMoney(project.value, project.currency)}
+            </span>
           </Stat>
           <Stat label="Due">
             <span className="mono">{formatDate(project.due_date)}</span>

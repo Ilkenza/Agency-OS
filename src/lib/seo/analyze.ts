@@ -3,7 +3,6 @@ import type { CheckResult, CheckStatus } from "@/lib/types";
 
 export type AnalyzeResult = { title: string | null; score: number; results: CheckResult[] };
 
-/** Parse HTML and score on-page SEO + GEO (generative-readiness) signals. Pure/testable. */
 export function analyzeHtml(html: string): AnalyzeResult {
   const $ = cheerio.load(html);
   const results: CheckResult[] = [];

@@ -33,18 +33,25 @@ export function QuoteBuilder({
   // Price for the currently-selected quote currency (one catalog item holds all three).
   const priceFor = (it: ServiceItem) => {
     const raw =
-      currency === "RSD" ? it.price_rsd : currency === "USD" ? it.price_usd : it.price_eur;
+      currency === "RSD"
+        ? it.price_rsd
+        : currency === "USD"
+          ? it.price_usd
+          : it.price_eur;
     return Number(raw) || 0;
   };
 
   const addFromCatalog = (id: string) => {
     const it = catalog.find((c) => c.id === id);
-    if (it) setItems((p) => [...p, { label: it.label, price: priceFor(it), qty: 1 }]);
+    if (it)
+      setItems((p) => [...p, { label: it.label, price: priceFor(it), qty: 1 }]);
   };
-  const addCustom = () => setItems((p) => [...p, { label: "", price: 0, qty: 1 }]);
+  const addCustom = () =>
+    setItems((p) => [...p, { label: "", price: 0, qty: 1 }]);
   const update = (i: number, patch: Partial<QuoteItem>) =>
     setItems((p) => p.map((it, idx) => (idx === i ? { ...it, ...patch } : it)));
-  const remove = (i: number) => setItems((p) => p.filter((_, idx) => idx !== i));
+  const remove = (i: number) =>
+    setItems((p) => p.filter((_, idx) => idx !== i));
 
   const total = quoteTotal(items);
   const clientOptions = clients.map((c) => ({ value: c.id, label: c.name }));
@@ -52,7 +59,7 @@ export function QuoteBuilder({
     "rounded-ctrl border border-line bg-white/[0.035] px-2.5 py-1.5 text-[13px] text-ink focus:border-gold focus:outline-none";
 
   return (
-    <form action={formAction} className="mx-auto max-w-[900px] space-y-5">
+    <form action={formAction} className="mx-auto max-w-225 space-y-5">
       {quote && <input type="hidden" name="id" value={quote.id} />}
       <input type="hidden" name="items" value={JSON.stringify(items)} />
 
@@ -152,27 +159,42 @@ export function QuoteBuilder({
               }
             }}
             aria-label="Add from catalog"
-            className="rounded-ctrl border border-line bg-white/[0.035] px-2.5 py-2 text-[12.5px] text-ink [color-scheme:dark] focus:border-gold focus:outline-none"
+            className="rounded-ctrl border border-line bg-white/[0.035] px-2.5 py-2 text-[12.5px] text-ink scheme-dark focus:border-gold focus:outline-none"
           >
             <option value="" className="bg-[#1A1D24] text-[#ECEEF2]">
               + Add from catalog ({currency})…
             </option>
             {catalog.map((c) => (
-              <option key={c.id} value={c.id} className="bg-[#1A1D24] text-[#ECEEF2]">
+              <option
+                key={c.id}
+                value={c.id}
+                className="bg-[#1A1D24] text-[#ECEEF2]"
+              >
                 {c.category ? `${c.category} · ` : ""}
-                {c.label} — {priceFor(c) > 0 ? formatMoney(priceFor(c), currency) : "no price"}
+                {c.label} —{" "}
+                {priceFor(c) > 0
+                  ? formatMoney(priceFor(c), currency)
+                  : "no price"}
               </option>
             ))}
           </select>
-          <button type="button" onClick={addCustom} className={buttonClasses("secondary")}>
+          <button
+            type="button"
+            onClick={addCustom}
+            className={buttonClasses("secondary")}
+          >
             <Plus className="h-4 w-4" />
             Custom line
           </button>
         </div>
 
         <div className="text-right">
-          <div className="text-[11px] uppercase tracking-[0.05em] text-muted">Total</div>
-          <div className="mono text-[20px] font-bold text-ink">{formatMoney(total, currency)}</div>
+          <div className="text-[11px] uppercase tracking-wider text-muted">
+            Total
+          </div>
+          <div className="mono text-[20px] font-bold text-ink">
+            {formatMoney(total, currency)}
+          </div>
         </div>
       </div>
 

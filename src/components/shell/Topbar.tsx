@@ -15,7 +15,13 @@ function greeting() {
   return "Good evening";
 }
 
-export function Topbar({ user, onMenu }: { user: ShellUser; onMenu: () => void }) {
+export function Topbar({
+  user,
+  onMenu,
+}: {
+  user: ShellUser;
+  onMenu: () => void;
+}) {
   const [menuOpen, setMenuOpen] = useState(false);
   const firstName = user.fullName?.trim().split(/\s+/)[0] ?? null;
 
@@ -24,7 +30,7 @@ export function Topbar({ user, onMenu }: { user: ShellUser; onMenu: () => void }
       <button
         onClick={onMenu}
         aria-label="Open menu"
-        className="rounded-ctrl p-1.5 text-muted transition-colors hover:bg-white/[0.04] hover:text-ink lg:hidden"
+        className="rounded-ctrl p-1.5 text-muted transition-colors hover:bg-white/4 hover:text-ink lg:hidden"
       >
         <Menu className="h-5 w-5" />
       </button>
@@ -46,7 +52,7 @@ export function Topbar({ user, onMenu }: { user: ShellUser; onMenu: () => void }
           type="search"
           placeholder="Search…"
           aria-label="Search"
-          className="w-[220px] rounded-ctrl border border-line bg-white/[0.035] py-2 pl-9 pr-3 text-[13px] text-ink placeholder:text-faint focus:border-gold focus:outline-none"
+          className="w-55 rounded-ctrl border border-line bg-white/[0.035] py-2 pl-9 pr-3 text-[13px] text-ink placeholder:text-faint focus:border-gold focus:outline-none"
         />
       </div>
 
@@ -81,7 +87,7 @@ export function Topbar({ user, onMenu }: { user: ShellUser; onMenu: () => void }
                   onClick={() => setMenuOpen(false)}
                   className={cn(
                     "block rounded-ctrl px-3 py-2 text-[13px] font-medium text-muted transition-colors",
-                    "hover:bg-white/[0.04] hover:text-ink",
+                    "hover:bg-white/4 hover:text-ink",
                   )}
                 >
                   {item.label}

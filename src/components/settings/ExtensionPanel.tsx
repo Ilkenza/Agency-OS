@@ -39,34 +39,49 @@ export function ExtensionPanel({
   return (
     <div className="space-y-4 px-4 py-4">
       <p className="text-[13px] leading-relaxed text-muted">
-        Connect the <b className="text-ink">Lead Collector</b> extension to your account: generate a
-        token, click “Copy config”, then paste it into the extension (Options). The token is a secret —
-        keep it safe; regenerating revokes the old one instantly.
+        Connect the <b className="text-ink">Lead Collector</b> extension to your
+        account: generate a token, click “Copy config”, then paste it into the
+        extension (Options). The token is a secret — keep it safe; regenerating
+        revokes the old one instantly.
       </p>
 
       {token ? (
         <div className="space-y-3">
           <div>
-            <div className="mb-1 text-[11px] font-semibold uppercase tracking-[0.05em] text-muted">
+            <div className="mb-1 text-[11px] font-semibold uppercase tracking-wider text-muted">
               Token
             </div>
-            <code className="mono block break-all rounded-ctrl border border-line bg-white/[0.03] px-3 py-2 text-[12px] text-ink">
+            <code className="mono block break-all rounded-ctrl border border-line bg-white/3 px-3 py-2 text-[12px] text-ink">
               {token}
             </code>
           </div>
           <div className="flex flex-wrap items-center gap-2">
             <Button type="button" variant="primary" onClick={copyConfig}>
-              {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+              {copied ? (
+                <Check className="h-4 w-4" />
+              ) : (
+                <Copy className="h-4 w-4" />
+              )}
               {copied ? "Copied" : "Copy config for the extension"}
             </Button>
-            <Button type="button" variant="secondary" onClick={generate} disabled={pending}>
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={generate}
+              disabled={pending}
+            >
               <KeyRound className="h-4 w-4" />
               {pending ? "…" : "Regenerate token"}
             </Button>
           </div>
         </div>
       ) : (
-        <Button type="button" variant="primary" onClick={generate} disabled={pending}>
+        <Button
+          type="button"
+          variant="primary"
+          onClick={generate}
+          disabled={pending}
+        >
           <KeyRound className="h-4 w-4" />
           {pending ? "Generating…" : "Generate token"}
         </Button>

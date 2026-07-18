@@ -1,6 +1,13 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, ExternalLink, RotateCw, CheckCircle2, AlertTriangle, XCircle } from "lucide-react";
+import {
+  ArrowLeft,
+  ExternalLink,
+  RotateCw,
+  CheckCircle2,
+  AlertTriangle,
+  XCircle,
+} from "lucide-react";
 import { getCheck } from "@/lib/data/seo";
 import { Panel } from "@/components/ui/Panel";
 import { Badge } from "@/components/ui/Badge";
@@ -12,7 +19,11 @@ import { formatDate } from "@/lib/format";
 import { CHECK_INFO } from "@/lib/seo/explain";
 import type { CheckResult } from "@/lib/types";
 
-const ICONS = { pass: CheckCircle2, warn: AlertTriangle, fail: XCircle } as const;
+const ICONS = {
+  pass: CheckCircle2,
+  warn: AlertTriangle,
+  fail: XCircle,
+} as const;
 
 export default async function CheckDetailPage({
   params,
@@ -25,10 +36,14 @@ export default async function CheckDetailPage({
 
   const badge = scoreBadge(check.score);
   const scoreColor =
-    check.score >= 80 ? "text-ok" : check.score >= 50 ? "text-gold" : "text-danger";
+    check.score >= 80
+      ? "text-ok"
+      : check.score >= 50
+        ? "text-gold"
+        : "text-danger";
 
   return (
-    <div className="mx-auto max-w-[1200px] space-y-6">
+    <div className="mx-auto max-w-300 space-y-6">
       <Link
         href="/seo"
         className="inline-flex items-center gap-1.5 text-[12px] font-semibold text-muted hover:text-ink"
@@ -53,7 +68,9 @@ export default async function CheckDetailPage({
             {check.url}
             <ExternalLink className="h-3.5 w-3.5" />
           </a>
-          <p className="mono mt-1 text-[11.5px] text-faint">Checked {formatDate(check.created_at)}</p>
+          <p className="mono mt-1 text-[11.5px] text-faint">
+            Checked {formatDate(check.created_at)}
+          </p>
         </div>
         <div className="flex items-center gap-2">
           <Link
@@ -63,13 +80,18 @@ export default async function CheckDetailPage({
             <RotateCw className="h-4 w-4" />
             Check again
           </Link>
-          <DeleteButton action={deleteCheck.bind(null, check.id)} confirmText="Delete this check?" />
+          <DeleteButton
+            action={deleteCheck.bind(null, check.id)}
+            confirmText="Delete this check?"
+          />
         </div>
       </div>
 
       <div className="flex items-center gap-6 rounded-card border border-line bg-surface px-6 py-5">
         <div className="text-center">
-          <div className={`mono text-[40px] font-bold leading-none ${scoreColor}`}>
+          <div
+            className={`mono text-[40px] font-bold leading-none ${scoreColor}`}
+          >
             {check.score}
           </div>
           <div className="mt-1 text-[11px] text-faint">/ 100</div>
@@ -96,27 +118,35 @@ export default async function CheckDetailPage({
                 key={r.key}
                 className="group border-b border-line-soft last:border-b-0 [&_summary::-webkit-details-marker]:hidden"
               >
-                <summary className="flex cursor-pointer list-none items-start gap-3 px-4 py-3 hover:bg-white/[0.02]">
-                  <Icon className={`mt-0.5 h-[17px] w-[17px] shrink-0 ${meta.color}`} />
+                <summary className="flex cursor-pointer list-none items-start gap-3 px-4 py-3 hover:bg-white/2">
+                  <Icon
+                    className={`mt-0.5 h-4.25 w-4.25 shrink-0 ${meta.color}`}
+                  />
                   <div className="min-w-0 flex-1">
-                    <div className="text-[13px] font-semibold text-ink">{r.label}</div>
+                    <div className="text-[13px] font-semibold text-ink">
+                      {r.label}
+                    </div>
                     <div className="text-[12px] text-muted">{r.detail}</div>
                   </div>
-                  <span className={`shrink-0 text-[11px] font-semibold uppercase ${meta.color}`}>
+                  <span
+                    className={`shrink-0 text-[11px] font-semibold uppercase ${meta.color}`}
+                  >
                     {meta.label}
                   </span>
                 </summary>
                 {(info || r.found) && (
                   <div className="space-y-2.5 px-4 pb-3.5 pl-11">
                     {info?.why && (
-                      <p className="text-[11.5px] leading-relaxed text-muted">{info.why}</p>
+                      <p className="text-[11.5px] leading-relaxed text-muted">
+                        {info.why}
+                      </p>
                     )}
                     {r.found && (
                       <div>
                         <div className="mb-1 text-[10.5px] font-bold uppercase tracking-[0.06em] text-faint">
                           Your page
                         </div>
-                        <pre className="mono overflow-x-auto rounded-ctrl border border-line-soft bg-white/[0.03] px-3 py-2 text-[11px] leading-relaxed text-ink/90">
+                        <pre className="mono overflow-x-auto rounded-ctrl border border-line-soft bg-white/3 px-3 py-2 text-[11px] leading-relaxed text-ink/90">
                           {r.found}
                         </pre>
                       </div>
@@ -126,7 +156,7 @@ export default async function CheckDetailPage({
                         <div className="mb-1 text-[10.5px] font-bold uppercase tracking-[0.06em] text-faint">
                           Example (recommended)
                         </div>
-                        <pre className="mono overflow-x-auto rounded-ctrl border border-line-soft bg-white/[0.03] px-3 py-2 text-[11px] leading-relaxed text-ink/90">
+                        <pre className="mono overflow-x-auto rounded-ctrl border border-line-soft bg-white/3 px-3 py-2 text-[11px] leading-relaxed text-ink/90">
                           {info.example}
                         </pre>
                       </div>

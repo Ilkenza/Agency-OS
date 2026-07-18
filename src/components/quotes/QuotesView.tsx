@@ -11,9 +11,11 @@ import type { QuoteWithClient } from "@/lib/types";
 
 export function QuotesView({ quotes }: { quotes: QuoteWithClient[] }) {
   return (
-    <div className="mx-auto max-w-[1200px]">
+    <div className="mx-auto max-w-300">
       <div className="mb-4 flex items-center justify-between">
-        <h1 className="font-display text-[22px] font-extrabold tracking-[-0.5px] text-ink">Quotes</h1>
+        <h1 className="font-display text-[22px] font-extrabold tracking-[-0.5px] text-ink">
+          Quotes
+        </h1>
         <div className="flex items-center gap-2">
           <Link href="/quotes/catalog" className={buttonClasses("secondary")}>
             <LayoutList className="h-4 w-4" />
@@ -43,25 +45,33 @@ export function QuotesView({ quotes }: { quotes: QuoteWithClient[] }) {
             <table className="w-full text-[13px]">
               <thead>
                 <tr>
-                  {["Title", "Client", "Status", "Total", "Date"].map((h, idx) => (
-                    <th
-                      key={h}
-                      className={`border-b border-line-soft px-4 py-[11px] text-[10.5px] font-bold uppercase tracking-[0.07em] text-muted ${
-                        idx >= 3 ? "text-right" : "text-left"
-                      }`}
-                    >
-                      {h}
-                    </th>
-                  ))}
+                  {["Title", "Client", "Status", "Total", "Date"].map(
+                    (h, idx) => (
+                      <th
+                        key={h}
+                        className={`border-b border-line-soft px-4 py-2.75 text-[10.5px] font-bold uppercase tracking-[0.07em] text-muted ${
+                          idx >= 3 ? "text-right" : "text-left"
+                        }`}
+                      >
+                        {h}
+                      </th>
+                    ),
+                  )}
                 </tr>
               </thead>
               <tbody>
                 {quotes.map((q) => {
                   const badge = quoteStatusBadge(q.status);
                   return (
-                    <tr key={q.id} className="transition-colors hover:bg-white/[0.02]">
+                    <tr
+                      key={q.id}
+                      className="transition-colors hover:bg-white/2"
+                    >
                       <td className="border-b border-line-soft px-4 py-3 font-semibold text-ink">
-                        <Link href={`/quotes/${q.id}`} className="hover:text-gold-hi">
+                        <Link
+                          href={`/quotes/${q.id}`}
+                          className="hover:text-gold-hi"
+                        >
                           {q.title}
                         </Link>
                       </td>

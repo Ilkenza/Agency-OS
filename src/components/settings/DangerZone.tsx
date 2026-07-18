@@ -12,8 +12,8 @@ export function DangerZone() {
   return (
     <div className="px-4 py-4">
       <p className="text-[13px] text-muted">
-        Permanently delete your account and everything in it — clients, projects, tasks, invoices,
-        leads and SEO checks. This cannot be undone.
+        Permanently delete your account and everything in it — clients,
+        projects, tasks, invoices, leads and SEO checks. This cannot be undone.
       </p>
 
       <label className="mt-3 flex items-start gap-2 text-[12.5px] text-muted">
@@ -29,7 +29,12 @@ export function DangerZone() {
       <form
         action={deleteAccount}
         onSubmit={(e) => {
-          if (!ack || !window.confirm("Delete your account and ALL data? This cannot be undone.")) {
+          if (
+            !ack ||
+            !window.confirm(
+              "Delete your account and ALL data? This cannot be undone.",
+            )
+          ) {
             e.preventDefault();
           }
         }}
@@ -38,7 +43,10 @@ export function DangerZone() {
         <button
           type="submit"
           disabled={!ack}
-          className={cn(buttonClasses("danger"), !ack && "cursor-not-allowed opacity-50")}
+          className={cn(
+            buttonClasses("danger"),
+            !ack && "cursor-not-allowed opacity-50",
+          )}
         >
           <Trash2 className="h-4 w-4" />
           Delete account

@@ -11,7 +11,6 @@ export const PROJECT_STATUS_OPTIONS: { value: ProjectStatus; label: string }[] =
   { value: "delivered", label: "Delivered" },
 ];
 
-/** Map a project status to a Badge variant + human label. */
 export function projectStatusBadge(status: string): { variant: BadgeStatus; label: string } {
   switch (status) {
     case "in_progress":
@@ -30,21 +29,19 @@ export const CLIENT_REGION_OPTIONS: { value: string; label: string }[] = [
   { value: "foreign", label: "International (EUR/USD)" },
 ];
 
-// Values stay `osnovni/standard/premium` (clients.tier check constraint); labels are English.
 export const CLIENT_TIER_OPTIONS: { value: string; label: string }[] = [
-  { value: "osnovni", label: "Basic" },
+  { value: "basic", label: "Basic" },
   { value: "standard", label: "Standard" },
   { value: "premium", label: "Premium" },
 ];
 
-/** Client tier → Badge variant + label (for list/detail chips). */
 export function clientTierBadge(tier: string | null): { variant: BadgeStatus; label: string } | null {
   switch (tier) {
     case "premium":
       return { variant: "ok", label: "Premium" };
     case "standard":
       return { variant: "info", label: "Standard" };
-    case "osnovni":
+    case "basic":
       return { variant: "draft", label: "Basic" };
     default:
       return null;
@@ -60,7 +57,6 @@ export const PRIORITY_OPTIONS: { value: TaskPriority; label: string }[] = [
   { value: "high", label: "High" },
 ];
 
-/** Priority badge. Gold/`active` stays reserved for the "in progress" status, not priority. */
 export function priorityBadge(priority: string): { variant: BadgeStatus; label: string } {
   switch (priority) {
     case "high":
@@ -82,7 +78,6 @@ export const INVOICE_STATUS_OPTIONS: { value: InvoiceStatus; label: string }[] =
   { value: "overdue", label: "Overdue" },
 ];
 
-/** A `sent` invoice past its due date reads as overdue without changing the stored status. */
 export function effectiveInvoiceStatus(inv: { status: string; due_date: string | null }): string {
   if (inv.status === "sent" && isOverdue(inv.due_date)) return "overdue";
   return inv.status;
@@ -101,14 +96,12 @@ export function invoiceStatusBadge(status: string): { variant: BadgeStatus; labe
   }
 }
 
-/** SEO check score → Badge variant + label. */
 export function scoreBadge(score: number): { variant: BadgeStatus; label: string } {
   if (score >= 80) return { variant: "ok", label: "Good" };
   if (score >= 50) return { variant: "pending", label: "Fair" };
   return { variant: "danger", label: "Poor" };
 }
 
-/** pass/warn/fail finding → text color + label (component picks the icon). */
 export function checkStatusMeta(status: string): { color: string; label: string } {
   switch (status) {
     case "pass":
@@ -187,7 +180,6 @@ export const CHANNEL_OPTIONS: { value: string; label: string }[] = [
   { value: "other", label: "Other" },
 ];
 
-/** What you pitched a lead (website work). */
 export const SERVICE_OPTIONS: { value: string; label: string }[] = [
   { value: "new_site", label: "New site" },
   { value: "redesign", label: "Redesign" },

@@ -19,14 +19,14 @@ export function AuthForm() {
   return (
     <div className="rounded-card border border-line bg-surface/80 p-6 shadow-[0_20px_60px_-20px_rgba(0,0,0,0.6)] backdrop-blur-xl">
       {/* segmented Sign in / Sign up tabs */}
-      <div className="mb-5 grid grid-cols-2 gap-1 rounded-ctrl border border-line bg-white/[0.02] p-1">
+      <div className="mb-5 grid grid-cols-2 gap-1 rounded-ctrl border border-line bg-white/2 p-1">
         {(["signin", "signup"] as Mode[]).map((m) => (
           <button
             key={m}
             type="button"
             onClick={() => setMode(m)}
             className={cn(
-              "rounded-[6px] py-2 text-[13px] font-semibold transition-colors",
+              "rounded-md py-2 text-[13px] font-semibold transition-colors",
               mode === m ? "bg-gold text-on-gold" : "text-muted hover:text-ink",
             )}
           >
@@ -92,8 +92,17 @@ export function AuthForm() {
           </p>
         )}
 
-        <Button type="submit" variant="primary" className="w-full" disabled={pending}>
-          {pending ? "Please wait…" : mode === "signin" ? "Sign in" : "Create account"}
+        <Button
+          type="submit"
+          variant="primary"
+          className="w-full"
+          disabled={pending}
+        >
+          {pending
+            ? "Please wait…"
+            : mode === "signin"
+              ? "Sign in"
+              : "Create account"}
         </Button>
       </form>
 

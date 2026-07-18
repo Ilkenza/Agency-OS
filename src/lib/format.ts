@@ -1,4 +1,3 @@
-/** EUR, no trailing .00 for whole amounts. Render inside a `.mono` element. */
 export function formatCurrency(value: number | null | undefined, currency = "EUR") {
   const n = typeof value === "number" && Number.isFinite(value) ? value : 0;
   return new Intl.NumberFormat("en-IE", {
@@ -8,7 +7,6 @@ export function formatCurrency(value: number | null | undefined, currency = "EUR
   }).format(n);
 }
 
-/** Money in a given currency (EUR/USD/RSD), correct symbol per locale. */
 export function formatMoney(amount: number | null | undefined, currency = "EUR") {
   const n = typeof amount === "number" && Number.isFinite(amount) ? amount : 0;
   const locale = currency === "USD" ? "en-US" : currency === "RSD" ? "sr-RS" : "en-IE";
@@ -23,7 +21,6 @@ export function formatMoney(amount: number | null | undefined, currency = "EUR")
   }
 }
 
-/** ISO date `YYYY-MM-DD`, or an em dash when empty. */
 export function formatDate(value: string | null | undefined) {
   if (!value) return "—";
   const d = new Date(value);
@@ -31,13 +28,11 @@ export function formatDate(value: string | null | undefined) {
   return d.toISOString().slice(0, 10);
 }
 
-/** Date, plus `HH:MM` when the value carries a non-midnight time (e.g. task due). */
 export function formatDateTime(value: string | null | undefined) {
   if (!value) return "—";
   const d = new Date(value);
   if (Number.isNaN(d.getTime())) return "—";
   const date = formatDate(value);
-  // A plain `YYYY-MM-DD` (date-only) string has no time component to show.
   const hasTime = /[T ]\d{2}:\d{2}/.test(value) && !(d.getHours() === 0 && d.getMinutes() === 0);
   if (!hasTime) return date;
   const hh = String(d.getHours()).padStart(2, "0");
@@ -45,12 +40,10 @@ export function formatDateTime(value: string | null | undefined) {
   return `${date} ${hh}:${mm}`;
 }
 
-/** Today's date as `YYYY-MM-DD` (server timezone). */
 export function todayISO() {
   return new Date().toISOString().slice(0, 10);
 }
 
-/** A `due_at` (date string) compared to today, ignoring time. */
 export function isToday(value: string | null | undefined) {
   return !!value && value.slice(0, 10) === todayISO();
 }
@@ -59,7 +52,6 @@ export function isOverdue(value: string | null | undefined) {
   return !!value && value.slice(0, 10) < todayISO();
 }
 
-/** Compact relative time: "just now", "5m", "3h", "2d", "3w"; older falls back to a date. */
 export function formatRelativeTime(value: string | null | undefined) {
   if (!value) return "";
   const then = new Date(value).getTime();

@@ -7,11 +7,21 @@ interface FieldProps extends InputHTMLAttributes<HTMLInputElement> {
   error?: boolean;
 }
 
-export function Field({ label, help, error, className, id, ...props }: FieldProps) {
+export function Field({
+  label,
+  help,
+  error,
+  className,
+  id,
+  ...props
+}: FieldProps) {
   const inputId = id ?? props.name;
   return (
-    <div className={cn("mb-[13px]", className)}>
-      <label htmlFor={inputId} className="mb-1.5 block text-xs font-semibold text-[#C6CAD6]">
+    <div className={cn("mb-3.25", className)}>
+      <label
+        htmlFor={inputId}
+        className="mb-1.5 block text-xs font-semibold text-[#C6CAD6]"
+      >
         {label}
       </label>
       <input
@@ -26,7 +36,14 @@ export function Field({ label, help, error, className, id, ...props }: FieldProp
         {...props}
       />
       {help && (
-        <p className={cn("mt-[5px] text-[11.5px]", error ? "text-danger" : "text-muted")}>{help}</p>
+        <p
+          className={cn(
+            "mt-1.25 text-[11.5px]",
+            error ? "text-danger" : "text-muted",
+          )}
+        >
+          {help}
+        </p>
       )}
     </div>
   );

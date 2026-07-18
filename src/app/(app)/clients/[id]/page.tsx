@@ -25,7 +25,7 @@ export default async function ClientDetailPage({
   const projects = await getProjectsByClient(id);
 
   return (
-    <div className="mx-auto max-w-[1200px] space-y-6">
+    <div className="mx-auto max-w-300 space-y-6">
       <Link
         href="/clients"
         className="inline-flex items-center gap-1.5 text-[12px] font-semibold text-muted hover:text-ink"
@@ -39,10 +39,15 @@ export default async function ClientDetailPage({
           <h1 className="font-display text-[24px] font-extrabold tracking-[-0.5px] text-ink">
             {client.name}
           </h1>
-          {client.contact && <p className="mt-1 text-[13px] text-muted">{client.contact}</p>}
+          {client.contact && (
+            <p className="mt-1 text-[13px] text-muted">{client.contact}</p>
+          )}
         </div>
         <div className="flex items-center gap-2">
-          <Link href={`/clients?edit=${client.id}`} className={buttonClasses("secondary")}>
+          <Link
+            href={`/clients?edit=${client.id}`}
+            className={buttonClasses("secondary")}
+          >
             <Pencil className="h-4 w-4" />
             Edit
           </Link>
@@ -78,16 +83,16 @@ export default async function ClientDetailPage({
             <table className="w-full text-[13px]">
               <thead>
                 <tr>
-                  <th className="border-b border-line-soft px-4 py-[11px] text-left text-[10.5px] font-bold uppercase tracking-[0.07em] text-muted">
+                  <th className="border-b border-line-soft px-4 py-2.75 text-left text-[10.5px] font-bold uppercase tracking-[0.07em] text-muted">
                     Project
                   </th>
-                  <th className="border-b border-line-soft px-4 py-[11px] text-left text-[10.5px] font-bold uppercase tracking-[0.07em] text-muted">
+                  <th className="border-b border-line-soft px-4 py-2.75 text-left text-[10.5px] font-bold uppercase tracking-[0.07em] text-muted">
                     Status
                   </th>
-                  <th className="border-b border-line-soft px-4 py-[11px] text-right text-[10.5px] font-bold uppercase tracking-[0.07em] text-muted">
+                  <th className="border-b border-line-soft px-4 py-2.75 text-right text-[10.5px] font-bold uppercase tracking-[0.07em] text-muted">
                     Value
                   </th>
-                  <th className="border-b border-line-soft px-4 py-[11px] text-right text-[10.5px] font-bold uppercase tracking-[0.07em] text-muted">
+                  <th className="border-b border-line-soft px-4 py-2.75 text-right text-[10.5px] font-bold uppercase tracking-[0.07em] text-muted">
                     Due
                   </th>
                 </tr>
@@ -96,9 +101,15 @@ export default async function ClientDetailPage({
                 {projects.map((p) => {
                   const badge = projectStatusBadge(p.status);
                   return (
-                    <tr key={p.id} className="transition-colors hover:bg-white/[0.02]">
+                    <tr
+                      key={p.id}
+                      className="transition-colors hover:bg-white/2"
+                    >
                       <td className="border-b border-line-soft px-4 py-3 font-semibold text-ink">
-                        <Link href={`/projects/${p.id}`} className="hover:text-gold-hi">
+                        <Link
+                          href={`/projects/${p.id}`}
+                          className="hover:text-gold-hi"
+                        >
                           {p.title}
                         </Link>
                       </td>

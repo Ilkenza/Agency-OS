@@ -1,6 +1,12 @@
 import { cn } from "@/lib/utils";
 
-export type BadgeStatus = "ok" | "active" | "pending" | "danger" | "draft" | "info";
+export type BadgeStatus =
+  | "ok"
+  | "active"
+  | "pending"
+  | "danger"
+  | "draft"
+  | "info";
 
 const variants: Record<BadgeStatus, string> = {
   ok: "text-ok bg-ok-bg before:bg-ok",

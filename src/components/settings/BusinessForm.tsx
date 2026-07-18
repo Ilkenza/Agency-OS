@@ -15,7 +15,9 @@ export function BusinessForm({ profile }: { profile: Profile | null }) {
 
   return (
     <form action={formAction} className="px-4 py-4">
-      <p className="mb-3 text-[12px] text-muted">Shown as the “From” details on your invoices.</p>
+      <p className="mb-3 text-[12px] text-muted">
+        Shown as the “From” details on your invoices.
+      </p>
 
       <Field
         label="Business name"

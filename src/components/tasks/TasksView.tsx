@@ -21,7 +21,7 @@ function TaskRow({ task }: { task: TaskWithProject }) {
   const done = task.status === "done";
   const pb = priorityBadge(task.priority);
   return (
-    <div className="group flex items-center gap-3 border-b border-line-soft px-4 py-3 last:border-b-0 hover:bg-white/[0.02]">
+    <div className="group flex items-center gap-3 border-b border-line-soft px-4 py-3 last:border-b-0 hover:bg-white/2">
       <TaskCheckbox id={task.id} done={done} />
       <div className="min-w-0 flex-1">
         <div
@@ -43,15 +43,15 @@ function TaskRow({ task }: { task: TaskWithProject }) {
         )}
       </div>
       {!done && <Badge status={pb.variant}>{pb.label}</Badge>}
-      <span className="mono w-[120px] shrink-0 text-right text-[12px] text-muted">
+      <span className="mono w-30 shrink-0 text-right text-[12px] text-muted">
         {formatDateTime(task.due_at)}
       </span>
       <Link
         href={`/tasks?edit=${task.id}`}
         aria-label={`Edit ${task.title}`}
-        className="inline-flex rounded-ctrl p-1.5 text-faint opacity-0 transition-opacity hover:bg-white/[0.05] hover:text-ink group-hover:opacity-100"
+        className="inline-flex rounded-ctrl p-1.5 text-faint opacity-0 transition-opacity hover:bg-white/5 hover:text-ink group-hover:opacity-100"
       >
-        <Pencil className="h-[15px] w-[15px]" />
+        <Pencil className="h-3.75 w-3.75" />
       </Link>
     </div>
   );
@@ -69,7 +69,7 @@ function Section({
   if (tasks.length === 0) return null;
   return (
     <div>
-      <div className="flex items-center gap-2 border-b border-line-soft bg-white/[0.015] px-4 py-2 text-[10.5px] font-bold uppercase tracking-[0.07em]">
+      <div className="flex items-center gap-2 border-b border-line-soft bg-white/15 px-4 py-2 text-[10.5px] font-bold uppercase tracking-[0.07em]">
         <span className={accent}>{title}</span>
         <span className="mono text-faint">{tasks.length}</span>
       </div>
@@ -97,11 +97,13 @@ export function TasksView({
 
   const overdue = open.filter((t) => isOverdue(t.due_at));
   const today = open.filter((t) => isToday(t.due_at));
-  const upcoming = open.filter((t) => t.due_at && !isOverdue(t.due_at) && !isToday(t.due_at));
+  const upcoming = open.filter(
+    (t) => t.due_at && !isOverdue(t.due_at) && !isToday(t.due_at),
+  );
   const noDate = open.filter((t) => !t.due_at);
 
   return (
-    <div className="mx-auto max-w-[1200px]">
+    <div className="mx-auto max-w-300">
       <div className="mb-4 flex items-center justify-between">
         <h1 className="font-display text-[22px] font-extrabold tracking-[-0.5px] text-ink">
           Tasks
@@ -140,7 +142,10 @@ export function TasksView({
         onClose={close}
         title={panel?.mode === "edit" ? "Edit task" : "New task"}
       >
-        <TaskForm task={panel?.mode === "edit" ? panel.task : undefined} projects={projects} />
+        <TaskForm
+          task={panel?.mode === "edit" ? panel.task : undefined}
+          projects={projects}
+        />
       </SlideOver>
     </div>
   );

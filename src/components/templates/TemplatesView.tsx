@@ -11,7 +11,10 @@ import type { OutreachTemplate } from "@/lib/types";
 import { CopyButton } from "./CopyButton";
 import { TemplateForm } from "./TemplateForm";
 
-export type TemplatesPanel = { mode: "new" } | { mode: "edit"; template: OutreachTemplate } | null;
+export type TemplatesPanel =
+  | { mode: "new" }
+  | { mode: "edit"; template: OutreachTemplate }
+  | null;
 
 export function TemplatesView({
   templates,
@@ -24,7 +27,7 @@ export function TemplatesView({
   const close = () => router.push("/leads/templates");
 
   return (
-    <div className="mx-auto max-w-[900px]">
+    <div className="mx-auto max-w-225">
       <Link
         href="/leads"
         className="inline-flex items-center gap-1.5 text-[12px] font-semibold text-muted hover:text-ink"
@@ -37,7 +40,10 @@ export function TemplatesView({
         <h1 className="font-display text-[22px] font-extrabold tracking-[-0.5px] text-ink">
           Message templates
         </h1>
-        <Link href="/leads/templates?new=1" className={buttonClasses("primary")}>
+        <Link
+          href="/leads/templates?new=1"
+          className={buttonClasses("primary")}
+        >
           <Plus className="h-4 w-4" />
           New template
         </Link>
@@ -50,7 +56,10 @@ export function TemplatesView({
             title="No templates yet"
             description="Save reach-out messages and copy them in one click."
             action={
-              <Link href="/leads/templates?new=1" className={buttonClasses("primary")}>
+              <Link
+                href="/leads/templates?new=1"
+                className={buttonClasses("primary")}
+              >
                 New template
               </Link>
             }
@@ -59,7 +68,10 @@ export function TemplatesView({
       ) : (
         <div className="space-y-3">
           {templates.map((t) => (
-            <div key={t.id} className="rounded-card border border-line bg-surface p-4">
+            <div
+              key={t.id}
+              className="rounded-card border border-line bg-surface p-4"
+            >
               <div className="flex items-start justify-between gap-3">
                 <h3 className="text-[14px] font-bold text-ink">{t.title}</h3>
                 <div className="flex shrink-0 items-center gap-2">
@@ -67,9 +79,9 @@ export function TemplatesView({
                   <Link
                     href={`/leads/templates?edit=${t.id}`}
                     aria-label={`Edit ${t.title}`}
-                    className="inline-flex rounded-ctrl p-1.5 text-faint transition-colors hover:bg-white/[0.05] hover:text-ink"
+                    className="inline-flex rounded-ctrl p-1.5 text-faint transition-colors hover:bg-white/5 hover:text-ink"
                   >
-                    <Pencil className="h-[15px] w-[15px]" />
+                    <Pencil className="h-3.75 w-3.75" />
                   </Link>
                 </div>
               </div>
@@ -86,7 +98,9 @@ export function TemplatesView({
         onClose={close}
         title={panel?.mode === "edit" ? "Edit template" : "New template"}
       >
-        <TemplateForm template={panel?.mode === "edit" ? panel.template : undefined} />
+        <TemplateForm
+          template={panel?.mode === "edit" ? panel.template : undefined}
+        />
       </SlideOver>
     </div>
   );

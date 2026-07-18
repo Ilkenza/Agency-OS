@@ -6,7 +6,11 @@ import { getClients } from "@/lib/data/clients";
 import { getServiceItems } from "@/lib/data/catalog";
 import { QuoteBuilder } from "@/components/quotes/QuoteBuilder";
 
-export default async function EditQuotePage({ params }: { params: Promise<{ id: string }> }) {
+export default async function EditQuotePage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
   const { id } = await params;
   const [quote, clients, catalog] = await Promise.all([
     getQuote(id),
@@ -17,7 +21,7 @@ export default async function EditQuotePage({ params }: { params: Promise<{ id: 
   const clientOptions = clients.map((c) => ({ id: c.id, name: c.name }));
 
   return (
-    <div className="mx-auto max-w-[900px]">
+    <div className="mx-auto max-w-225">
       <Link
         href={`/quotes/${quote.id}`}
         className="mb-3 inline-flex items-center gap-1.5 text-[12px] font-semibold text-muted hover:text-ink"

@@ -9,10 +9,7 @@ export type ActivityItem = {
   created_at: string;
 };
 
-/**
- * Derived feed: newest created rows across clients/projects/tasks/invoices,
- * merged and sorted by created_at. No event table, no extra writes.
- */
+
 export async function getRecentActivity(limit = 6): Promise<ActivityItem[]> {
   const supabase = await createClient();
   const [clients, projects, tasks, invoices, leads] = await Promise.all([

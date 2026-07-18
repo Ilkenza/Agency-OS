@@ -41,9 +41,11 @@ export function ToolboxView({
   );
 
   return (
-    <div className="mx-auto max-w-[1100px]">
+    <div className="mx-auto max-w-275">
       <div className="mb-4 flex items-center justify-between">
-        <h1 className="font-display text-[22px] font-extrabold tracking-[-0.5px] text-ink">Toolbox</h1>
+        <h1 className="font-display text-[22px] font-extrabold tracking-[-0.5px] text-ink">
+          Toolbox
+        </h1>
         <Link href="/toolbox?new=1" className={buttonClasses("primary")}>
           <Plus className="h-4 w-4" />
           New tool
@@ -102,17 +104,21 @@ export function ToolboxView({
                           <ExternalLink className="h-3.5 w-3.5 text-faint" />
                         </a>
                       ) : (
-                        <span className="text-[14px] font-bold text-ink">{t.name}</span>
+                        <span className="text-[14px] font-bold text-ink">
+                          {t.name}
+                        </span>
                       )}
                       <Link
                         href={`/toolbox?edit=${t.id}`}
                         aria-label={`Edit ${t.name}`}
-                        className="shrink-0 rounded-ctrl p-1 text-faint opacity-0 transition-opacity hover:bg-white/[0.05] hover:text-ink group-hover:opacity-100"
+                        className="shrink-0 rounded-ctrl p-1 text-faint opacity-0 transition-opacity hover:bg-white/5 hover:text-ink group-hover:opacity-100"
                       >
-                        <Pencil className="h-[14px] w-[14px]" />
+                        <Pencil className="h-3.5 w-3,5" />
                       </Link>
                     </div>
-                    {t.notes && <p className="mt-1.5 text-[12px] text-muted">{t.notes}</p>}
+                    {t.notes && (
+                      <p className="mt-1.5 text-[12px] text-muted">{t.notes}</p>
+                    )}
                   </div>
                 ))}
               </div>

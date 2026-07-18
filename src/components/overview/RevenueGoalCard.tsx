@@ -11,7 +11,13 @@ import { formatCurrency } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import { saveRevenueGoal } from "@/app/(app)/actions";
 
-export function RevenueGoalCard({ goal, revenue }: { goal: number; revenue: number }) {
+export function RevenueGoalCard({
+  goal,
+  revenue,
+}: {
+  goal: number;
+  revenue: number;
+}) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -43,9 +49,9 @@ export function RevenueGoalCard({ goal, revenue }: { goal: number; revenue: numb
           <button
             onClick={() => setOpen(true)}
             aria-label="Edit revenue goal"
-            className="rounded-ctrl p-1 text-faint transition-colors hover:bg-white/[0.05] hover:text-ink"
+            className="rounded-ctrl p-1 text-faint transition-colors hover:bg-white/5 hover:text-ink"
           >
-            <Pencil className="h-[14px] w-[14px]" />
+            <Pencil className="h-3.5 w-3.5" />
           </button>
         ) : undefined
       }
@@ -57,29 +63,42 @@ export function RevenueGoalCard({ goal, revenue }: { goal: number; revenue: numb
               <span className="mono text-[14px] font-semibold text-ink">
                 {formatCurrency(revenue)}
               </span>
-              <span className="mono text-[12px] text-muted">/ {formatCurrency(goal)}</span>
+              <span className="mono text-[12px] text-muted">
+                / {formatCurrency(goal)}
+              </span>
             </div>
-            <div className="h-2 w-full overflow-hidden rounded-pill bg-white/[0.05]">
+            <div className="h-2 w-full overflow-hidden rounded-pill bg-white/5">
               <div
                 className="h-full rounded-pill bg-gold transition-all"
                 style={{ width: `${pct}%` }}
               />
             </div>
             <p className="mt-2 text-[12px] text-muted">
-              {remaining > 0 ? `${pct}% · ${formatCurrency(remaining)} to go` : "Goal reached"}
+              {remaining > 0
+                ? `${pct}% · ${formatCurrency(remaining)} to go`
+                : "Goal reached"}
             </p>
           </>
         ) : (
           <div className="text-center">
-            <p className="text-[12.5px] text-muted">Set a monthly goal to track progress.</p>
-            <button onClick={() => setOpen(true)} className={cn(buttonClasses("secondary"), "mt-3")}>
+            <p className="text-[12.5px] text-muted">
+              Set a monthly goal to track progress.
+            </p>
+            <button
+              onClick={() => setOpen(true)}
+              className={cn(buttonClasses("secondary"), "mt-3")}
+            >
               Set goal
             </button>
           </div>
         )}
       </div>
 
-      <SlideOver open={open} onClose={() => setOpen(false)} title="Revenue goal">
+      <SlideOver
+        open={open}
+        onClose={() => setOpen(false)}
+        title="Revenue goal"
+      >
         <form onSubmit={onSubmit}>
           <Field
             label="Monthly goal (€)"
@@ -97,7 +116,12 @@ export function RevenueGoalCard({ goal, revenue }: { goal: number; revenue: numb
               {error}
             </p>
           )}
-          <Button type="submit" variant="primary" className="w-full" disabled={pending}>
+          <Button
+            type="submit"
+            variant="primary"
+            className="w-full"
+            disabled={pending}
+          >
             {pending ? "Saving…" : "Save goal"}
           </Button>
         </form>

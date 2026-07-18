@@ -35,7 +35,12 @@ export function CategoryForm({ name }: { name: string }) {
           </p>
         )}
 
-        <Button type="submit" variant="primary" className="w-full" disabled={pending}>
+        <Button
+          type="submit"
+          variant="primary"
+          className="w-full"
+          disabled={pending}
+        >
           {pending ? "Saving…" : "Save changes"}
         </Button>
       </form>

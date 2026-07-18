@@ -23,7 +23,10 @@ export default async function PrintInvoicePage({
   const profile = await getProfile();
 
   const fromName =
-    profile?.business_name || profile?.full_name || user?.email || "Your business";
+    profile?.business_name ||
+    profile?.full_name ||
+    user?.email ||
+    "Your business";
   const fromEmail = profile?.business_email || user?.email || "";
 
   const status = effectiveInvoiceStatus(invoice);
@@ -40,11 +43,12 @@ export default async function PrintInvoicePage({
             qty: 1,
           },
         ];
-  const subtotal = invoice.items.length > 0 ? quoteTotal(invoice.items) : invoice.amount;
+  const subtotal =
+    invoice.items.length > 0 ? quoteTotal(invoice.items) : invoice.amount;
   const amountDue = status === "paid" ? 0 : invoice.amount;
 
   return (
-    <div className="mx-auto max-w-[720px] bg-white p-10 text-neutral-900 shadow-sm print:max-w-none print:p-0 print:shadow-none">
+    <div className="mx-auto max-w-180 bg-white p-10 text-neutral-900 shadow-sm print:max-w-none print:p-0 print:shadow-none">
       <div className="mb-8 flex items-start justify-between">
         <div>
           <div
@@ -53,7 +57,9 @@ export default async function PrintInvoicePage({
           >
             Invoice
           </div>
-          <div className="mono mt-1 text-sm text-neutral-500">{invoice.number ?? "—"}</div>
+          <div className="mono mt-1 text-sm text-neutral-500">
+            {invoice.number ?? "—"}
+          </div>
         </div>
         <PrintButton />
       </div>
@@ -75,23 +81,31 @@ export default async function PrintInvoicePage({
 
       <div className="mb-8 grid grid-cols-2 gap-8">
         <div>
-          <div className="text-[11px] font-bold uppercase tracking-wide text-neutral-400">From</div>
+          <div className="text-[11px] font-bold uppercase tracking-wide text-neutral-400">
+            From
+          </div>
           <div className="mt-1 font-semibold">{fromName}</div>
-          {fromEmail && <div className="text-sm text-neutral-500">{fromEmail}</div>}
+          {fromEmail && (
+            <div className="text-sm text-neutral-500">{fromEmail}</div>
+          )}
           {profile?.business_address && (
             <div className="mt-1 whitespace-pre-wrap text-sm text-neutral-500">
               {profile.business_address}
             </div>
           )}
           {profile?.vat_id && (
-            <div className="mono mt-1 text-xs text-neutral-400">VAT / PIB: {profile.vat_id}</div>
+            <div className="mono mt-1 text-xs text-neutral-400">
+              VAT / PIB: {profile.vat_id}
+            </div>
           )}
         </div>
         <div>
           <div className="text-[11px] font-bold uppercase tracking-wide text-neutral-400">
             Bill to
           </div>
-          <div className="mt-1 font-semibold">{invoice.client?.name ?? "—"}</div>
+          <div className="mt-1 font-semibold">
+            {invoice.client?.name ?? "—"}
+          </div>
           <div className="mt-2 text-[11px] font-bold uppercase tracking-wide text-neutral-400">
             Status
           </div>
@@ -113,8 +127,12 @@ export default async function PrintInvoicePage({
             <tr key={i} className="border-b border-neutral-100">
               <td className="py-3 pr-2">{it.label}</td>
               <td className="mono py-3 text-right">{it.qty}</td>
-              <td className="mono py-3 text-right">{formatMoney(it.price, currency)}</td>
-              <td className="mono py-3 text-right">{formatMoney(it.price * it.qty, currency)}</td>
+              <td className="mono py-3 text-right">
+                {formatMoney(it.price, currency)}
+              </td>
+              <td className="mono py-3 text-right">
+                {formatMoney(it.price * it.qty, currency)}
+              </td>
             </tr>
           ))}
         </tbody>
@@ -128,16 +146,22 @@ export default async function PrintInvoicePage({
           </div>
           <div className="flex justify-between border-t border-neutral-200 py-1">
             <span className="text-neutral-500">Total</span>
-            <span className="mono">{formatMoney(invoice.amount, currency)}</span>
+            <span className="mono">
+              {formatMoney(invoice.amount, currency)}
+            </span>
           </div>
           <div className="flex justify-between border-t-2 border-neutral-900 pt-2">
             <span className="font-bold">Amount due</span>
-            <span className="mono font-bold">{formatMoney(amountDue, currency)}</span>
+            <span className="mono font-bold">
+              {formatMoney(amountDue, currency)}
+            </span>
           </div>
         </div>
       </div>
 
-      <p className="mt-12 text-xs text-neutral-400">Generated with Agency OS.</p>
+      <p className="mt-12 text-xs text-neutral-400">
+        Generated with Agency OS.
+      </p>
     </div>
   );
 }

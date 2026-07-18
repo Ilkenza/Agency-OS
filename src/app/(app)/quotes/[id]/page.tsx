@@ -11,7 +11,11 @@ import { quoteStatusBadge } from "@/lib/status";
 import { quoteTotal } from "@/lib/quotes/total";
 import { formatMoney, formatDate } from "@/lib/format";
 
-export default async function QuoteDetailPage({ params }: { params: Promise<{ id: string }> }) {
+export default async function QuoteDetailPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
   const { id } = await params;
   const quote = await getQuote(id);
   if (!quote) notFound();
@@ -20,7 +24,7 @@ export default async function QuoteDetailPage({ params }: { params: Promise<{ id
   const total = quoteTotal(quote.items);
 
   return (
-    <div className="mx-auto max-w-[1000px] space-y-6">
+    <div className="mx-auto max-w-250 space-y-6">
       <Link
         href="/quotes"
         className="inline-flex items-center gap-1.5 text-[12px] font-semibold text-muted hover:text-ink"
@@ -37,18 +41,28 @@ export default async function QuoteDetailPage({ params }: { params: Promise<{ id
           <div className="mt-2 flex items-center gap-2">
             <Badge status={badge.variant}>{badge.label}</Badge>
             {quote.client?.name && (
-              <span className="text-[13px] text-muted">{quote.client.name}</span>
+              <span className="text-[13px] text-muted">
+                {quote.client.name}
+              </span>
             )}
-            <span className="mono text-[12px] text-faint">{formatDate(quote.created_at)}</span>
+            <span className="mono text-[12px] text-faint">
+              {formatDate(quote.created_at)}
+            </span>
           </div>
         </div>
         <div className="flex flex-wrap items-center gap-2">
-          <Link href={`/print/quote/${quote.id}`} className={buttonClasses("secondary")}>
+          <Link
+            href={`/print/quote/${quote.id}`}
+            className={buttonClasses("secondary")}
+          >
             <Printer className="h-4 w-4" />
             Print
           </Link>
           {quote.invoice_id ? (
-            <Link href={`/invoices/${quote.invoice_id}`} className={buttonClasses("secondary")}>
+            <Link
+              href={`/invoices/${quote.invoice_id}`}
+              className={buttonClasses("secondary")}
+            >
               <ArrowUpRight className="h-4 w-4" />
               View invoice
             </Link>
@@ -60,7 +74,10 @@ export default async function QuoteDetailPage({ params }: { params: Promise<{ id
               </Button>
             </form>
           )}
-          <Link href={`/quotes/${quote.id}/edit`} className={buttonClasses("secondary")}>
+          <Link
+            href={`/quotes/${quote.id}/edit`}
+            className={buttonClasses("secondary")}
+          >
             <Pencil className="h-4 w-4" />
             Edit
           </Link>
@@ -76,16 +93,16 @@ export default async function QuoteDetailPage({ params }: { params: Promise<{ id
           <table className="w-full text-[13px]">
             <thead>
               <tr>
-                <th className="border-b border-line-soft px-4 py-[11px] text-left text-[10.5px] font-bold uppercase tracking-[0.07em] text-muted">
+                <th className="border-b border-line-soft px-4 py-2.75 text-left text-[10.5px] font-bold uppercase tracking-[0.07em] text-muted">
                   Item
                 </th>
-                <th className="border-b border-line-soft px-4 py-[11px] text-right text-[10.5px] font-bold uppercase tracking-[0.07em] text-muted">
+                <th className="border-b border-line-soft px-4 py-2.75 text-right text-[10.5px] font-bold uppercase tracking-[0.07em] text-muted">
                   Price
                 </th>
-                <th className="border-b border-line-soft px-4 py-[11px] text-right text-[10.5px] font-bold uppercase tracking-[0.07em] text-muted">
+                <th className="border-b border-line-soft px-4 py-2.75 text-right text-[10.5px] font-bold uppercase tracking-[0.07em] text-muted">
                   Qty
                 </th>
-                <th className="border-b border-line-soft px-4 py-[11px] text-right text-[10.5px] font-bold uppercase tracking-[0.07em] text-muted">
+                <th className="border-b border-line-soft px-4 py-2.75 text-right text-[10.5px] font-bold uppercase tracking-[0.07em] text-muted">
                   Amount
                 </th>
               </tr>
@@ -93,7 +110,9 @@ export default async function QuoteDetailPage({ params }: { params: Promise<{ id
             <tbody>
               {quote.items.map((it, i) => (
                 <tr key={i}>
-                  <td className="border-b border-line-soft px-4 py-3 text-ink">{it.label}</td>
+                  <td className="border-b border-line-soft px-4 py-3 text-ink">
+                    {it.label}
+                  </td>
                   <td className="mono border-b border-line-soft px-4 py-3 text-right text-muted">
                     {formatMoney(it.price, quote.currency)}
                   </td>

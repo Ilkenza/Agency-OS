@@ -12,14 +12,23 @@ import type { ServiceItem } from "@/lib/types";
 import { ServiceItemForm } from "./ServiceItemForm";
 import { addStarterFeatures } from "@/app/(app)/quotes/catalog/actions";
 
-export type CatalogPanel = { mode: "new" } | { mode: "edit"; item: ServiceItem } | null;
+export type CatalogPanel =
+  | { mode: "new" }
+  | { mode: "edit"; item: ServiceItem }
+  | null;
 
-export function CatalogView({ items, panel }: { items: ServiceItem[]; panel: CatalogPanel }) {
+export function CatalogView({
+  items,
+  panel,
+}: {
+  items: ServiceItem[];
+  panel: CatalogPanel;
+}) {
   const router = useRouter();
   const close = () => router.push("/quotes/catalog");
 
   return (
-    <div className="mx-auto max-w-[900px]">
+    <div className="mx-auto max-w-225">
       <Link
         href="/quotes"
         className="inline-flex items-center gap-1.5 text-[12px] font-semibold text-muted hover:text-ink"
@@ -57,17 +66,29 @@ export function CatalogView({ items, panel }: { items: ServiceItem[]; panel: Cat
             {items.map((it) => (
               <div
                 key={it.id}
-                className="group flex items-center gap-3 border-b border-line-soft px-4 py-3 last:border-b-0 hover:bg-white/[0.02]"
+                className="group flex items-center gap-3 border-b border-line-soft px-4 py-3 last:border-b-0 hover:bg-white/2"
               >
                 <div className="min-w-0 flex-1">
-                  <div className="text-[13.5px] font-semibold text-ink">{it.label}</div>
-                  {it.category && <div className="text-[11.5px] text-muted">{it.category}</div>}
+                  <div className="text-[13.5px] font-semibold text-ink">
+                    {it.label}
+                  </div>
+                  {it.category && (
+                    <div className="text-[11.5px] text-muted">
+                      {it.category}
+                    </div>
+                  )}
                 </div>
                 <span className="mono shrink-0 text-right text-[12px] text-ink">
                   {[
-                    it.price_rsd != null ? formatMoney(it.price_rsd, "RSD") : null,
-                    it.price_eur != null ? formatMoney(it.price_eur, "EUR") : null,
-                    it.price_usd != null ? formatMoney(it.price_usd, "USD") : null,
+                    it.price_rsd != null
+                      ? formatMoney(it.price_rsd, "RSD")
+                      : null,
+                    it.price_eur != null
+                      ? formatMoney(it.price_eur, "EUR")
+                      : null,
+                    it.price_usd != null
+                      ? formatMoney(it.price_usd, "USD")
+                      : null,
                   ]
                     .filter(Boolean)
                     .map((s, i) => (
@@ -75,16 +96,18 @@ export function CatalogView({ items, panel }: { items: ServiceItem[]; panel: Cat
                         {s}
                       </span>
                     ))}
-                  {it.price_rsd == null && it.price_eur == null && it.price_usd == null && (
-                    <span className="text-faint">—</span>
-                  )}
+                  {it.price_rsd == null &&
+                    it.price_eur == null &&
+                    it.price_usd == null && (
+                      <span className="text-faint">—</span>
+                    )}
                 </span>
                 <Link
                   href={`/quotes/catalog?edit=${it.id}`}
                   aria-label={`Edit ${it.label}`}
-                  className="inline-flex rounded-ctrl p-1.5 text-faint opacity-0 transition-opacity hover:bg-white/[0.05] hover:text-ink group-hover:opacity-100"
+                  className="inline-flex rounded-ctrl p-1.5 text-faint opacity-0 transition-opacity hover:bg-white/5 hover:text-ink group-hover:opacity-100"
                 >
-                  <Pencil className="h-[15px] w-[15px]" />
+                  <Pencil className="h-3.75 w-3.75" />
                 </Link>
               </div>
             ))}
@@ -97,7 +120,9 @@ export function CatalogView({ items, panel }: { items: ServiceItem[]; panel: Cat
         onClose={close}
         title={panel?.mode === "edit" ? "Edit feature" : "New feature"}
       >
-        <ServiceItemForm item={panel?.mode === "edit" ? panel.item : undefined} />
+        <ServiceItemForm
+          item={panel?.mode === "edit" ? panel.item : undefined}
+        />
       </SlideOver>
     </div>
   );

@@ -19,7 +19,7 @@ export async function saveClient(
   const regionRaw = String(formData.get("region") ?? "").trim();
   const region = ["domestic", "foreign"].includes(regionRaw) ? regionRaw : null;
   const tierRaw = String(formData.get("tier") ?? "").trim();
-  const tier = ["osnovni", "standard", "premium"].includes(tierRaw) ? tierRaw : null;
+  const tier = ["basic", "standard", "premium"].includes(tierRaw) ? tierRaw : null;
 
   if (!name) return { error: "Name is required." };
 

@@ -36,7 +36,7 @@ export function SeoView({
   const close = () => router.push("/seo");
 
   return (
-    <div className="mx-auto max-w-[1200px]">
+    <div className="mx-auto max-w-300">
       <div className="mb-4 flex items-center justify-between">
         <h1 className="font-display text-[22px] font-extrabold tracking-[-0.5px] text-ink">
           SEO / GEO
@@ -64,16 +64,16 @@ export function SeoView({
             <table className="w-full text-[13px]">
               <thead>
                 <tr>
-                  <th className="border-b border-line-soft px-4 py-[11px] text-left text-[10.5px] font-bold uppercase tracking-[0.07em] text-muted">
+                  <th className="border-b border-line-soft px-4 py-2.75 text-left text-[10.5px] font-bold uppercase tracking-[0.07em] text-muted">
                     Site
                   </th>
-                  <th className="border-b border-line-soft px-4 py-[11px] text-left text-[10.5px] font-bold uppercase tracking-[0.07em] text-muted">
+                  <th className="border-b border-line-soft px-4 py-2.75 text-left text-[10.5px] font-bold uppercase tracking-[0.07em] text-muted">
                     Title
                   </th>
-                  <th className="border-b border-line-soft px-4 py-[11px] text-left text-[10.5px] font-bold uppercase tracking-[0.07em] text-muted">
+                  <th className="border-b border-line-soft px-4 py-2.75 text-left text-[10.5px] font-bold uppercase tracking-[0.07em] text-muted">
                     Score
                   </th>
-                  <th className="border-b border-line-soft px-4 py-[11px] text-right text-[10.5px] font-bold uppercase tracking-[0.07em] text-muted">
+                  <th className="border-b border-line-soft px-4 py-2.75 text-right text-[10.5px] font-bold uppercase tracking-[0.07em] text-muted">
                     Checked
                   </th>
                 </tr>
@@ -82,18 +82,25 @@ export function SeoView({
                 {checks.map((c) => {
                   const badge = scoreBadge(c.score);
                   return (
-                    <tr key={c.id} className="transition-colors hover:bg-white/[0.02]">
+                    <tr
+                      key={c.id}
+                      className="transition-colors hover:bg-white/2"
+                    >
                       <td className="border-b border-line-soft px-4 py-3 font-semibold text-ink">
-                        <Link href={`/seo/${c.id}`} className="hover:text-gold-hi">
+                        <Link
+                          href={`/seo/${c.id}`}
+                          className="hover:text-gold-hi"
+                        >
                           {domainOf(c.url)}
                         </Link>
                       </td>
-                      <td className="max-w-[280px] truncate border-b border-line-soft px-4 py-3 text-muted">
+                      <td className="max-w-70 truncate border-b border-line-soft px-4 py-3 text-muted">
                         {c.title ?? "—"}
                       </td>
                       <td className="border-b border-line-soft px-4 py-3">
                         <Badge status={badge.variant}>
-                          <span className="mono">{c.score}</span> · {badge.label}
+                          <span className="mono">{c.score}</span> ·{" "}
+                          {badge.label}
                         </Badge>
                       </td>
                       <td className="mono border-b border-line-soft px-4 py-3 text-right text-muted">

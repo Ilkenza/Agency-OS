@@ -11,7 +11,10 @@ const variants: Record<ButtonVariant, string> = {
 };
 
 /** Shared class builder so links can look like buttons (a > button is invalid HTML). */
-export function buttonClasses(variant: ButtonVariant = "primary", className?: string) {
+export function buttonClasses(
+  variant: ButtonVariant = "primary",
+  className?: string,
+) {
   return cn(
     "inline-flex items-center justify-center gap-2 rounded-ctrl border border-transparent px-4 py-[9px] text-[13.5px] font-semibold transition-colors",
     "cursor-pointer disabled:cursor-not-allowed disabled:opacity-50",
@@ -24,6 +27,10 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: ButtonVariant;
 }
 
-export function Button({ variant = "primary", className, ...props }: ButtonProps) {
+export function Button({
+  variant = "primary",
+  className,
+  ...props
+}: ButtonProps) {
   return <button className={buttonClasses(variant, className)} {...props} />;
 }

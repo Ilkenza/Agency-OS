@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, Pencil, UserPlus, ArrowUpRight } from "lucide-react";
+import { ArrowLeft, Pencil, UserPlus, ArrowUpRight, ExternalLink } from "lucide-react";
 import { getLead } from "@/lib/data/leads";
+import { leadProfileUrl } from "@/lib/leads/profile-url";
 import { getTemplates } from "@/lib/data/templates";
 import { ComposeMessage } from "@/components/leads/ComposeMessage";
 import { Panel } from "@/components/ui/Panel";
@@ -12,25 +13,38 @@ import { deleteLead, convertLeadToClient } from "../actions";
 import { leadStatusBadge, serviceLabel } from "@/lib/status";
 import { formatCurrency, formatDate } from "@/lib/format";
 
-function Stat({ label, children }: { label: string; children: React.ReactNode }) {
+function Stat({
+  label,
+  children,
+}: {
+  label: string;
+  children: React.ReactNode;
+}) {
   return (
     <div>
-      <div className="text-[11px] font-semibold uppercase tracking-[0.05em] text-muted">{label}</div>
+      <div className="text-[11px] font-semibold uppercase tracking-wider text-muted">
+        {label}
+      </div>
       <div className="mt-1 text-[14px] text-ink">{children}</div>
     </div>
   );
 }
 
-export default async function LeadDetailPage({ params }: { params: Promise<{ id: string }> }) {
+export default async function LeadDetailPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
   const { id } = await params;
   const lead = await getLead(id);
   if (!lead) notFound();
 
   const templates = await getTemplates();
   const badge = leadStatusBadge(lead.status);
+  const profileUrl = leadProfileUrl(lead.channel, lead.contact);
 
   return (
-    <div className="mx-auto max-w-[1200px] space-y-6">
+    <div className="mx-auto max-w-300 space-y-6">
       <Link
         href="/leads"
         className="inline-flex items-center gap-1.5 text-[12px] font-semibold text-muted hover:text-ink"
@@ -46,12 +60,17 @@ export default async function LeadDetailPage({ params }: { params: Promise<{ id:
           </h1>
           <div className="mt-2 flex items-center gap-2">
             <Badge status={badge.variant}>{badge.label}</Badge>
-            {lead.company && <span className="text-[13px] text-muted">{lead.company}</span>}
+            {lead.company && (
+              <span className="text-[13px] text-muted">{lead.company}</span>
+            )}
           </div>
         </div>
         <div className="flex flex-wrap items-center gap-2">
           {lead.client_id ? (
-            <Link href={`/clients/${lead.client_id}`} className={buttonClasses("secondary")}>
+            <Link
+              href={`/clients/${lead.client_id}`}
+              className={buttonClasses("secondary")}
+            >
               <ArrowUpRight className="h-4 w-4" />
               View client
             </Link>
@@ -63,7 +82,10 @@ export default async function LeadDetailPage({ params }: { params: Promise<{ id:
               </Button>
             </form>
           )}
-          <Link href={`/leads?edit=${lead.id}`} className={buttonClasses("secondary")}>
+          <Link
+            href={`/leads?edit=${lead.id}`}
+            className={buttonClasses("secondary")}
+          >
             <Pencil className="h-4 w-4" />
             Edit
           </Link>
@@ -76,7 +98,25 @@ export default async function LeadDetailPage({ params }: { params: Promise<{ id:
 
       <Panel title="Details">
         <div className="grid grid-cols-2 gap-5 px-4 py-4 sm:grid-cols-3">
-          <Stat label="Contact">{lead.contact ?? <span className="text-muted">—</span>}</Stat>
+          <Stat label="Contact">
+            {lead.contact ? (
+              profileUrl ? (
+                <a
+                  href={profileUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 text-gold-hi hover:underline"
+                >
+                  {lead.contact}
+                  <ExternalLink className="h-3.5 w-3.5" />
+                </a>
+              ) : (
+                lead.contact
+              )
+            ) : (
+              <span className="text-muted">—</span>
+            )}
+          </Stat>
           <Stat label="Channel">
             {lead.channel ? (
               <span className="capitalize">{lead.channel}</span>
@@ -85,7 +125,9 @@ export default async function LeadDetailPage({ params }: { params: Promise<{ id:
             )}
           </Stat>
           <Stat label="Service">
-            {serviceLabel(lead.service) ?? <span className="text-muted">—</span>}
+            {serviceLabel(lead.service) ?? (
+              <span className="text-muted">—</span>
+            )}
           </Stat>
           <Stat label="Est. value">
             <span className="mono">{formatCurrency(lead.value)}</span>

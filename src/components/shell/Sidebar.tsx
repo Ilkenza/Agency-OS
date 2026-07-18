@@ -27,7 +27,6 @@ export function Sidebar({
 
   return (
     <aside className="flex h-screen flex-col border-r border-line bg-sidebar lg:sticky lg:top-0">
-      {/* Wordmark */}
       <div className="flex items-center gap-2 px-5 py-5">
         <div className="flex h-7 w-7 items-center justify-center rounded-ctrl bg-gold text-on-gold">
           <span className="font-display text-[15px] font-extrabold">A</span>
@@ -41,7 +40,9 @@ export function Sidebar({
       <nav className="flex-1 space-y-0.5 px-3 py-2">
         {NAV_ITEMS.map((item) => {
           const active =
-            item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
+            item.href === "/"
+              ? pathname === "/"
+              : pathname.startsWith(item.href);
           const Icon = item.icon;
           const count = item.countKey ? counts[item.countKey] : undefined;
           return (
@@ -54,10 +55,10 @@ export function Sidebar({
                 "flex items-center gap-3 rounded-ctrl px-3 py-2 text-[13.5px] font-semibold transition-colors",
                 active
                   ? "bg-active-bg text-gold"
-                  : "text-muted hover:bg-white/[0.03] hover:text-ink",
+                  : "text-muted hover:bg-white/3 hover:text-ink",
               )}
             >
-              <Icon className="h-[18px] w-[18px] shrink-0" strokeWidth={2} />
+              <Icon className="h-4.5 w-4.5 shrink-0" strokeWidth={2} />
               <span className="flex-1 truncate">{item.label}</span>
               {typeof count === "number" && count > 0 && (
                 <span className="mono text-[11px] text-faint">{count}</span>
@@ -77,7 +78,9 @@ export function Sidebar({
             <div className="truncate text-[13px] font-semibold text-ink">
               {user.fullName ?? "Account"}
             </div>
-            <div className="mono truncate text-[11px] text-muted">{user.email}</div>
+            <div className="mono truncate text-[11px] text-muted">
+              {user.email}
+            </div>
           </div>
           <form action={signOut}>
             <button

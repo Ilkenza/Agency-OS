@@ -14,10 +14,10 @@ import type { ServiceItem } from "@/lib/types";
 const priceStr = (v: number | null | undefined) => (v == null ? "" : String(v));
 
 export function ServiceItemForm({ item }: { item?: ServiceItem }) {
-  const [state, formAction, pending] = useActionState<ServiceItemState, FormData>(
-    saveServiceItem,
-    undefined,
-  );
+  const [state, formAction, pending] = useActionState<
+    ServiceItemState,
+    FormData
+  >(saveServiceItem, undefined);
 
   return (
     <div className="flex h-full flex-col">
@@ -39,7 +39,9 @@ export function ServiceItemForm({ item }: { item?: ServiceItem }) {
           placeholder="Website"
         />
 
-        <div className="mb-1.5 text-xs font-semibold text-[#C6CAD6]">Prices per currency</div>
+        <div className="mb-1.5 text-xs font-semibold text-[#C6CAD6]">
+          Prices per currency
+        </div>
         <div className="grid grid-cols-3 gap-x-3">
           <Field
             label="RSD"
@@ -73,7 +75,8 @@ export function ServiceItemForm({ item }: { item?: ServiceItem }) {
           />
         </div>
         <p className="mb-3 text-[11.5px] text-muted">
-          Fill in the currencies you use — leave blank if you do not offer it in that currency.
+          Fill in the currencies you use — leave blank if you do not offer it in
+          that currency.
         </p>
 
         {state?.error && (
@@ -82,7 +85,12 @@ export function ServiceItemForm({ item }: { item?: ServiceItem }) {
           </p>
         )}
 
-        <Button type="submit" variant="primary" className="w-full" disabled={pending}>
+        <Button
+          type="submit"
+          variant="primary"
+          className="w-full"
+          disabled={pending}
+        >
           {pending ? "Saving…" : item ? "Save changes" : "Add feature"}
         </Button>
       </form>

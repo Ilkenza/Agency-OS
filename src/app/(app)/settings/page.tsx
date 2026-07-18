@@ -15,8 +15,10 @@ export default async function SettingsPage() {
   const profile = await getProfile();
 
   return (
-    <div className="mx-auto max-w-[720px] space-y-6">
-      <h1 className="font-display text-[22px] font-extrabold tracking-[-0.5px] text-ink">Settings</h1>
+    <div className="mx-auto max-w-180 space-y-6">
+      <h1 className="font-display text-[22px] font-extrabold tracking-[-0.5px] text-ink">
+        Settings
+      </h1>
 
       <Panel title="Profile">
         <ProfileForm profile={profile} />

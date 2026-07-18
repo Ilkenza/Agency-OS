@@ -10,10 +10,18 @@ import { deleteInvoice } from "../actions";
 import { effectiveInvoiceStatus, invoiceStatusBadge } from "@/lib/status";
 import { formatMoney, formatDate } from "@/lib/format";
 
-function Stat({ label, children }: { label: string; children: React.ReactNode }) {
+function Stat({
+  label,
+  children,
+}: {
+  label: string;
+  children: React.ReactNode;
+}) {
   return (
     <div>
-      <div className="text-[11px] font-semibold uppercase tracking-[0.05em] text-muted">{label}</div>
+      <div className="text-[11px] font-semibold uppercase tracking-wider text-muted">
+        {label}
+      </div>
       <div className="mt-1 text-[14px] text-ink">{children}</div>
     </div>
   );
@@ -31,7 +39,7 @@ export default async function InvoiceDetailPage({
   const badge = invoiceStatusBadge(effectiveInvoiceStatus(invoice));
 
   return (
-    <div className="mx-auto max-w-[1200px] space-y-6">
+    <div className="mx-auto max-w-300 space-y-6">
       <Link
         href="/invoices"
         className="inline-flex items-center gap-1.5 text-[12px] font-semibold text-muted hover:text-ink"
@@ -50,11 +58,17 @@ export default async function InvoiceDetailPage({
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <Link href={`/print/invoice/${invoice.id}`} className={buttonClasses("secondary")}>
+          <Link
+            href={`/print/invoice/${invoice.id}`}
+            className={buttonClasses("secondary")}
+          >
             <Printer className="h-4 w-4" />
             Print
           </Link>
-          <Link href={`/invoices?edit=${invoice.id}`} className={buttonClasses("secondary")}>
+          <Link
+            href={`/invoices?edit=${invoice.id}`}
+            className={buttonClasses("secondary")}
+          >
             <Pencil className="h-4 w-4" />
             Edit
           </Link>
@@ -71,7 +85,9 @@ export default async function InvoiceDetailPage({
             {invoice.client?.name ?? <span className="text-muted">—</span>}
           </Stat>
           <Stat label="Amount">
-            <span className="mono">{formatMoney(invoice.amount, invoice.currency)}</span>
+            <span className="mono">
+              {formatMoney(invoice.amount, invoice.currency)}
+            </span>
           </Stat>
           <Stat label="Issued">
             <span className="mono">{formatDate(invoice.issued_at)}</span>
@@ -97,7 +113,9 @@ export default async function InvoiceDetailPage({
               {invoice.items.map((it, i) => (
                 <tr key={i} className="border-t border-line-soft">
                   <td className="px-4 py-2.5 text-ink">{it.label}</td>
-                  <td className="mono px-4 py-2.5 text-right text-muted">{it.qty}</td>
+                  <td className="mono px-4 py-2.5 text-right text-muted">
+                    {it.qty}
+                  </td>
                   <td className="mono px-4 py-2.5 text-right text-muted">
                     {formatMoney(it.price, invoice.currency)}
                   </td>

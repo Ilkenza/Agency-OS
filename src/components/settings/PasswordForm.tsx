@@ -1,7 +1,10 @@
 "use client";
 
 import { useActionState } from "react";
-import { changePassword, type SettingsState } from "@/app/(app)/settings/actions";
+import {
+  changePassword,
+  type SettingsState,
+} from "@/app/(app)/settings/actions";
 import { Field } from "@/components/ui/Field";
 import { Button } from "@/components/ui/Button";
 

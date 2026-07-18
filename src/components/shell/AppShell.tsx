@@ -32,8 +32,12 @@ export function AppShell({
             onClick={() => setDrawerOpen(false)}
             className="absolute inset-0 bg-black/60"
           />
-          <div className="absolute inset-y-0 left-0 w-[260px] shadow-[0_0_40px_rgba(0,0,0,0.5)]">
-            <Sidebar user={user} counts={counts} onNavigate={() => setDrawerOpen(false)} />
+          <div className="absolute inset-y-0 left-0 w-65 shadow-[0_0_40px_rgba(0,0,0,0.5)]">
+            <Sidebar
+              user={user}
+              counts={counts}
+              onNavigate={() => setDrawerOpen(false)}
+            />
           </div>
         </div>
       )}

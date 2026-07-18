@@ -2,7 +2,11 @@
 
 import { useActionState, useState } from "react";
 import { Plus, Trash2 } from "lucide-react";
-import { saveInvoice, deleteInvoice, type InvoiceFormState } from "@/app/(app)/invoices/actions";
+import {
+  saveInvoice,
+  deleteInvoice,
+  type InvoiceFormState,
+} from "@/app/(app)/invoices/actions";
 import { Field } from "@/components/ui/Field";
 import { Select } from "@/components/ui/Select";
 import { Button } from "@/components/ui/Button";
@@ -23,20 +27,24 @@ export function InvoiceForm({
   clients: ClientOption[];
   suggestedNumber: string;
 }) {
-  const [state, formAction, pending] = useActionState<InvoiceFormState, FormData>(
-    saveInvoice,
-    undefined,
-  );
+  const [state, formAction, pending] = useActionState<
+    InvoiceFormState,
+    FormData
+  >(saveInvoice, undefined);
 
   const [currency, setCurrency] = useState(invoice?.currency ?? "EUR");
   const [items, setItems] = useState<QuoteItem[]>(
-    Array.isArray(invoice?.items) ? (invoice!.items as unknown as QuoteItem[]) : [],
+    Array.isArray(invoice?.items)
+      ? (invoice!.items as unknown as QuoteItem[])
+      : [],
   );
 
-  const addLine = () => setItems((p) => [...p, { label: "", price: 0, qty: 1 }]);
+  const addLine = () =>
+    setItems((p) => [...p, { label: "", price: 0, qty: 1 }]);
   const update = (i: number, patch: Partial<QuoteItem>) =>
     setItems((p) => p.map((it, idx) => (idx === i ? { ...it, ...patch } : it)));
-  const remove = (i: number) => setItems((p) => p.filter((_, idx) => idx !== i));
+  const remove = (i: number) =>
+    setItems((p) => p.filter((_, idx) => idx !== i));
 
   const total = quoteTotal(items);
   const hasItems = items.length > 0;
@@ -82,9 +90,11 @@ export function InvoiceForm({
         </div>
 
         {/* Line items */}
-        <div className="mb-[13px]">
+        <div className="mb-3.25">
           <div className="mb-1.5 flex items-center justify-between">
-            <label className="block text-xs font-semibold text-[#C6CAD6]">Line items</label>
+            <label className="block text-xs font-semibold text-[#C6CAD6]">
+              Line items
+            </label>
             <button
               type="button"
               onClick={addLine}
@@ -113,7 +123,9 @@ export function InvoiceForm({
                     step="0.01"
                     min="0"
                     value={it.price}
-                    onChange={(e) => update(i, { price: Number(e.target.value) })}
+                    onChange={(e) =>
+                      update(i, { price: Number(e.target.value) })
+                    }
                     className={`mono ${cellInput} w-20 text-right`}
                   />
                   <input
@@ -138,8 +150,8 @@ export function InvoiceForm({
         </div>
 
         {hasItems ? (
-          <div className="mb-[13px] flex items-center justify-between rounded-ctrl border border-line bg-white/[0.02] px-3 py-2.5">
-            <span className="text-[12px] font-semibold uppercase tracking-[0.05em] text-muted">
+          <div className="mb-3.25 flex items-center justify-between rounded-ctrl border border-line bg-white/2 px-3 py-2.5">
+            <span className="text-[12px] font-semibold uppercase tracking-widere text-muted">
               Total
             </span>
             <span className="mono text-[15px] font-bold text-ink">
@@ -180,7 +192,12 @@ export function InvoiceForm({
           </p>
         )}
 
-        <Button type="submit" variant="primary" className="w-full" disabled={pending}>
+        <Button
+          type="submit"
+          variant="primary"
+          className="w-full"
+          disabled={pending}
+        >
           {pending ? "Saving…" : invoice ? "Save changes" : "Create invoice"}
         </Button>
       </form>

@@ -13,10 +13,10 @@ import { DeleteButton } from "@/components/ui/DeleteButton";
 import type { OutreachTemplate } from "@/lib/types";
 
 export function TemplateForm({ template }: { template?: OutreachTemplate }) {
-  const [state, formAction, pending] = useActionState<TemplateFormState, FormData>(
-    saveTemplate,
-    undefined,
-  );
+  const [state, formAction, pending] = useActionState<
+    TemplateFormState,
+    FormData
+  >(saveTemplate, undefined);
 
   return (
     <div className="flex h-full flex-col">
@@ -39,9 +39,10 @@ export function TemplateForm({ template }: { template?: OutreachTemplate }) {
           placeholder="Hi {name}, I came across {company} and…"
         />
         <p className="mb-3 -mt-1 text-[11.5px] text-muted">
-          Variables filled per lead:{" "}
-          <code className="mono">{"{name}"}</code> <code className="mono">{"{company}"}</code>{" "}
-          <code className="mono">{"{contact}"}</code> <code className="mono">{"{service}"}</code>
+          Variables filled per lead: <code className="mono">{"{name}"}</code>{" "}
+          <code className="mono">{"{company}"}</code>{" "}
+          <code className="mono">{"{contact}"}</code>{" "}
+          <code className="mono">{"{service}"}</code>
         </p>
 
         {state?.error && (
@@ -50,7 +51,12 @@ export function TemplateForm({ template }: { template?: OutreachTemplate }) {
           </p>
         )}
 
-        <Button type="submit" variant="primary" className="w-full" disabled={pending}>
+        <Button
+          type="submit"
+          variant="primary"
+          className="w-full"
+          disabled={pending}
+        >
           {pending ? "Saving…" : template ? "Save changes" : "Create template"}
         </Button>
       </form>

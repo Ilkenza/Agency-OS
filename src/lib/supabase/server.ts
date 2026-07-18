@@ -1,7 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 
-/** Supabase client for Server Components, Route Handlers and Server Actions. */
 export async function createClient() {
   const cookieStore = await cookies();
 
@@ -14,14 +13,12 @@ export async function createClient() {
           return cookieStore.getAll();
         },
         setAll(cookiesToSet) {
-          // In Server Components `set` throws — safe to ignore, the
-          // middleware refreshes the session on every request instead.
+
           try {
             cookiesToSet.forEach(({ name, value, options }) =>
               cookieStore.set(name, value, options),
             );
           } catch {
-            // called from a Server Component; ignore.
           }
         },
       },
