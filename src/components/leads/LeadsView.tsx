@@ -76,8 +76,9 @@ function LeadRow({ lead }: { lead: Lead }) {
       : open && isToday(lead.next_followup)
         ? "text-gold"
         : "text-muted";
+  const followText = formatDate(lead.next_followup);
   return (
-    <div className="group flex items-center gap-3 border-b border-line-soft px-4 py-3 last:border-b-0 hover:bg-white/2">
+    <div className="group flex items-start gap-3 border-b border-line-soft px-4 py-3 last:border-b-0 hover:bg-white/2">
       <div className="min-w-0 flex-1">
         <Link
           href={`/leads/${lead.id}`}
@@ -90,16 +91,24 @@ function LeadRow({ lead }: { lead: Lead }) {
             .filter(Boolean)
             .join(" · ") || "—"}
         </div>
+        {/* Mobile meta: status + follow-up under the name */}
+        <div className="mt-1.5 flex flex-wrap items-center gap-2 sm:hidden">
+          <Badge status={badge.variant}>{badge.label}</Badge>
+          {followText !== "—" && (
+            <span className={cn("mono text-[11px]", followColor)}>↳ {followText}</span>
+          )}
+        </div>
       </div>
-      <Badge status={badge.variant}>{badge.label}</Badge>
-      <span className="mono hidden w-17.5 shrink-0 text-right text-[12px] text-ink sm:block">
-        {lead.value > 0 ? formatCurrency(lead.value) : "—"}
-      </span>
-      <span
-        className={cn("mono w-23 shrink-0 text-right text-[12px]", followColor)}
-      >
-        {formatDate(lead.next_followup)}
-      </span>
+
+      {/* Desktop columns */}
+      <div className="hidden shrink-0 items-center gap-3 sm:flex">
+        <Badge status={badge.variant}>{badge.label}</Badge>
+        <span className="mono w-17.5 text-right text-[12px] text-ink">
+          {lead.value > 0 ? formatCurrency(lead.value) : "—"}
+        </span>
+        <span className={cn("mono w-23 text-right text-[12px]", followColor)}>{followText}</span>
+      </div>
+
       {profileUrl && (
         <a
           href={profileUrl}
@@ -114,7 +123,7 @@ function LeadRow({ lead }: { lead: Lead }) {
       <Link
         href={`/leads?edit=${lead.id}`}
         aria-label={`Edit ${lead.name}`}
-        className="inline-flex rounded-ctrl p-1.5 text-faint opacity-0 transition-opacity hover:bg-white/5 hover:text-ink group-hover:opacity-100"
+        className="inline-flex shrink-0 rounded-ctrl p-1.5 text-faint transition-opacity hover:bg-white/5 hover:text-ink sm:opacity-0 sm:group-hover:opacity-100"
       >
         <Pencil className="h-3.75 w-3.75" />
       </Link>
@@ -186,12 +195,18 @@ export function LeadsView({
 
   return (
     <div className="mx-auto max-w-300">
-      <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-        <h1 className="font-display text-[22px] font-extrabold tracking-[-0.5px] text-ink">
-          Leads
-        </h1>
+      <div className="mb-4 space-y-3">
+        <div className="flex items-center justify-between gap-3">
+          <h1 className="font-display text-[22px] font-extrabold tracking-[-0.5px] text-ink">
+            Leads
+          </h1>
+          <Link href="/leads?new=1" className={cn(buttonClasses("primary"), "shrink-0")}>
+            <Plus className="h-4 w-4" />
+            New lead
+          </Link>
+        </div>
         <div className="flex items-center gap-2">
-          <div className="relative">
+          <div className="relative min-w-0 flex-1 sm:max-w-64">
             <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-faint" />
             <input
               value={q}
@@ -199,29 +214,34 @@ export function LeadsView({
               type="search"
               placeholder="Search leads…"
               aria-label="Search leads"
-              className="w-50 rounded-ctrl border border-line bg-white/[0.035] py-2 pl-9 pr-3 text-[13px] text-ink placeholder:text-faint focus:border-gold focus:outline-none"
+              className="w-full rounded-ctrl border border-line bg-white/[0.035] py-2 pl-9 pr-3 text-[13px] text-ink placeholder:text-faint focus:border-gold focus:outline-none"
             />
           </div>
-          <Link href="/leads/import" className={buttonClasses("secondary")}>
+          <Link
+            href="/leads/import"
+            aria-label="Import"
+            className={cn(buttonClasses("secondary"), "shrink-0")}
+          >
             <Upload className="h-4 w-4" />
-            Import
+            <span className="hidden md:inline">Import</span>
           </Link>
           <button
             type="button"
             onClick={() => exportLeadsCsv(leads)}
             disabled={leads.length === 0}
-            className={buttonClasses("secondary")}
+            aria-label="Export"
+            className={cn(buttonClasses("secondary"), "shrink-0")}
           >
             <Download className="h-4 w-4" />
-            Export
+            <span className="hidden md:inline">Export</span>
           </button>
-          <Link href="/leads/templates" className={buttonClasses("secondary")}>
+          <Link
+            href="/leads/templates"
+            aria-label="Templates"
+            className={cn(buttonClasses("secondary"), "shrink-0")}
+          >
             <FileText className="h-4 w-4" />
-            Templates
-          </Link>
-          <Link href="/leads?new=1" className={buttonClasses("primary")}>
-            <Plus className="h-4 w-4" />
-            New lead
+            <span className="hidden md:inline">Templates</span>
           </Link>
         </div>
       </div>
