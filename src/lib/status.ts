@@ -36,11 +36,20 @@ export const CLIENT_TIER_OPTIONS: { value: string; label: string }[] = [
 ];
 
 /** Rough price range per tier (typical whole-site project) — guidance in the client form. */
-export const TIER_PRICE_HINTS: Record<string, string> = {
-  basic: "30–70k RSD · 400–900 €",
-  standard: "70–140k RSD · 900–1800 €",
-  premium: "140–300k RSD · 1800–3500 €",
+export const TIER_PRICE_HINTS: Record<string, { domestic: string; foreign: string }> = {
+  basic: { domestic: "30–70k RSD", foreign: "500–1000 €" },
+  standard: { domestic: "70–140k RSD", foreign: "1000–2000 €" },
+  premium: { domestic: "140–300k RSD", foreign: "2000–4000 €" },
 };
+
+/** Price-range hint for a tier, shown for the client's region (or both if unknown). */
+export function tierPriceHint(tier: string, region: string): string {
+  const h = TIER_PRICE_HINTS[tier];
+  if (!h) return "";
+  if (region === "domestic") return `Domestic: ${h.domestic}`;
+  if (region === "foreign") return `Foreign: ${h.foreign}`;
+  return `Domestic ${h.domestic} · Foreign ${h.foreign}`;
+}
 
 export function clientTierBadge(tier: string | null): { variant: BadgeStatus; label: string } | null {
   switch (tier) {

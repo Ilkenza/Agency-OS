@@ -11,7 +11,7 @@ import {
   CLIENT_REGION_OPTIONS,
   CLIENT_TIER_OPTIONS,
   CHANNEL_OPTIONS,
-  TIER_PRICE_HINTS,
+  tierPriceHint,
 } from "@/lib/status";
 import type { Client } from "@/lib/types";
 
@@ -27,10 +27,11 @@ export function ClientForm({
     undefined,
   );
   const [tier, setTier] = useState(client?.tier ?? "");
+  const [region, setRegion] = useState(client?.region ?? "");
   const [businessType, setBusinessType] = useState(client?.business_type ?? "");
 
   const tierHelp = tier
-    ? TIER_PRICE_HINTS[tier]
+    ? tierPriceHint(tier, region)
     : "Basic / Standard / Premium — sets your usual price range.";
 
   return (
@@ -63,7 +64,8 @@ export function ClientForm({
           <Select
             label="Region"
             name="region"
-            defaultValue={client?.region ?? ""}
+            value={region}
+            onChange={(e) => setRegion(e.target.value)}
             placeholder="Select…"
             options={CLIENT_REGION_OPTIONS}
             help="Sets the currency for quotes/projects."
