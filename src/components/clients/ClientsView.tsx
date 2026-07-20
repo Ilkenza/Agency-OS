@@ -29,6 +29,10 @@ export function ClientsView({
   const router = useRouter();
   const close = () => router.push("/clients");
 
+  const businessTypes = [
+    ...new Set(clients.map((c) => c.business_type?.trim()).filter(Boolean) as string[]),
+  ].sort((a, b) => a.localeCompare(b));
+
   return (
     <div className="mx-auto max-w-300">
       <div className="mb-4 flex items-center justify-between">
@@ -136,9 +140,9 @@ export function ClientsView({
         title={panel?.mode === "edit" ? "Edit client" : "New client"}
       >
         {panel?.mode === "edit" ? (
-          <ClientForm client={panel.client} />
+          <ClientForm client={panel.client} businessTypes={businessTypes} />
         ) : (
-          <ClientForm />
+          <ClientForm businessTypes={businessTypes} />
         )}
       </SlideOver>
     </div>

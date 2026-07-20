@@ -1,20 +1,37 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import { saveClient, deleteClient, type ClientFormState } from "@/app/(app)/clients/actions";
 import { Field } from "@/components/ui/Field";
 import { Select } from "@/components/ui/Select";
 import { Textarea } from "@/components/ui/Textarea";
 import { Button } from "@/components/ui/Button";
 import { DeleteButton } from "@/components/ui/DeleteButton";
-import { CLIENT_REGION_OPTIONS, CLIENT_TIER_OPTIONS } from "@/lib/status";
+import {
+  CLIENT_REGION_OPTIONS,
+  CLIENT_TIER_OPTIONS,
+  CHANNEL_OPTIONS,
+  TIER_PRICE_HINTS,
+} from "@/lib/status";
 import type { Client } from "@/lib/types";
 
-export function ClientForm({ client }: { client?: Client }) {
+export function ClientForm({
+  client,
+  businessTypes = [],
+}: {
+  client?: Client;
+  businessTypes?: string[];
+}) {
   const [state, formAction, pending] = useActionState<ClientFormState, FormData>(
     saveClient,
     undefined,
   );
+  const [tier, setTier] = useState(client?.tier ?? "");
+  const [businessType, setBusinessType] = useState(client?.business_type ?? "");
+
+  const tierHelp = tier
+    ? TIER_PRICE_HINTS[tier]
+    : "Basic / Standard / Premium — sets your usual price range.";
 
   return (
     <div className="flex h-full flex-col">
@@ -34,11 +51,12 @@ export function ClientForm({ client }: { client?: Client }) {
           defaultValue={client?.contact ?? ""}
           placeholder="e.g. John Miller"
         />
-        <Field
+        <Select
           label="Contact channel"
           name="contact_channel"
           defaultValue={client?.contact_channel ?? ""}
-          placeholder="Instagram @user · email · phone"
+          placeholder="Select…"
+          options={CHANNEL_OPTIONS}
           help="How you're in touch / where you connected."
         />
         <div className="grid gap-x-4 sm:grid-cols-2">
@@ -53,17 +71,44 @@ export function ClientForm({ client }: { client?: Client }) {
           <Select
             label="Tier"
             name="tier"
-            defaultValue={client?.tier ?? ""}
+            value={tier}
+            onChange={(e) => setTier(e.target.value)}
             placeholder="Select…"
             options={CLIENT_TIER_OPTIONS}
+            help={tierHelp}
           />
         </div>
+
         <Field
           label="Business type"
           name="business_type"
-          defaultValue={client?.business_type ?? ""}
+          value={businessType}
+          onChange={(e) => setBusinessType(e.target.value)}
           placeholder="bakery, gym, clinic…"
+          help="Type a new one or click an existing type below."
         />
+        {businessTypes.length > 0 && (
+          <div className="mb-[13px] -mt-1 flex flex-wrap gap-1.5">
+            {businessTypes.map((t) => {
+              const active = t.toLowerCase() === businessType.trim().toLowerCase();
+              return (
+                <button
+                  key={t}
+                  type="button"
+                  onClick={() => setBusinessType(t)}
+                  className={`rounded-pill border px-2.5 py-1 text-[11.5px] font-medium transition-colors ${
+                    active
+                      ? "border-gold bg-gold/15 text-gold-hi"
+                      : "border-line text-muted hover:border-muted hover:text-ink"
+                  }`}
+                >
+                  {t}
+                </button>
+              );
+            })}
+          </div>
+        )}
+
         <Textarea
           label="Notes"
           name="notes"

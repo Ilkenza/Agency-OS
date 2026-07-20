@@ -132,17 +132,29 @@ export async function convertLeadToClient(id: string) {
     redirect(`/clients/${lead.client_id}`);
   }
 
+  const clientName = lead.company || lead.name;
   const { data: client, error } = await supabase
     .from("clients")
-    .insert({ name: lead.company || lead.name, contact: lead.contact, notes: lead.notes })
+    .insert({
+      name: clientName,
+      contact: lead.contact,
+      contact_channel: lead.channel,
+      notes: lead.notes,
+    })
     .select("id")
     .single();
   if (error || !client) redirect("/leads");
+
+  // Start a project for the new client, named after them.
+  await supabase
+    .from("projects")
+    .insert({ client_id: client.id, title: clientName, status: "draft" });
 
   await supabase.from("leads").update({ client_id: client.id, status: "won" }).eq("id", id);
 
   revalidatePath("/leads");
   revalidatePath("/clients");
+  revalidatePath("/projects");
   revalidatePath("/");
   redirect(`/clients/${client.id}`);
 }
