@@ -37,9 +37,9 @@ export const CLIENT_TIER_OPTIONS: { value: string; label: string }[] = [
 
 /** Rough price range per tier (typical whole-site project) — guidance in the client form. */
 export const TIER_PRICE_HINTS: Record<string, string> = {
-  basic: "~30–100k RSD · 400–1200 €",
-  standard: "~50–160k RSD · 640–1900 €",
-  premium: "~75–250k RSD · 1000–3000 €",
+  basic: "30–70k RSD · 400–900 €",
+  standard: "70–140k RSD · 900–1800 €",
+  premium: "140–300k RSD · 1800–3500 €",
 };
 
 export function clientTierBadge(tier: string | null): { variant: BadgeStatus; label: string } | null {
