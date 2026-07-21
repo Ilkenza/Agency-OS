@@ -33,9 +33,12 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      suppressHydrationWarning
       className={`${bricolage.variable} ${manrope.variable} ${splineMono.variable} h-full`}
     >
-      <body className="min-h-full">{children}</body>
+      <body suppressHydrationWarning className="min-h-full">
+        {children}
+      </body>
     </html>
   );
 }
