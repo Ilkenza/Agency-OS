@@ -160,7 +160,7 @@ export default async function PrintInvoicePage({
       </div>
 
       <p className="mt-12 text-xs text-neutral-400">
-        Generated with Agency OS.
+        Generated with Zevern.
       </p>
     </div>
   );

@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 /*
-  Agency OS — design tokens (source: agency-os-styleguide-dark.html)
+  Zevern — design tokens (source: agency-os-styleguide-dark.html)
   Dark palette: warm gold accent on cool graphite. Border-first, minimal shadow.
   Tailwind v4: tokens declared in @theme generate utilities
   (e.g. --color-gold -> bg-gold/text-gold/border-gold, --radius-card -> rounded-card).

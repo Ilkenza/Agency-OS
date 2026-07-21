@@ -8,7 +8,7 @@ export default function LoginPage() {
           {"// access"}
         </div>
         <h1 className="mt-2 font-display text-[27px] font-extrabold tracking-[-0.7px] text-ink">
-          Agency OS
+          Zevern
         </h1>
         <p className="mt-1 text-sm text-muted">Run your whole business from one screen.</p>
       </div>

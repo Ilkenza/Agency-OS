@@ -21,7 +21,7 @@ const splineMono = Spline_Sans_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Agency OS",
+  title: "Zevern",
   description: "Run your whole freelance business from one screen.",
 };
 

@@ -32,7 +32,7 @@ export function Sidebar({
           <span className="font-display text-[15px] font-extrabold">A</span>
         </div>
         <span className="font-display text-[17px] font-extrabold tracking-[-0.4px] text-ink">
-          Agency OS
+          Zevern
         </span>
       </div>
 
